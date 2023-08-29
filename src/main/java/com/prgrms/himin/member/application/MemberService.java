@@ -26,7 +26,9 @@ public class MemberService {
 	public MemberCreateResponse createMember(MemberCreateRequest request) {
 		Member member = request.toEntity();
 		Address address = new Address(
-			member, request.getAddressAlias(), request.getAddress()
+			member,
+			request.getAddressAlias(),
+			request.getAddress()
 		);
 		member.updateGrade(Grade.NEW);
 		memberRepository.save(member);
