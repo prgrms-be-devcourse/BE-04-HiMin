@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/shops")
@@ -18,7 +20,7 @@ public class ShopController {
     private final ShopService shopService;
 
     @PostMapping
-    public ResponseEntity<ShopResponse> createShop(@RequestBody ShopCreateRequest request) {
+    public ResponseEntity<ShopResponse> createShop(@Valid @RequestBody ShopCreateRequest request) {
         ShopResponse response = shopService.createShop(request);
         return ResponseEntity.ok(response);
     }
