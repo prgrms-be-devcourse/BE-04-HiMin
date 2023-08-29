@@ -16,12 +16,12 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/members")
+@RequestMapping("/api")
 public class MemberController {
 
 	private final MemberService memberService;
 
-	@PostMapping
+	@PostMapping("/sign-up")
 	public ResponseEntity<MemberCreateResponse> createMember(@Valid @RequestBody MemberCreateRequest request) {
 		return ResponseEntity.ok(memberService.createMember(request));
 	}
