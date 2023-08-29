@@ -32,7 +32,7 @@ public class Address {
 	@Column(name = "addressAlias", nullable = false)
 	private String addressAlias;
 
-	@Column(name = "addressAlias", nullable = false)
+	@Column(name = "address", nullable = false)
 	private String address;
 
 	public Address(
