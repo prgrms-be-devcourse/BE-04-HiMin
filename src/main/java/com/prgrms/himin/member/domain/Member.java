@@ -62,24 +62,20 @@ public class Member {
 		LocalDate birthday,
 		Grade grade
 	) {
+		validateLoginId(loginId);
+		validatePassword(password);
+		validateName(name);
+		validatePhone(phone);
 		this.loginId = loginId;
 		this.password = password;
 		this.name = name;
 		this.phone = phone;
 		this.birthday = birthday;
 		this.grade = grade;
-		validateAll();
 	}
 
 	public void updateGrade(Grade grade) {
 		this.grade = grade;
-	}
-
-	private void validateAll() {
-		validateLoginId(loginId);
-		validatePassword(password);
-		validatename(name);
-		validatePhone(phone);
 	}
 
 	private void validateLoginId(String loginId) {
@@ -94,7 +90,7 @@ public class Member {
 		}
 	}
 
-	private void validatename(String name) {
+	private void validateName(String name) {
 		if (name == null || name.length() > NAME_MAX_LENGTH) {
 			throw new RuntimeException("잘못된 이름입니다.");
 		}
