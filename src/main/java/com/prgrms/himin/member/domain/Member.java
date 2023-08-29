@@ -4,39 +4,105 @@ import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "members")
 public class Member {
+
+	private static final int ID_MAX_LENGTH = 20;
+
+	private static final int PASSWORD_MAX_LENGTH = 20;
+
+	private static final int NAME_MAX_LENGTH = 10;
+
+	private static final int PHONE_MAX_LENGTH = 15;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
 
-	@Column(name = "login_id", nullable = false, length = 20)
+	@Column(name = "login_id", nullable = false, length = ID_MAX_LENGTH)
 	private String loginId;
 
-	@Column(name = "password", nullable = false, length = 60)
+	@Column(name = "password", nullable = false, length = PASSWORD_MAX_LENGTH)
 	private String password;
 
-	@Column(name = "id", nullable = false, length = 20)
+	@Column(name = "name", nullable = false, length = NAME_MAX_LENGTH)
 	private String name;
 
-	@Column(name = "id", nullable = false, length = 15)
+	@Column(name = "phone", nullable = false, length = 15)
 	private String phone;
 
-	@Column(name = "id", nullable = false)
+	@Column(name = "birthday", nullable = false)
 	private LocalDate birthday;
 
-	@Column(name = "id", nullable = false)
+	@Enumerated
+	@Column(name = "grade", nullable = false)
 	private Grade grade;
+
+	@Builder
+	public Member(
+		String loginId,
+		String password,
+		String name,
+		String phone,
+		LocalDate birthday,
+		Grade grade
+	) {
+		this.loginId = loginId;
+		this.password = password;
+		this.name = name;
+		this.phone = phone;
+		this.birthday = birthday;
+		this.grade = grade;
+		validateAll();
+	}
+
+	public void updateGrade(Grade grade) {
+		this.grade = grade;
+	}
+
+	private void validateAll() {
+		validateLoginId(loginId);
+		validatePassword(password);
+		validatename(name);
+		validatePhone(phone);
+	}
+
+	private void validateLoginId(String loginId) {
+		if (loginId == null || loginId.length() > ID_MAX_LENGTH) {
+			throw new RuntimeException("잘못된 로그인ID입니다.");
+		}
+	}
+
+	private void validatePassword(String password) {
+		if (password == null || password.length() > PASSWORD_MAX_LENGTH) {
+			throw new RuntimeException("잘못된 비밀번호입니다.");
+		}
+	}
+
+	private void validatename(String name) {
+		if (name == null || name.length() > NAME_MAX_LENGTH) {
+			throw new RuntimeException("잘못된 이름입니다.");
+		}
+	}
+
+	private void validatePhone(String phone) {
+		if (phone == null || phone.length() > PHONE_MAX_LENGTH) {
+			throw new RuntimeException("잘못된 핸드폰번호입니다.");
+		}
+	}
 }
