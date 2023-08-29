@@ -14,13 +14,13 @@ import javax.validation.constraints.Size;
 public final class ShopCreateRequest {
 
     @Size(max = 20, message = "가게 이름은 최대 20글자 입니다.")
-    @NotBlank(message = "이름은 필수 입력 값 입니다.")
+    @NotBlank(message = "이름이 비어있으면 안됩니다.")
     private final String name;
 
     private final Category category;
 
     @Size(max = 50, message = "주소는 최대 50글자 입니다.")
-    @NotBlank(message = "주소는 필수 입력 값 입니다.")
+    @NotBlank(message = "주소가 비어있으면 안됩니다.")
     private final String address;
 
     @Size(max = 15, message = "전화번호는 최대 15글자 입니다.")
