@@ -29,8 +29,10 @@ public class Address {
 	@JoinColumn(name = "member", nullable = false)
 	private Member member;
 
+	@Column(name = "addressAlias", nullable = false)
 	private String addressAlias;
 
+	@Column(name = "addressAlias", nullable = false)
 	private String address;
 
 	public Address(
