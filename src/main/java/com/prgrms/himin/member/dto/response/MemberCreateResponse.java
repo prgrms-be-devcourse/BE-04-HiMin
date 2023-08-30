@@ -1,6 +1,7 @@
 package com.prgrms.himin.member.dto.response;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import com.prgrms.himin.member.domain.Address;
 import com.prgrms.himin.member.domain.Grade;
@@ -24,7 +25,7 @@ public final class MemberCreateResponse {
 
 	private final Grade grade;
 
-	private final Address address;
+	private final List<Address> addresses;
 
 	@Builder
 	public MemberCreateResponse(
@@ -34,7 +35,7 @@ public final class MemberCreateResponse {
 		String phone,
 		LocalDate birthday,
 		Grade grade,
-		Address address
+		List<Address> addresses
 	) {
 		this.id = id;
 		this.loginId = loginId;
@@ -42,10 +43,10 @@ public final class MemberCreateResponse {
 		this.phone = phone;
 		this.birthday = birthday;
 		this.grade = grade;
-		this.address = address;
+		this.addresses = addresses;
 	}
 
-	public static MemberCreateResponse of(Member member, Address address) {
+	public static MemberCreateResponse from(Member member) {
 		return MemberCreateResponse.builder()
 			.id(member.getId())
 			.loginId(member.getLoginId())
@@ -53,7 +54,7 @@ public final class MemberCreateResponse {
 			.phone(member.getPhone())
 			.birthday(member.getBirthday())
 			.grade(member.getGrade())
-			.address(address)
+			.addresses(member.getAddresses())
 			.build();
 	}
 }
