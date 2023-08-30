@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "menu_options")
 public class MenuOption {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -22,6 +23,6 @@ public class MenuOption {
 	@Column(name = "name", nullable = false, length = 20)
 	private String name;
 
-	@Column(name = "id", nullable = false)
+	@Column(name = "price", nullable = false)
 	private int price;
 }
