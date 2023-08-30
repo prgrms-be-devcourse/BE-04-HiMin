@@ -43,7 +43,7 @@ public class Member {
 	@Column(name = "name", nullable = false, length = NAME_MAX_LENGTH)
 	private String name;
 
-	@Column(name = "phone", nullable = false, length = 15)
+	@Column(name = "phone", nullable = false, length = PHONE_MAX_LENGTH)
 	private String phone;
 
 	@Column(name = "birthday", nullable = false)
@@ -59,8 +59,7 @@ public class Member {
 		String password,
 		String name,
 		String phone,
-		LocalDate birthday,
-		Grade grade
+		LocalDate birthday
 	) {
 		validateLoginId(loginId);
 		validatePassword(password);
@@ -71,7 +70,7 @@ public class Member {
 		this.name = name;
 		this.phone = phone;
 		this.birthday = birthday;
-		this.grade = grade;
+		this.grade = Grade.NEW;
 	}
 
 	public void updateGrade(Grade grade) {
