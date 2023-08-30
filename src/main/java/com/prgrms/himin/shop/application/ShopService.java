@@ -21,4 +21,10 @@ public class ShopService {
         Shop savedShop = shopRepository.save(shop);
         return ShopResponse.from(savedShop);
     }
+
+    public ShopResponse getShop(Long shopId) {
+        Shop shop = shopRepository.findById(shopId)
+                .orElseThrow(() -> new RuntimeException("가게를 찾을 수 없습니다."));
+        return ShopResponse.from(shop);
+    }
 }
