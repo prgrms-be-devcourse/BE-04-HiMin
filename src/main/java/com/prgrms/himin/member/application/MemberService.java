@@ -5,7 +5,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.prgrms.himin.member.domain.Address;
 import com.prgrms.himin.member.domain.AddressRepository;
-import com.prgrms.himin.member.domain.Grade;
 import com.prgrms.himin.member.domain.Member;
 import com.prgrms.himin.member.domain.MemberRepository;
 import com.prgrms.himin.member.dto.request.MemberCreateRequest;
@@ -30,9 +29,8 @@ public class MemberService {
 			request.getAddressAlias(),
 			request.getAddress()
 		);
-		member.updateGrade(Grade.NEW);
-		memberRepository.save(member);
-		addressRepository.save(address);
-		return MemberCreateResponse.of(member, address);
+		Member savedMember = memberRepository.save(member);
+		Address savedAddress = addressRepository.save(address);
+		return MemberCreateResponse.of(savedMember, savedAddress);
 	}
 }
