@@ -20,7 +20,7 @@ public class MenuService {
 	@Transactional(readOnly = false)
 	public MenuCreateResponse createMenu(MenuCreateRequest menuCreateRequest) {
 		Menu menuEntity = menuCreateRequest.toEntity();
-		menuRepository.save(menuEntity);
-		return MenuCreateResponse.from(menuEntity);
+		Menu savedMenuEntity = menuRepository.save(menuEntity);
+		return MenuCreateResponse.from(savedMenuEntity);
 	}
 }
