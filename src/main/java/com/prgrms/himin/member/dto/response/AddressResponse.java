@@ -2,7 +2,6 @@ package com.prgrms.himin.member.dto.response;
 
 import com.prgrms.himin.member.domain.Address;
 
-import lombok.Builder;
 import lombok.Getter;
 
 @Getter
@@ -14,8 +13,7 @@ public final class AddressResponse {
 
 	private final String addressAlias;
 
-	@Builder
-	public AddressResponse(
+	private AddressResponse(
 		Long addressId,
 		String address,
 		String addressAlias
@@ -26,10 +24,10 @@ public final class AddressResponse {
 	}
 
 	public static AddressResponse from(Address address) {
-		return AddressResponse.builder()
-			.addressId(address.getAddressId())
-			.address(address.getAddress())
-			.addressAlias(address.getAddressAlias())
-			.build();
+		return new AddressResponse(
+			address.getAddressId(),
+			address.getAddress(),
+			address.getAddressAlias()
+		);
 	}
 }
