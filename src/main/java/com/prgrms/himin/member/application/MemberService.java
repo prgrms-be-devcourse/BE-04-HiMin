@@ -37,11 +37,13 @@ public class MemberService {
 		return MemberCreateResponse.of(savedMember, savedAddress);
 	}
 
-	public boolean tryToLoginWith(MemberLoginRequest request) {
+	public void login(MemberLoginRequest request) {
 		Optional<Member> member = memberRepository.findMemberByLoginIdAndPassword(
 			request.getLoginId(),
 			request.getPassword()
 		);
-		return member.isPresent();
+		if (member.isEmpty()) {
+			throw new RuntimeException("로그인할 정보가 일치하지 않습니다!");
+		}
 	}
 }

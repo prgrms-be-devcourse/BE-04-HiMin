@@ -29,9 +29,7 @@ public class MemberController {
 
 	@PostMapping("/sign-in")
 	public ResponseEntity<Void> login(@Valid @RequestBody MemberLoginRequest request) {
-		if (memberService.tryToLoginWith(request)) {
-			return ResponseEntity.ok().build();
-		}
-		return ResponseEntity.badRequest().build();
+		memberService.login(request);
+		return ResponseEntity.ok().build();
 	}
 }
