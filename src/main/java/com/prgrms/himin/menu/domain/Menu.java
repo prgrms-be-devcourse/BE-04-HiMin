@@ -23,6 +23,10 @@ import lombok.NoArgsConstructor;
 @Table(name = "menus")
 public class Menu {
 
+	private static final int MIN_PRICE = 0;
+
+	private static final int MAX_NAME_LENGTH = 30;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -60,14 +64,14 @@ public class Menu {
 	}
 
 	private void validatePrice(int price) {
-		if (price < 0) {
-			throw new RuntimeException("price는 0 이상이어야 합니다.");
+		if (price < MIN_PRICE) {
+			throw new RuntimeException("price는 음수가 되면 안됩니다.");
 		}
 	}
 
 	private void validateName(String name) {
-		if (name == null) {
-			throw new RuntimeException("name은 null값이면 안됩니다.");
+		if (name == null || name.length() > MAX_NAME_LENGTH) {
+			throw new RuntimeException("잘못된 메뉴 이름 입니다.");
 		}
 	}
 }
