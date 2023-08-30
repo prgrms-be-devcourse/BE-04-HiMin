@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.prgrms.himin.member.application.MemberService;
 import com.prgrms.himin.member.dto.request.MemberCreateRequest;
+import com.prgrms.himin.member.dto.request.MemberLoginRequest;
 import com.prgrms.himin.member.dto.response.MemberCreateResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -24,5 +25,13 @@ public class MemberController {
 	@PostMapping("/sign-up")
 	public ResponseEntity<MemberCreateResponse> createMember(@Valid @RequestBody MemberCreateRequest request) {
 		return ResponseEntity.ok(memberService.createMember(request));
+	}
+
+	@PostMapping("/sign-in")
+	public ResponseEntity<Void> login(@Valid @RequestBody MemberLoginRequest request) {
+		if (memberService.tryToLoginWith(request)) {
+			return ResponseEntity.ok().build();
+		}
+		return ResponseEntity.badRequest().build();
 	}
 }

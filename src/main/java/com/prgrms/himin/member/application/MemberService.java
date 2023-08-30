@@ -1,5 +1,7 @@
 package com.prgrms.himin.member.application;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -8,6 +10,7 @@ import com.prgrms.himin.member.domain.AddressRepository;
 import com.prgrms.himin.member.domain.Member;
 import com.prgrms.himin.member.domain.MemberRepository;
 import com.prgrms.himin.member.dto.request.MemberCreateRequest;
+import com.prgrms.himin.member.dto.request.MemberLoginRequest;
 import com.prgrms.himin.member.dto.response.MemberCreateResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -32,5 +35,13 @@ public class MemberService {
 		Member savedMember = memberRepository.save(member);
 		Address savedAddress = addressRepository.save(address);
 		return MemberCreateResponse.of(savedMember, savedAddress);
+	}
+
+	public boolean tryToLoginWith(MemberLoginRequest request) {
+		Optional<Member> member = memberRepository.findMemberByLoginIdAndPassword(
+			request.getLoginId(),
+			request.getPassword()
+		);
+		return member.isPresent();
 	}
 }
