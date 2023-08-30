@@ -31,7 +31,10 @@ public class MenuService {
 	}
 
 	@Transactional(readOnly = false)
-	public MenuOptionGroupCreateResponse createMenuOptionGroup(Long menuId, MenuOptionGroupCreateRequest request) {
+	public MenuOptionGroupCreateResponse createMenuOptionGroup(
+		Long menuId,
+		MenuOptionGroupCreateRequest request
+	) {
 		MenuOptionGroup menuOptionGroupEntity = request.toEntity(menuId);
 		MenuOptionGroup savedMenuOptionGroupEntity = menuOptionGroupRepository.save(menuOptionGroupEntity);
 		return MenuOptionGroupCreateResponse.from(savedMenuOptionGroupEntity);

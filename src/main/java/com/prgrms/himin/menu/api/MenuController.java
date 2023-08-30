@@ -35,7 +35,10 @@ public class MenuController {
 		@PathVariable Long menuId,
 		@RequestBody MenuOptionGroupCreateRequest request
 	) {
-		MenuOptionGroupCreateResponse response = menuService.createMenuOptionGroup(menuId, request);
+		MenuOptionGroupCreateResponse response = menuService.createMenuOptionGroup(
+			menuId,
+			request
+		);
 		return ResponseEntity.ok(response);
 	}
 }
