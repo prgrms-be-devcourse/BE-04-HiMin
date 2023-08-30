@@ -35,8 +35,13 @@ public class MenuService {
 		Long menuId,
 		MenuOptionGroupCreateRequest request
 	) {
-		MenuOptionGroup menuOptionGroupEntity = request.toEntity(menuId);
+		MenuOptionGroup menuOptionGroupEntity = request.toEntity();
+		Menu menu = menuRepository.findById(menuId)
+			.orElseThrow(
+				() -> new RuntimeException("존재 하지 않는 메뉴 id 입니다.")
+			);
 		MenuOptionGroup savedMenuOptionGroupEntity = menuOptionGroupRepository.save(menuOptionGroupEntity);
+		savedMenuOptionGroupEntity.attachMenu(menu);
 		return MenuOptionGroupCreateResponse.from(savedMenuOptionGroupEntity);
 	}
 }

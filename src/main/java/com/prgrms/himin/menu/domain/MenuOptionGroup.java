@@ -29,20 +29,19 @@ public class MenuOptionGroup {
 	@Column(name = "menu_group_name", nullable = false, length = 30)
 	private String name;
 
-	@Column(name = "menu_id", insertable = false, updatable = false)
-	private Long menuId;
-
 	@ManyToOne
 	@JoinColumn(name = "menu_id")
 	private Menu menu;
 
 	public MenuOptionGroup(
-		Long menuId,
 		String name
 	) {
 		validateName(name);
-		this.menuId = menuId;
 		this.name = name;
+	}
+
+	public void attachMenu(Menu menu) {
+		this.menu = menu;
 	}
 
 	private void validateName(String name) {

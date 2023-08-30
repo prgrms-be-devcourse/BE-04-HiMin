@@ -14,10 +14,7 @@ public final class MenuOptionGroupCreateRequest {
 	@NotBlank(message = "메뉴 옵션 그룹 이름은 비어있으면 안됩니다.")
 	private String name;
 
-	public MenuOptionGroup toEntity(Long menuId) {
-		return new MenuOptionGroup(
-			menuId,
-			name
-		);
+	public MenuOptionGroup toEntity() {
+		return new MenuOptionGroup(name);
 	}
 }
