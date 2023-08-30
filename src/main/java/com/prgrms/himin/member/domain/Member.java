@@ -1,13 +1,18 @@
 package com.prgrms.himin.member.domain;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.AccessLevel;
@@ -49,9 +54,12 @@ public class Member {
 	@Column(name = "birthday", nullable = false)
 	private LocalDate birthday;
 
-	@Enumerated
+	@Enumerated(EnumType.STRING)
 	@Column(name = "grade", nullable = false)
 	private Grade grade;
+
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+	private List<Address> addresses = new ArrayList<>();
 
 	@Builder
 	public Member(
@@ -75,6 +83,14 @@ public class Member {
 
 	public void updateGrade(Grade grade) {
 		this.grade = grade;
+	}
+
+	public void addAddress(Address address) {
+		addresses.add(address);
+	}
+
+	public void removeAddress(Address address) {
+		addresses.remove(address);
 	}
 
 	private void validateLoginId(String loginId) {

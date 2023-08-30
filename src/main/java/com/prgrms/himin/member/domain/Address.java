@@ -40,12 +40,18 @@ public class Address {
 	private String address;
 
 	public Address(
-		Member member,
 		String addressAlias,
 		String address
 	) {
-		this.member = member;
 		this.addressAlias = addressAlias;
 		this.address = address;
+	}
+
+	public void attachTo(Member member) {
+		if (this.member != null) {
+			this.member.removeAddress(this);
+		}
+		this.member = member;
+		member.addAddress(this);
 	}
 }
