@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.regex.Pattern;
 
 @Getter
@@ -49,9 +48,6 @@ public class Shop {
     @Column(name = "delivery_tip", nullable = false)
     private int deliveryTip;
 
-    @Column(name = "rating")
-    private BigDecimal rating;
-
     @Column(name = "dibs_count")
     private int dibsCount;
 
@@ -88,7 +84,6 @@ public class Shop {
         this.phone = phone;
         this.content = content;
         this.deliveryTip = deliveryTip;
-        this.rating = BigDecimal.ZERO;
         this.status = ShopStatus.CLOSE;
         this.openingTime = openingTime;
         this.closingTime = closingTime;
