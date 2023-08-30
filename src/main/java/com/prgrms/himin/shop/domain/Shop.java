@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.regex.Pattern;
 
 @Getter
@@ -49,9 +48,6 @@ public class Shop {
     @Column(name = "delivery_tip", nullable = false)
     private int deliveryTip;
 
-    @Column(name = "rating")
-    private BigDecimal rating;
-
     @Column(name = "dibs_count")
     private int dibsCount;
 
@@ -88,7 +84,6 @@ public class Shop {
         this.phone = phone;
         this.content = content;
         this.deliveryTip = deliveryTip;
-        this.rating = BigDecimal.ZERO;
         this.status = ShopStatus.CLOSE;
         this.openingTime = openingTime;
         this.closingTime = closingTime;
@@ -125,8 +120,38 @@ public class Shop {
     }
 
     private void validateClosingTime(String closingTime) {
-        if (openingTime == null || !TIME_PATTERN.matcher(closingTime).matches()) {
+        if (closingTime == null || !TIME_PATTERN.matcher(closingTime).matches()) {
             throw new RuntimeException("잘못된 마감 시간입니다.");
         }
+    }
+
+    public void updateInfo(
+            String name,
+            Category category,
+            String address,
+            String phone,
+            String content,
+            int deliveryTip,
+            String openingTime,
+            String closingTime
+    ) {
+        validateName(name);
+        validateAddress(address);
+        validatePhone(phone);
+        validateDeliveryTip(deliveryTip);
+        validateOpeningTime(openingTime);
+        validateClosingTime(closingTime);
+        this.name = name;
+        this.category = category;
+        this.address = address;
+        this.phone = phone;
+        this.content = content;
+        this.deliveryTip = deliveryTip;
+        this.openingTime = openingTime;
+        this.closingTime = closingTime;
+    }
+
+    public void changeStatus(ShopStatus status) {
+        this.status = status;
     }
 }

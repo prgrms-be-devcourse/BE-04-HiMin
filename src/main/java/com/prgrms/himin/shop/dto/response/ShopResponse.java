@@ -6,8 +6,6 @@ import com.prgrms.himin.shop.domain.ShopStatus;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.math.BigDecimal;
-
 @Getter
 public final class ShopResponse {
 
@@ -24,8 +22,6 @@ public final class ShopResponse {
     private final String content;
 
     private final int deliveryTip;
-
-    private final BigDecimal rating;
 
     private final int dibsCount;
 
@@ -44,7 +40,6 @@ public final class ShopResponse {
             String phone,
             String content,
             int deliveryTip,
-            BigDecimal rating,
             int dibsCount,
             ShopStatus status,
             String openingTime,
@@ -57,7 +52,6 @@ public final class ShopResponse {
         this.phone = phone;
         this.content = content;
         this.deliveryTip = deliveryTip;
-        this.rating = rating;
         this.dibsCount = dibsCount;
         this.status = status;
         this.openingTime = openingTime;
@@ -73,7 +67,6 @@ public final class ShopResponse {
                 .phone(shop.getPhone())
                 .content(shop.getContent())
                 .deliveryTip(shop.getDeliveryTip())
-                .rating(shop.getRating())
                 .dibsCount(shop.getDibsCount())
                 .status(shop.getStatus())
                 .openingTime(shop.getOpeningTime())
