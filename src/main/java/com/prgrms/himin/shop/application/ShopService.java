@@ -30,7 +30,7 @@ public class ShopService {
     }
 
     @Transactional
-    public void updateShop(Long shopId, ShopUpdateRequest request) {
+    public void updateShop(Long shopId, ShopUpdateRequest.Info request) {
         Shop shop = shopRepository.findById(shopId)
                 .orElseThrow(() -> new RuntimeException("가게를 찾을 수 없습니다."));
 

@@ -32,7 +32,7 @@ public class ShopController {
     @PutMapping("/{shopId}")
     public ResponseEntity<Void> updateShop(
             @PathVariable Long shopId,
-            @RequestBody ShopUpdateRequest request
+            @RequestBody ShopUpdateRequest.Info request
     ) {
         shopService.updateShop(shopId, request);
         return ResponseEntity.noContent().build();
