@@ -15,9 +15,9 @@ public final class MenuOptionGroupCreateRequest {
 	private String name;
 
 	public MenuOptionGroup toEntity(Long menuId) {
-		return MenuOptionGroup.builder()
-			.menuId(menuId)
-			.name(this.name)
-			.build();
+		return new MenuOptionGroup(
+			menuId,
+			name
+		);
 	}
 }

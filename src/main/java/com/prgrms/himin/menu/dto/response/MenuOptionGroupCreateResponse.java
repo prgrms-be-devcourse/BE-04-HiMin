@@ -9,7 +9,7 @@ public final class MenuOptionGroupCreateResponse {
 
 	private final String name;
 
-	public MenuOptionGroupCreateResponse(String name) {
+	private MenuOptionGroupCreateResponse(String name) {
 		this.name = name;
 	}
 
