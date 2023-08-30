@@ -129,4 +129,30 @@ public class Shop {
             throw new RuntimeException("잘못된 마감 시간입니다.");
         }
     }
+
+    public void updateInfo(
+            String name,
+            Category category,
+            String address,
+            String phone,
+            String content,
+            int deliveryTip,
+            String openingTime,
+            String closingTime
+    ) {
+        validateName(name);
+        validateAddress(address);
+        validatePhone(phone);
+        validateDeliveryTip(deliveryTip);
+        validateOpeningTime(openingTime);
+        validateClosingTime(closingTime);
+        this.name = name;
+        this.category = category;
+        this.address = address;
+        this.phone = phone;
+        this.content = content;
+        this.deliveryTip = deliveryTip;
+        this.openingTime = openingTime;
+        this.closingTime = closingTime;
+    }
 }

@@ -2,6 +2,7 @@ package com.prgrms.himin.shop.api;
 
 import com.prgrms.himin.shop.application.ShopService;
 import com.prgrms.himin.shop.dto.request.ShopCreateRequest;
+import com.prgrms.himin.shop.dto.request.ShopUpdateRequest;
 import com.prgrms.himin.shop.dto.response.ShopResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,5 +27,14 @@ public class ShopController {
     public ResponseEntity<ShopResponse> getShop(@PathVariable Long shopId) {
         ShopResponse response = shopService.getShop(shopId);
         return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{shopId}")
+    public ResponseEntity<Void> updateShop(
+            @PathVariable Long shopId,
+            @RequestBody ShopUpdateRequest request
+    ) {
+        shopService.updateShop(shopId, request);
+        return ResponseEntity.noContent().build();
     }
 }
