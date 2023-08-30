@@ -120,7 +120,7 @@ public class Shop {
     }
 
     private void validateClosingTime(String closingTime) {
-        if (openingTime == null || !TIME_PATTERN.matcher(closingTime).matches()) {
+        if (closingTime == null || !TIME_PATTERN.matcher(closingTime).matches()) {
             throw new RuntimeException("잘못된 마감 시간입니다.");
         }
     }
