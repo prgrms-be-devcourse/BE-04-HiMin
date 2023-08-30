@@ -10,7 +10,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,7 +26,7 @@ public class MenuOptionGroup {
 	@Column(name = "id")
 	private Long id;
 
-	@Column(name = "menu_group_name")
+	@Column(name = "menu_group_name", nullable = false, length = 30)
 	private String name;
 
 	@Column(name = "menu_id", insertable = false, updatable = false)
@@ -37,14 +36,13 @@ public class MenuOptionGroup {
 	@JoinColumn(name = "menu_id")
 	private Menu menu;
 
-	@Builder
 	public MenuOptionGroup(
-		String name,
-		Long menuId
+		Long menuId,
+		String name
 	) {
 		validateName(name);
-		this.name = name;
 		this.menuId = menuId;
+		this.name = name;
 	}
 
 	private void validateName(String name) {
