@@ -107,7 +107,7 @@ public class Shop {
     }
 
     private void validatePhone(String phone) {
-        if (!PHONE_PATTERN.matcher(phone).matches() || phone.length() > MAX_PHONE_LENGTH) {
+        if (phone == null || !PHONE_PATTERN.matcher(phone).matches() || phone.length() > MAX_PHONE_LENGTH) {
             throw new RuntimeException("잘못된 전화번호입니다.");
         }
     }
@@ -119,13 +119,13 @@ public class Shop {
     }
 
     private void validateOpeningTime(String openingTime) {
-        if (!TIME_PATTERN.matcher(openingTime).matches()) {
+        if (openingTime == null || !TIME_PATTERN.matcher(openingTime).matches()) {
             throw new RuntimeException("잘못된 오픈 시간입니다.");
         }
     }
 
     private void validateClosingTime(String closingTime) {
-        if (!TIME_PATTERN.matcher(closingTime).matches()) {
+        if (openingTime == null || !TIME_PATTERN.matcher(closingTime).matches()) {
             throw new RuntimeException("잘못된 마감 시간입니다.");
         }
     }

@@ -24,6 +24,7 @@ public final class ShopCreateRequest {
     private final String address;
 
     @Size(max = 15, message = "전화번호는 최대 15글자 입니다.")
+    @NotBlank(message = "전화번호가 비어있으면 안됩니다.")
     @Pattern(regexp = "^(02|0[3-9]{1}[0-9]{1}|010)-[0-9]{3,4}-[0-9]{4}$", message = "전화번호 형식이어야 합니다.")
     private final String phone;
 
@@ -32,9 +33,11 @@ public final class ShopCreateRequest {
     @PositiveOrZero(message = "배달팁은 0원 이상이어야 합니다.")
     private final int deliveryTip;
 
+    @NotBlank(message = "오픈 시간이 비어있으면 안됩니다.")
     @Pattern(regexp = "([01]?[0-9]|2[0-3]):[0-5][0-9]", message = "오픈 시간은 HH:MM 형식이어야 합니다.")
     private final String openingTime;
 
+    @NotBlank(message = "마감 시간이 비어있으면 안됩니다.")
     @Pattern(regexp = "([01]?[0-9]|2[0-3]):[0-5][0-9]", message = "마감 시간은 HH:MM 형식이어야 합니다.")
     private final String closingTime;
 
