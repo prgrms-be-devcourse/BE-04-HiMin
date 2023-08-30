@@ -10,7 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class MemberCreateResponse {
+public final class MemberCreateResponse {
 
 	private final Long id;
 
