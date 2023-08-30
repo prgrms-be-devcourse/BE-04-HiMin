@@ -46,4 +46,10 @@ public class ShopController {
         shopService.changeShopStatus(shopId, request);
         return ResponseEntity.noContent().build();
     }
+
+    @DeleteMapping("/{shopId}")
+    public ResponseEntity<Void> deleteShop(@PathVariable Long shopId) {
+        shopService.deleteShop(shopId);
+        return ResponseEntity.noContent().build();
+    }
 }

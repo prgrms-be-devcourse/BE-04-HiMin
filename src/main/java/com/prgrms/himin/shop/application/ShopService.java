@@ -53,4 +53,12 @@ public class ShopService {
 
         shop.changeStatus(request.getStatus());
     }
+
+    @Transactional
+    public void deleteShop(Long shopId) {
+        if (!shopRepository.existsById(shopId)) {
+            throw new RuntimeException("가게를 찾을 수 없습니다.");
+        }
+        shopRepository.deleteById(shopId);
+    }
 }
