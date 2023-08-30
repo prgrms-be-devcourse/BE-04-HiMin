@@ -20,6 +20,10 @@ import lombok.NoArgsConstructor;
 @Table(name = "addresses")
 public class Address {
 
+	private static final int MAX_ADDRESS_LENGTH = 50;
+
+	private static final int MAX_ALIAS_ADDRESS_LENGTH = 10;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -29,10 +33,10 @@ public class Address {
 	@JoinColumn(name = "member_id", nullable = false)
 	private Member member;
 
-	@Column(name = "address_alias", nullable = false)
+	@Column(name = "address_alias", nullable = false, length = MAX_ALIAS_ADDRESS_LENGTH)
 	private String addressAlias;
 
-	@Column(name = "address", nullable = false)
+	@Column(name = "address", nullable = false, length = MAX_ADDRESS_LENGTH)
 	private String address;
 
 	public Address(
