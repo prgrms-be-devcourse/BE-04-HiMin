@@ -1,7 +1,5 @@
 package com.prgrms.himin.member.application;
 
-import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,11 +36,10 @@ public class MemberService {
 	}
 
 	public void login(MemberLoginRequest request) {
-		Optional<Member> member = memberRepository.findMemberByLoginIdAndPassword(
+		if (!memberRepository.existsMemberByLoginIdAndPassword(
 			request.getLoginId(),
 			request.getPassword()
-		);
-		if (member.isEmpty()) {
+		)) {
 			throw new RuntimeException("로그인할 정보가 일치하지 않습니다!");
 		}
 	}
