@@ -26,10 +26,10 @@ public class Address {
 	private Long addressId;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "member", nullable = false)
+	@JoinColumn(name = "member_id", nullable = false)
 	private Member member;
 
-	@Column(name = "addressAlias", nullable = false)
+	@Column(name = "address_alias", nullable = false)
 	private String addressAlias;
 
 	@Column(name = "address", nullable = false)
