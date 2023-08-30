@@ -5,7 +5,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.prgrms.himin.menu.domain.Menu;
-import com.prgrms.himin.menu.domain.MenuStatus;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -22,15 +21,11 @@ public final class MenuCreateRequest {
 	@NotNull(message = "popularity가 null값이면 안됩니다.")
 	private final boolean popularity;
 
-	@NotNull(message = "status가 비어있으면 안됩니다.")
-	private final MenuStatus status;
-
 	public Menu toEntity() {
 		return Menu.builder()
 			.name(this.name)
 			.price(this.price)
 			.popularity(this.popularity)
-			.status(this.status)
 			.build();
 	}
 }

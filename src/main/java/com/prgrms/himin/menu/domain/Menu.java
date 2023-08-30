@@ -49,22 +49,14 @@ public class Menu {
 	public Menu(
 		String name,
 		int price,
-		boolean popularity,
-		MenuStatus status
+		boolean popularity
 	) {
 		validateName(name);
 		validatePrice(price);
-		validateStatus(status);
 		this.name = name;
 		this.price = price;
 		this.popularity = popularity;
-		this.status = status;
-	}
-
-	private void validateStatus(MenuStatus status) {
-		if (status == null) {
-			throw new RuntimeException("status는 null값이면 안됩니다.");
-		}
+		this.status = MenuStatus.unsellable;
 	}
 
 	private void validatePrice(int price) {
