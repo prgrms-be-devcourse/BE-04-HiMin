@@ -2,8 +2,8 @@ package com.prgrms.himin.member.dto.response;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import com.prgrms.himin.member.domain.Address;
 import com.prgrms.himin.member.domain.Grade;
 import com.prgrms.himin.member.domain.Member;
 
@@ -25,17 +25,17 @@ public final class MemberCreateResponse {
 
 	private final Grade grade;
 
-	private final List<Address> addresses;
+	private final List<AddressResponse> addresses;
 
 	@Builder
-	public MemberCreateResponse(
+	private MemberCreateResponse(
 		Long id,
 		String loginId,
 		String name,
 		String phone,
 		LocalDate birthday,
 		Grade grade,
-		List<Address> addresses
+		List<AddressResponse> addresses
 	) {
 		this.id = id;
 		this.loginId = loginId;
@@ -54,7 +54,10 @@ public final class MemberCreateResponse {
 			.phone(member.getPhone())
 			.birthday(member.getBirthday())
 			.grade(member.getGrade())
-			.addresses(member.getAddresses())
+			.addresses(member.getAddresses()
+				.stream()
+				.map(AddressResponse::from)
+				.collect(Collectors.toList()))
 			.build();
 	}
 }
