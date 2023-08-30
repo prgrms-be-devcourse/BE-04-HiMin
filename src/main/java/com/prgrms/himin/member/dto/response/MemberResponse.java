@@ -27,7 +27,7 @@ public final class MemberResponse {
 	private final List<AddressResponse> addresses;
 
 	@Builder
-	public MemberResponse(
+	private MemberResponse(
 		Long id,
 		String loginId,
 		String name,
@@ -45,7 +45,7 @@ public final class MemberResponse {
 		this.addresses = addresses;
 	}
 
-	public static MemberResponse from(Member member, List<AddressResponse> addresses) {
+	public static MemberResponse of(Member member, List<AddressResponse> addresses) {
 		return MemberResponse.builder()
 			.id(member.getId())
 			.loginId(member.getLoginId())

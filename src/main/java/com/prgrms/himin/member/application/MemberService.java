@@ -54,6 +54,6 @@ public class MemberService {
 			.stream()
 			.map(AddressResponse::from)
 			.collect(Collectors.toList());
-		return MemberResponse.from(member, addresses);
+		return MemberResponse.of(member, addresses);
 	}
 }
