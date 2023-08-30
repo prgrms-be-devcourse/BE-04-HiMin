@@ -1,6 +1,7 @@
 package com.prgrms.himin.shop.dto.request;
 
 import com.prgrms.himin.shop.domain.Category;
+import com.prgrms.himin.shop.domain.ShopStatus;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -43,5 +44,11 @@ public class ShopUpdateRequest {
         @NotBlank(message = "마감 시간이 비어있으면 안됩니다.")
         @Pattern(regexp = "([01]?[0-9]|2[0-3]):[0-5][0-9]", message = "마감 시간은 HH:MM 형식이어야 합니다.")
         private final String closingTime;
+    }
+
+    @Getter
+    public static final class Status {
+
+        private ShopStatus status;
     }
 }

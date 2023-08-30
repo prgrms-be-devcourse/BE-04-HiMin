@@ -37,4 +37,13 @@ public class ShopController {
         shopService.updateShop(shopId, request);
         return ResponseEntity.noContent().build();
     }
+
+    @PatchMapping("/{shopId}")
+    public ResponseEntity<Void> changeShopStatus(
+            @PathVariable Long shopId,
+            @RequestBody ShopUpdateRequest.Status request
+    ) {
+        shopService.changeShopStatus(shopId, request);
+        return ResponseEntity.noContent().build();
+    }
 }

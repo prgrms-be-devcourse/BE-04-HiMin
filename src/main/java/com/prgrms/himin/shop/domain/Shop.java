@@ -155,4 +155,8 @@ public class Shop {
         this.openingTime = openingTime;
         this.closingTime = closingTime;
     }
+
+    public void changeStatus(ShopStatus status) {
+        this.status = status;
+    }
 }

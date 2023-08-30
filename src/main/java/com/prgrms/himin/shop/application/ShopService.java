@@ -45,4 +45,12 @@ public class ShopService {
                 request.getClosingTime()
         );
     }
+
+    @Transactional
+    public void changeShopStatus(Long shopId, ShopUpdateRequest.Status request) {
+        Shop shop = shopRepository.findById(shopId)
+                .orElseThrow(() -> new RuntimeException("가게를 찾을 수 없습니다."));
+
+        shop.changeStatus(request.getStatus());
+    }
 }
