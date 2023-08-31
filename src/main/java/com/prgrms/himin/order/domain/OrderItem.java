@@ -5,6 +5,7 @@ import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,9 +13,18 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import com.prgrms.himin.menu.domain.Menu;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
+@Table(name = "order_items")
 public class OrderItem {
 
 	@Id
@@ -35,6 +45,14 @@ public class OrderItem {
 
 	@OneToMany(mappedBy = "orderItem", cascade = CascadeType.ALL)
 	private List<SelectedOption> selectedOptions;
+
+	public OrderItem(
+		Menu menu,
+		int quantity
+	) {
+		this.quantity = quantity;
+		this.menu = menu;
+	}
 
 	@Override
 	public boolean equals(Object o) {
