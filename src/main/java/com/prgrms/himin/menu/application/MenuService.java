@@ -57,10 +57,7 @@ public class MenuService {
 			.orElseThrow(
 				() -> new RuntimeException("존재 하지 않는 메뉴 id 입니다.")
 			);
-		Shop shop = menu.getShop();
-		if (!shopId.equals(shop.getShopId())) {
-			throw new RuntimeException("잘못된 가게 id 입니다.");
-		}
+		checkShopId(shopId, menu);
 		MenuOptionGroup savedMenuOptionGroupEntity = menuOptionGroupRepository.save(menuOptionGroupEntity);
 		savedMenuOptionGroupEntity.attachMenu(menu);
 		return MenuOptionGroupCreateResponse.from(savedMenuOptionGroupEntity);
@@ -84,10 +81,7 @@ public class MenuService {
 			throw new RuntimeException("잘못된 메뉴 id 입니다.");
 		}
 
-		Shop shop = menu.getShop();
-		if (!shopId.equals(shop.getShopId())) {
-			throw new RuntimeException("잘못된 가게 id 입니다.");
-		}
+		checkShopId(shopId, menu);
 
 		menuOptionEntity.attachMenuOptionGroup(menuOptionGroup);
 		MenuOption savedMenuOption = menuOptionRepository.save(menuOptionEntity);
@@ -101,11 +95,15 @@ public class MenuService {
 		Menu menu = menuRepository.findById(menuId)
 			.orElseThrow(() -> new RuntimeException("메뉴를 찾을 수 없습니다."));
 
+		checkShopId(shopId, menu);
+
+		return MenuResponse.from(menu);
+	}
+
+	private void checkShopId(Long shopId, Menu menu) {
 		Shop shop = menu.getShop();
 		if (!shopId.equals(shop.getShopId())) {
 			throw new RuntimeException("잘못된 가게 id 입니다.");
 		}
-
-		return MenuResponse.from(menu);
 	}
 }
