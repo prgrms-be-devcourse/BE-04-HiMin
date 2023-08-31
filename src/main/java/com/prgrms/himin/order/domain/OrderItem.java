@@ -85,4 +85,15 @@ public class OrderItem {
 		order.addOrderItem(this);
 		this.order = order;
 	}
+
+	public void addSelectedOption(SelectedOption selectedOption) {
+		if (selectedOptions.contains(selectedOption)) {
+			return;
+		}
+		selectedOptions.add(selectedOption);
+	}
+
+	public void removeSelectedOption(SelectedOption selectedOption) {
+		selectedOptions.remove(selectedOption);
+	}
 }
