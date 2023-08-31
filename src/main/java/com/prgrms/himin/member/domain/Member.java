@@ -58,7 +58,7 @@ public class Member {
 	@Column(name = "grade", nullable = false)
 	private Grade grade;
 
-	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Address> addresses = new ArrayList<>();
 
 	@Builder
