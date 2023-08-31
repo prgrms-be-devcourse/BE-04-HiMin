@@ -16,6 +16,8 @@ import com.prgrms.himin.menu.dto.response.MenuCreateResponse;
 import com.prgrms.himin.menu.dto.response.MenuOptionCreateResponse;
 import com.prgrms.himin.menu.dto.response.MenuOptionGroupCreateResponse;
 import com.prgrms.himin.menu.dto.response.MenuResponse;
+import com.prgrms.himin.shop.domain.Shop;
+import com.prgrms.himin.shop.domain.ShopRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,15 +32,23 @@ public class MenuService {
 
 	private final MenuOptionRepository menuOptionRepository;
 
+	private final ShopRepository shopRepository;
+
 	@Transactional(readOnly = false)
-	public MenuCreateResponse createMenu(MenuCreateRequest request) {
-		Menu menuEntity = request.toEntity();
-		Menu savedMenuEntity = menuRepository.save(menuEntity);
+	public MenuCreateResponse createMenu(Long shopId, MenuCreateRequest request) {
+		Shop shop = shopRepository.findById(shopId)
+			.orElseThrow(
+				() -> new RuntimeException("존재 하지 않는 가게 id 입니다.")
+			);
+		Menu menu = request.toEntity();
+		menu.attachShop(shop);
+		Menu savedMenuEntity = menuRepository.save(menu);
 		return MenuCreateResponse.from(savedMenuEntity);
 	}
 
 	@Transactional(readOnly = false)
 	public MenuOptionGroupCreateResponse createMenuOptionGroup(
+		Long shopId,
 		Long menuId,
 		MenuOptionGroupCreateRequest request
 	) {
@@ -47,6 +57,10 @@ public class MenuService {
 			.orElseThrow(
 				() -> new RuntimeException("존재 하지 않는 메뉴 id 입니다.")
 			);
+		Shop shop = menu.getShop();
+		if (!shopId.equals(shop.getShopId())) {
+			throw new RuntimeException("잘못된 가게 id 입니다.");
+		}
 		MenuOptionGroup savedMenuOptionGroupEntity = menuOptionGroupRepository.save(menuOptionGroupEntity);
 		savedMenuOptionGroupEntity.attachMenu(menu);
 		return MenuOptionGroupCreateResponse.from(savedMenuOptionGroupEntity);
@@ -54,6 +68,7 @@ public class MenuService {
 
 	@Transactional(readOnly = false)
 	public MenuOptionCreateResponse createMenuOption(
+		Long shopId,
 		Long menuId,
 		Long menuOptionGroupId,
 		MenuOptionCreateRequest request
@@ -69,14 +84,28 @@ public class MenuService {
 			throw new RuntimeException("잘못된 메뉴 id 입니다.");
 		}
 
+		Shop shop = menu.getShop();
+		if (!shopId.equals(shop.getShopId())) {
+			throw new RuntimeException("잘못된 가게 id 입니다.");
+		}
+
 		menuOptionEntity.attachMenuOptionGroup(menuOptionGroup);
 		MenuOption savedMenuOption = menuOptionRepository.save(menuOptionEntity);
 		return MenuOptionCreateResponse.from(savedMenuOption);
 	}
 
-	public MenuResponse getMenu(Long menuId) {
+	public MenuResponse getMenu(
+		Long shopId,
+		Long menuId
+	) {
 		Menu menu = menuRepository.findById(menuId)
 			.orElseThrow(() -> new RuntimeException("메뉴를 찾을 수 없습니다."));
+
+		Shop shop = menu.getShop();
+		if (!shopId.equals(shop.getShopId())) {
+			throw new RuntimeException("잘못된 가게 id 입니다.");
+		}
+
 		return MenuResponse.from(menu);
 	}
 }
