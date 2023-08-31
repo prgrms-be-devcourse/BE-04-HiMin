@@ -1,5 +1,6 @@
 package com.prgrms.himin.order.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -44,7 +45,7 @@ public class OrderItem {
 	private Menu menu;
 
 	@OneToMany(mappedBy = "orderItem", cascade = CascadeType.ALL)
-	private List<SelectedOption> selectedOptions;
+	private List<SelectedOption> selectedOptions = new ArrayList<>();
 
 	public OrderItem(
 		Menu menu,
@@ -95,5 +96,9 @@ public class OrderItem {
 
 	public void removeSelectedOption(SelectedOption selectedOption) {
 		selectedOptions.remove(selectedOption);
+	}
+
+	public int calculateOrderItemPrice() {
+		return menu.getPrice() * quantity;
 	}
 }
