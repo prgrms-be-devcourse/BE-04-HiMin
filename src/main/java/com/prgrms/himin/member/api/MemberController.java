@@ -3,6 +3,7 @@ package com.prgrms.himin.member.api;
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,5 +42,11 @@ public class MemberController {
 	public ResponseEntity<MemberResponse> getMember(@PathVariable Long memberId) {
 		MemberResponse response = memberService.getMember(memberId);
 		return ResponseEntity.ok(response);
+	}
+
+	@DeleteMapping("/withdrawal/{memberId}")
+	public ResponseEntity<Void> deleteMemberById(@PathVariable Long memberId) {
+		memberService.deleteMemberById(memberId);
+		return ResponseEntity.ok().build();
 	}
 }
