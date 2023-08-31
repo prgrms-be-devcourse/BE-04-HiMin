@@ -12,6 +12,8 @@ import lombok.Getter;
 @Getter
 public final class MenuResponse {
 
+	private final Long menuId;
+
 	private final String name;
 
 	private final int price;
@@ -24,12 +26,14 @@ public final class MenuResponse {
 
 	@Builder
 	private MenuResponse(
+		Long menuId,
 		String name,
 		int price,
 		boolean popularity,
 		MenuStatus status,
 		List<MenuOptionGroupResponse> menuOptionGroupResponses
 	) {
+		this.menuId = menuId;
 		this.name = name;
 		this.price = price;
 		this.popularity = popularity;
@@ -44,6 +48,7 @@ public final class MenuResponse {
 			.collect(Collectors.toList());
 
 		return MenuResponse.builder()
+			.menuId(menu.getId())
 			.name(menu.getName())
 			.price(menu.getPrice())
 			.popularity(menu.isPopularity())
