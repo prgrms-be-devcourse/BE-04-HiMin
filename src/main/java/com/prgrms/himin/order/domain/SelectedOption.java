@@ -17,7 +17,9 @@ import com.prgrms.himin.menu.domain.MenuOption;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -54,15 +56,16 @@ public class SelectedOption {
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o)
+		if (this == o) {
 			return true;
+		}
 		if (o == null || getClass() != o.getClass())
 			return false;
 		SelectedOption that = (SelectedOption)o;
-		return Objects.equals(
-			selectedOptionId,
-			that.selectedOptionId
-		);
+		if (Objects.equals(menuOption.getId(), that.menuOption.getId())) {
+			return true;
+		}
+		return false;
 	}
 
 	@Override
