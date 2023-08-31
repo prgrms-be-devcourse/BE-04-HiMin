@@ -10,14 +10,18 @@ import lombok.Getter;
 @Getter
 public final class MenuOptionGroupResponse {
 
+	private final Long menuOptionGroupId;
+
 	private final String name;
 
 	private final List<MenuOptionResponse> menuOptionResponses;
 
 	private MenuOptionGroupResponse(
+		Long menuOptionGroupId,
 		String name,
 		List<MenuOptionResponse> menuOptionResponses
 	) {
+		this.menuOptionGroupId = menuOptionGroupId;
 		this.name = name;
 		this.menuOptionResponses = menuOptionResponses;
 	}
@@ -29,6 +33,7 @@ public final class MenuOptionGroupResponse {
 			.collect(Collectors.toList());
 
 		return new MenuOptionGroupResponse(
+			menuOptionGroup.getId(),
 			menuOptionGroup.getName(),
 			menuOptionResponses
 		);
