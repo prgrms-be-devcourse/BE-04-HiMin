@@ -47,7 +47,11 @@ public class MenuOption {
 	}
 
 	public void attachMenuOptionGroup(MenuOptionGroup menuOptionGroup) {
+		if (this.menuOptionGroup != null) {
+			this.menuOptionGroup.removeMenuOption(this);
+		}
 		this.menuOptionGroup = menuOptionGroup;
+		menuOptionGroup.addMenuOption(this);
 	}
 
 	private void validatePrice(int price) {
@@ -60,5 +64,22 @@ public class MenuOption {
 		if (name == null || name.length() > MAX_NAME_LENGTH) {
 			throw new RuntimeException("잘못된 메뉴 옵션 이름 입니다.");
 		}
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+
+		MenuOption that = (MenuOption)o;
+
+		return menuOptionId.equals(that.menuOptionId);
+	}
+
+	@Override
+	public int hashCode() {
+		return menuOptionId.hashCode();
 	}
 }
