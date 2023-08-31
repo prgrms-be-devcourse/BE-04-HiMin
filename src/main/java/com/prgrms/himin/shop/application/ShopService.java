@@ -1,5 +1,6 @@
 package com.prgrms.himin.shop.application;
 
+import com.prgrms.himin.shop.domain.Category;
 import com.prgrms.himin.shop.domain.Shop;
 import com.prgrms.himin.shop.domain.ShopRepository;
 import com.prgrms.himin.shop.dto.request.ShopCreateRequest;
@@ -8,6 +9,9 @@ import com.prgrms.himin.shop.dto.response.ShopResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +31,23 @@ public class ShopService {
         Shop shop = shopRepository.findById(shopId)
                 .orElseThrow(() -> new RuntimeException("가게를 찾을 수 없습니다."));
         return ShopResponse.from(shop);
+    }
+
+    public List<ShopResponse> getShops(
+            String name,
+            Category category,
+            String address,
+            Integer deliveryTip
+    ) {
+        List<Shop> shops = shopRepository.searchShops(
+                name,
+                category,
+                address,
+                deliveryTip
+        );
+        return shops.stream()
+                .map(ShopResponse::from)
+                .collect(Collectors.toList());
     }
 
     @Transactional
