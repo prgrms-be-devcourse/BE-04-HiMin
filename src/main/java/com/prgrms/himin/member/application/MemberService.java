@@ -98,6 +98,8 @@ public class MemberService {
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 		Address address = addressRepository.findById(addressId)
 			.orElseThrow(() -> new RuntimeException("찾는 주소가 없습니다."));
-		addressRepository.delete(address);
+		if (!member.removeAddress(address)) {
+			throw new RuntimeException("찾는 주소는 해당 멤버의 주소가 아닙니다.");
+		}
 	}
 }
