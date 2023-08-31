@@ -62,7 +62,7 @@ public class MemberController {
 		return ResponseEntity.ok(response);
 	}
 
-	@GetMapping("/memebers/{memberId}/addresses")
+	@GetMapping("/members/{memberId}/addresses")
 	public ResponseEntity<List<AddressResponse>> getAllAddress(@PathVariable Long memberId) {
 		List<AddressResponse> response = memberService.getAllAddress(memberId);
 		return ResponseEntity.ok(response);
