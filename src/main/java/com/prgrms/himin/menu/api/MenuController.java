@@ -44,7 +44,7 @@ public class MenuController {
 		return ResponseEntity.ok(response);
 	}
 
-	@PostMapping("/{menuId}/option-group/{menuOptionGroupId}/option")
+	@PostMapping("/{menuId}/option-group/{menuOptionGroupId}/options")
 	public ResponseEntity<MenuOptionCreateResponse> createMenuOption(
 		@PathVariable Long menuId,
 		@PathVariable Long menuOptionGroupId,
