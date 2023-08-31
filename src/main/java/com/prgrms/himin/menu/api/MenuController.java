@@ -32,7 +32,10 @@ public class MenuController {
 	public ResponseEntity<MenuCreateResponse> createMenu(
 		@PathVariable Long shopId,
 		@Valid @RequestBody MenuCreateRequest request) {
-		MenuCreateResponse response = menuService.createMenu(request);
+		MenuCreateResponse response = menuService.createMenu(
+			shopId,
+			request
+		);
 		return ResponseEntity.ok(response);
 	}
 
@@ -43,6 +46,7 @@ public class MenuController {
 		@RequestBody MenuOptionGroupCreateRequest request
 	) {
 		MenuOptionGroupCreateResponse response = menuService.createMenuOptionGroup(
+			shopId,
 			menuId,
 			request
 		);
@@ -57,6 +61,7 @@ public class MenuController {
 		@RequestBody MenuOptionCreateRequest request
 	) {
 		MenuOptionCreateResponse response = menuService.createMenuOption(
+			shopId,
 			menuId,
 			menuOptionGroupId,
 			request
@@ -69,7 +74,10 @@ public class MenuController {
 		@PathVariable Long shopId,
 		@PathVariable Long menuId
 	) {
-		MenuResponse menuResponse = menuService.getMenu(menuId);
+		MenuResponse menuResponse = menuService.getMenu(
+			shopId,
+			menuId
+		);
 		return ResponseEntity.ok(menuResponse);
 	}
 }
