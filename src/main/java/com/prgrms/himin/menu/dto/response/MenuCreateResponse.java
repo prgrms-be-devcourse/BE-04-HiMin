@@ -18,7 +18,7 @@ public final class MenuCreateResponse {
 	private final MenuStatus status;
 
 	@Builder
-	public MenuCreateResponse(
+	private MenuCreateResponse(
 		String name,
 		int price,
 		boolean popularity,

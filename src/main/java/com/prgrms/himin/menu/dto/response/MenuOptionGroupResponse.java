@@ -14,7 +14,7 @@ public final class MenuOptionGroupResponse {
 
 	private final List<MenuOptionResponse> menuOptionResponses;
 
-	public MenuOptionGroupResponse(
+	private MenuOptionGroupResponse(
 		String name,
 		List<MenuOptionResponse> menuOptionResponses
 	) {

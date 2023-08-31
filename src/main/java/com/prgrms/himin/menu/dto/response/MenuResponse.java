@@ -23,7 +23,7 @@ public final class MenuResponse {
 	private final List<MenuOptionGroupResponse> menuOptionGroupResponses;
 
 	@Builder
-	public MenuResponse(
+	private MenuResponse(
 		String name,
 		int price,
 		boolean popularity,
