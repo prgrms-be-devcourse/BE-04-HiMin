@@ -2,6 +2,7 @@ package com.prgrms.himin.menu.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -82,7 +83,7 @@ public class MenuOptionGroup {
 
 		MenuOptionGroup that = (MenuOptionGroup)o;
 
-		return id.equals(that.id);
+		return Objects.equals(this.id, that.id);
 	}
 
 	@Override
