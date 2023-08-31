@@ -92,8 +92,8 @@ public class Member {
 		addresses.add(address);
 	}
 
-	public void removeAddress(Address address) {
-		addresses.remove(address);
+	public boolean removeAddress(Address address) {
+		return addresses.remove(address);
 	}
 
 	private void validateLoginId(String loginId) {
