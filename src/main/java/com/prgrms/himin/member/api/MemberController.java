@@ -45,8 +45,8 @@ public class MemberController {
 	}
 
 	@DeleteMapping("/withdrawal/{memberId}")
-	public ResponseEntity<Void> deleteMemberById(@PathVariable Long memberId) {
-		memberService.deleteMemberById(memberId);
+	public ResponseEntity<Void> deleteMember(@PathVariable Long memberId) {
+		memberService.deleteMember(memberId);
 		return ResponseEntity.ok().build();
 	}
 }
