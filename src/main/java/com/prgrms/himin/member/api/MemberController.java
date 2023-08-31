@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.prgrms.himin.member.application.MemberService;
+import com.prgrms.himin.member.dto.request.AddressCreateRequest;
 import com.prgrms.himin.member.dto.request.MemberCreateRequest;
 import com.prgrms.himin.member.dto.request.MemberLoginRequest;
+import com.prgrms.himin.member.dto.response.AddressResponse;
 import com.prgrms.himin.member.dto.response.MemberCreateResponse;
 import com.prgrms.himin.member.dto.response.MemberResponse;
 
@@ -48,5 +50,13 @@ public class MemberController {
 	public ResponseEntity<Void> deleteMember(@PathVariable Long memberId) {
 		memberService.deleteMember(memberId);
 		return ResponseEntity.ok().build();
+	}
+
+	@PostMapping("/members/{memberId}/addresses")
+	public ResponseEntity<AddressResponse> createAddress(
+		@PathVariable Long memberId,
+		@Valid @RequestBody AddressCreateRequest request) {
+		AddressResponse response = memberService.createAddress(memberId, request);
+		return ResponseEntity.ok(response);
 	}
 }

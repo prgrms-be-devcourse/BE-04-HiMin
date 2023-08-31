@@ -9,8 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.prgrms.himin.global.error.exception.EntityNotFoundException;
 import com.prgrms.himin.global.error.exception.ErrorCode;
 import com.prgrms.himin.member.domain.Address;
+import com.prgrms.himin.member.domain.AddressRepository;
 import com.prgrms.himin.member.domain.Member;
 import com.prgrms.himin.member.domain.MemberRepository;
+import com.prgrms.himin.member.dto.request.AddressCreateRequest;
 import com.prgrms.himin.member.dto.request.MemberCreateRequest;
 import com.prgrms.himin.member.dto.request.MemberLoginRequest;
 import com.prgrms.himin.member.dto.response.AddressResponse;
@@ -25,6 +27,8 @@ import lombok.RequiredArgsConstructor;
 public class MemberService {
 
 	private final MemberRepository memberRepository;
+
+	private final AddressRepository addressRepository;
 
 	@Transactional
 	public MemberCreateResponse createMember(MemberCreateRequest request) {
@@ -63,5 +67,15 @@ public class MemberService {
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 
 		memberRepository.delete(member);
+	}
+
+	@Transactional
+	public AddressResponse createAddress(Long memberId, AddressCreateRequest request) {
+		Member member = memberRepository.findById(memberId)
+			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+		Address address = request.toEntity();
+		address.attachTo(member);
+		Address savedAddress = addressRepository.save(address);
+		return AddressResponse.from(savedAddress);
 	}
 }

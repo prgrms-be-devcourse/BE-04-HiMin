@@ -86,6 +86,9 @@ public class Member {
 	}
 
 	public void addAddress(Address address) {
+		if (addresses.contains(address)) {
+			return;
+		}
 		addresses.add(address);
 	}
 
