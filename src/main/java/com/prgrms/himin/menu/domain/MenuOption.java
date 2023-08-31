@@ -2,6 +2,7 @@ package com.prgrms.himin.menu.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,7 +35,7 @@ public class MenuOption {
 	@Column(name = "price", nullable = false)
 	private int price;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "menu_option_group_id")
 	private MenuOptionGroup menuOptionGroup;
 
