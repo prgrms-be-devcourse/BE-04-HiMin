@@ -4,12 +4,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.prgrms.himin.menu.domain.Menu;
+import com.prgrms.himin.menu.domain.MenuOption;
 import com.prgrms.himin.menu.domain.MenuOptionGroup;
 import com.prgrms.himin.menu.domain.MenuOptionGroupRepository;
+import com.prgrms.himin.menu.domain.MenuOptionRepository;
 import com.prgrms.himin.menu.domain.MenuRepository;
 import com.prgrms.himin.menu.dto.request.MenuCreateRequest;
+import com.prgrms.himin.menu.dto.request.MenuOptionCreateRequest;
 import com.prgrms.himin.menu.dto.request.MenuOptionGroupCreateRequest;
 import com.prgrms.himin.menu.dto.response.MenuCreateResponse;
+import com.prgrms.himin.menu.dto.response.MenuOptionCreateResponse;
 import com.prgrms.himin.menu.dto.response.MenuOptionGroupCreateResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -22,6 +26,8 @@ public class MenuService {
 	private final MenuRepository menuRepository;
 
 	private final MenuOptionGroupRepository menuOptionGroupRepository;
+
+	private final MenuOptionRepository menuOptionRepository;
 
 	@Transactional(readOnly = false)
 	public MenuCreateResponse createMenu(MenuCreateRequest request) {
@@ -43,5 +49,27 @@ public class MenuService {
 		MenuOptionGroup savedMenuOptionGroupEntity = menuOptionGroupRepository.save(menuOptionGroupEntity);
 		savedMenuOptionGroupEntity.attachMenu(menu);
 		return MenuOptionGroupCreateResponse.from(savedMenuOptionGroupEntity);
+	}
+
+	@Transactional(readOnly = false)
+	public MenuOptionCreateResponse createMenuOption(
+		Long menuId,
+		Long menuOptionGroupId,
+		MenuOptionCreateRequest request
+	) {
+		MenuOption menuOptionEntity = request.toEntity();
+		MenuOptionGroup menuOptionGroup = menuOptionGroupRepository.findById(menuOptionGroupId)
+			.orElseThrow(
+				() -> new RuntimeException("존재 하지 않는 메뉴 옵션 그룹 id 입니다.")
+			);
+
+		Menu menu = menuOptionGroup.getMenu();
+		if (!menuId.equals(menu.getId())) {
+			throw new RuntimeException("잘못된 메뉴 id 입니다.");
+		}
+
+		menuOptionEntity.attachMenuOptionGroup(menuOptionGroup);
+		MenuOption savedMenuOption = menuOptionRepository.save(menuOptionEntity);
+		return MenuOptionCreateResponse.from(savedMenuOption);
 	}
 }

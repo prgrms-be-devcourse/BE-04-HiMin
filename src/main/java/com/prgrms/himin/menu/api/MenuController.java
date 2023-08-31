@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.prgrms.himin.menu.application.MenuService;
 import com.prgrms.himin.menu.dto.request.MenuCreateRequest;
+import com.prgrms.himin.menu.dto.request.MenuOptionCreateRequest;
 import com.prgrms.himin.menu.dto.request.MenuOptionGroupCreateRequest;
 import com.prgrms.himin.menu.dto.response.MenuCreateResponse;
+import com.prgrms.himin.menu.dto.response.MenuOptionCreateResponse;
 import com.prgrms.himin.menu.dto.response.MenuOptionGroupCreateResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -37,6 +39,20 @@ public class MenuController {
 	) {
 		MenuOptionGroupCreateResponse response = menuService.createMenuOptionGroup(
 			menuId,
+			request
+		);
+		return ResponseEntity.ok(response);
+	}
+
+	@PostMapping("/{menuId}/option-group/{menuOptionGroupId}/option")
+	public ResponseEntity<MenuOptionCreateResponse> createMenuOption(
+		@PathVariable Long menuId,
+		@PathVariable Long menuOptionGroupId,
+		@RequestBody MenuOptionCreateRequest request
+	) {
+		MenuOptionCreateResponse response = menuService.createMenuOption(
+			menuId,
+			menuOptionGroupId,
 			request
 		);
 		return ResponseEntity.ok(response);
