@@ -82,7 +82,14 @@ public class Order {
 	}
 
 	public void addOrderItem(OrderItem orderItem) {
+		if (orderItems.contains(orderItem)) {
+			return;
+		}
 		orderItems.add(orderItem);
+	}
+
+	public void removeOrderItem(OrderItem orderItem) {
+		orderItems.remove(orderItem);
 	}
 
 	public void addOrderPrice(int orderItemPrice) {
