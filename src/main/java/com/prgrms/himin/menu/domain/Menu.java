@@ -75,7 +75,6 @@ public class Menu {
 	public void addMenuOptionGroup(MenuOptionGroup menuOptionGroup) {
 		if (!menuOptionGroups.contains(menuOptionGroup)) {
 			this.menuOptionGroups.add(menuOptionGroup);
-			menuOptionGroup.attachMenu(this);
 		}
 	}
 

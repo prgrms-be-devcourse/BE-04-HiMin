@@ -60,7 +60,6 @@ public class MenuOptionGroup {
 	public void addMenuOption(MenuOption menuOption) {
 		if (!menuOptions.contains(menuOption)) {
 			this.menuOptions.add(menuOption);
-			menuOption.attachMenuOptionGroup(this);
 		}
 	}
 
