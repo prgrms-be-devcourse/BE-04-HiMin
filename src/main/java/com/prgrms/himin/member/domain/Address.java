@@ -22,7 +22,7 @@ public class Address {
 
 	private static final int MAX_ADDRESS_LENGTH = 50;
 
-	private static final int MAX_ALIAS_ADDRESS_LENGTH = 10;
+	private static final int MAX_ADDRESS_ALIAS_LENGTH = 10;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +33,7 @@ public class Address {
 	@JoinColumn(name = "member_id", nullable = false)
 	private Member member;
 
-	@Column(name = "address_alias", nullable = false, length = MAX_ALIAS_ADDRESS_LENGTH)
+	@Column(name = "address_alias", nullable = false, length = MAX_ADDRESS_ALIAS_LENGTH)
 	private String addressAlias;
 
 	@Column(name = "address", nullable = false, length = MAX_ADDRESS_LENGTH)
@@ -43,6 +43,8 @@ public class Address {
 		String addressAlias,
 		String address
 	) {
+		validateAddressAlias(addressAlias);
+		validateAddress(address);
 		this.addressAlias = addressAlias;
 		this.address = address;
 	}
@@ -53,5 +55,17 @@ public class Address {
 		}
 		this.member = member;
 		member.addAddress(this);
+	}
+
+	private void validateAddress(String address) {
+		if (address == null || address.length() > MAX_ADDRESS_LENGTH) {
+			throw new RuntimeException("잘못된 주소입니다.");
+		}
+	}
+
+	private void validateAddressAlias(String addressAlias) {
+		if (addressAlias == null || addressAlias.length() > MAX_ADDRESS_ALIAS_LENGTH) {
+			throw new RuntimeException("잘못된 주소 가명입니다.");
+		}
 	}
 }
