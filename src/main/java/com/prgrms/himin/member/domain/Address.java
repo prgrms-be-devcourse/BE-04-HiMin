@@ -1,5 +1,7 @@
 package com.prgrms.himin.member.domain;
 
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -55,6 +57,21 @@ public class Address {
 		}
 		this.member = member;
 		member.addAddress(this);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		Address address1 = (Address)o;
+		return Objects.equals(addressId, address1.addressId);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(addressId, member, addressAlias, address);
 	}
 
 	private void validateAddress(String address) {
