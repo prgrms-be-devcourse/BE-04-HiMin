@@ -1,5 +1,7 @@
 package com.prgrms.himin.menu.domain;
 
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -27,7 +29,7 @@ public class MenuOption {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Long menuOptionId;
+	private Long id;
 
 	@Column(name = "name", nullable = false, length = 20)
 	private String name;
@@ -75,11 +77,11 @@ public class MenuOption {
 
 		MenuOption that = (MenuOption)o;
 
-		return menuOptionId.equals(that.menuOptionId);
+		return Objects.equals(this.id, that.id);
 	}
 
 	@Override
 	public int hashCode() {
-		return menuOptionId.hashCode();
+		return id.hashCode();
 	}
 }
