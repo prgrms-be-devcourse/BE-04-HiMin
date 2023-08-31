@@ -23,19 +23,22 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/menus")
+@RequestMapping("/api/shops")
 public class MenuController {
 
 	private final MenuService menuService;
 
-	@PostMapping
-	public ResponseEntity<MenuCreateResponse> createMenu(@Valid @RequestBody MenuCreateRequest request) {
+	@PostMapping("/{shopId}/menus")
+	public ResponseEntity<MenuCreateResponse> createMenu(
+		@PathVariable Long shopId,
+		@Valid @RequestBody MenuCreateRequest request) {
 		MenuCreateResponse response = menuService.createMenu(request);
 		return ResponseEntity.ok(response);
 	}
 
-	@PostMapping("/{menuId}/option-group")
+	@PostMapping("/{shopId}/menus/{menuId}/option-group")
 	public ResponseEntity<MenuOptionGroupCreateResponse> createMenuOptionGroup(
+		@PathVariable Long shopId,
 		@PathVariable Long menuId,
 		@RequestBody MenuOptionGroupCreateRequest request
 	) {
@@ -46,8 +49,9 @@ public class MenuController {
 		return ResponseEntity.ok(response);
 	}
 
-	@PostMapping("/{menuId}/option-group/{menuOptionGroupId}/options")
+	@PostMapping("/{shopId}/menus/{menuId}/option-group/{menuOptionGroupId}/options")
 	public ResponseEntity<MenuOptionCreateResponse> createMenuOption(
+		@PathVariable Long shopId,
 		@PathVariable Long menuId,
 		@PathVariable Long menuOptionGroupId,
 		@RequestBody MenuOptionCreateRequest request
@@ -60,8 +64,11 @@ public class MenuController {
 		return ResponseEntity.ok(response);
 	}
 
-	@GetMapping("/{menuId}")
-	public ResponseEntity<MenuResponse> getMenu(@PathVariable Long menuId) {
+	@GetMapping("/{shopId}/menus/{menuId}")
+	public ResponseEntity<MenuResponse> getMenu(
+		@PathVariable Long shopId,
+		@PathVariable Long menuId
+	) {
 		MenuResponse menuResponse = menuService.getMenu(menuId);
 		return ResponseEntity.ok(menuResponse);
 	}
