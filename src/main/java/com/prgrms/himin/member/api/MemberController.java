@@ -67,4 +67,13 @@ public class MemberController {
 		List<AddressResponse> response = memberService.getAllAddress(memberId);
 		return ResponseEntity.ok(response);
 	}
+
+	@DeleteMapping("/members/{memberId}/addresses/{addressId}")
+	public ResponseEntity<Void> deleteAddress(
+		@PathVariable Long memberId,
+		@PathVariable Long addressId
+	) {
+		memberService.deleteAddress(memberId, addressId);
+		return ResponseEntity.ok().build();
+	}
 }

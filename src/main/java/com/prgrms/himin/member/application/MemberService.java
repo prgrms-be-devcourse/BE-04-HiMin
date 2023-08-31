@@ -88,4 +88,16 @@ public class MemberService {
 			.collect(Collectors.toList());
 		return addressResponses;
 	}
+
+	@Transactional
+	public void deleteAddress(
+		Long memberId,
+		Long addressId
+	) {
+		Member member = memberRepository.findById(memberId)
+			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+		Address address = addressRepository.findById(addressId)
+			.orElseThrow(() -> new RuntimeException("찾는 주소가 없습니다."));
+		addressRepository.delete(address);
+	}
 }
