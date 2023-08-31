@@ -56,4 +56,12 @@ public class MemberService {
 			.collect(Collectors.toList());
 		return MemberResponse.of(member, addresses);
 	}
+
+	@Transactional
+	public void deleteMember(Long memberId) {
+		Member member = memberRepository.findById(memberId)
+			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+
+		memberRepository.delete(member);
+	}
 }
