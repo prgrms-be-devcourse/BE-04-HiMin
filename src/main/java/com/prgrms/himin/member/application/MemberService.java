@@ -78,4 +78,14 @@ public class MemberService {
 		Address savedAddress = addressRepository.save(address);
 		return AddressResponse.from(savedAddress);
 	}
+
+	public List<AddressResponse> getAllAddress(Long memberId) {
+		Member member = memberRepository.findById(memberId)
+			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+		List<Address> addresses = member.getAddresses();
+		List<AddressResponse> addressResponses = addresses.stream()
+			.map(AddressResponse::from)
+			.collect(Collectors.toList());
+		return addressResponses;
+	}
 }

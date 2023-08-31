@@ -1,5 +1,7 @@
 package com.prgrms.himin.member.api;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
@@ -57,6 +59,12 @@ public class MemberController {
 		@PathVariable Long memberId,
 		@Valid @RequestBody AddressCreateRequest request) {
 		AddressResponse response = memberService.createAddress(memberId, request);
+		return ResponseEntity.ok(response);
+	}
+
+	@GetMapping("/members/{memberId}/addresses")
+	public ResponseEntity<List<AddressResponse>> getAllAddress(@PathVariable Long memberId) {
+		List<AddressResponse> response = memberService.getAllAddress(memberId);
 		return ResponseEntity.ok(response);
 	}
 }
