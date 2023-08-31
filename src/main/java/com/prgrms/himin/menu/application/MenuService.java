@@ -15,6 +15,7 @@ import com.prgrms.himin.menu.dto.request.MenuOptionGroupCreateRequest;
 import com.prgrms.himin.menu.dto.response.MenuCreateResponse;
 import com.prgrms.himin.menu.dto.response.MenuOptionCreateResponse;
 import com.prgrms.himin.menu.dto.response.MenuOptionGroupCreateResponse;
+import com.prgrms.himin.menu.dto.response.MenuResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -71,5 +72,11 @@ public class MenuService {
 		menuOptionEntity.attachMenuOptionGroup(menuOptionGroup);
 		MenuOption savedMenuOption = menuOptionRepository.save(menuOptionEntity);
 		return MenuOptionCreateResponse.from(savedMenuOption);
+	}
+
+	public MenuResponse getMenu(Long menuId) {
+		Menu menu = menuRepository.findById(menuId)
+			.orElseThrow(() -> new RuntimeException("메뉴를 찾을 수 없습니다."));
+		return MenuResponse.from(menu);
 	}
 }

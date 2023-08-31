@@ -3,6 +3,7 @@ package com.prgrms.himin.menu.api;
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +17,7 @@ import com.prgrms.himin.menu.dto.request.MenuOptionGroupCreateRequest;
 import com.prgrms.himin.menu.dto.response.MenuCreateResponse;
 import com.prgrms.himin.menu.dto.response.MenuOptionCreateResponse;
 import com.prgrms.himin.menu.dto.response.MenuOptionGroupCreateResponse;
+import com.prgrms.himin.menu.dto.response.MenuResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -56,5 +58,11 @@ public class MenuController {
 			request
 		);
 		return ResponseEntity.ok(response);
+	}
+
+	@GetMapping("/{menuId}")
+	public ResponseEntity<MenuResponse> getMenu(@PathVariable Long menuId) {
+		MenuResponse menuResponse = menuService.getMenu(menuId);
+		return ResponseEntity.ok(menuResponse);
 	}
 }
