@@ -2,6 +2,7 @@ package com.prgrms.himin.menu.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,7 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.prgrms.himin.order.domain.Order;
+import com.prgrms.himin.shop.domain.Shop;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -52,8 +53,8 @@ public class Menu {
 	private MenuStatus status;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "order_id")
-	private Order order;
+	@JoinColumn(name = "shop_id")
+	private Shop shop;
 
 	@OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<MenuOptionGroup> menuOptionGroups = new ArrayList<>();
@@ -70,6 +71,14 @@ public class Menu {
 		this.price = price;
 		this.popularity = popularity;
 		this.status = MenuStatus.unsellable;
+	}
+
+	public void attachShop(Shop shop) {
+		if (this.shop != null) {
+			this.shop.removeMenu(this);
+		}
+		this.shop = shop;
+		shop.addMenu(this);
 	}
 
 	public void addMenuOptionGroup(MenuOptionGroup menuOptionGroup) {
@@ -92,5 +101,22 @@ public class Menu {
 		if (name == null || name.length() > MAX_NAME_LENGTH) {
 			throw new RuntimeException("잘못된 메뉴 이름 입니다.");
 		}
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+
+		Menu menu = (Menu)o;
+
+		return Objects.equals(this.id, menu.getId());
+	}
+
+	@Override
+	public int hashCode() {
+		return id.hashCode();
 	}
 }
