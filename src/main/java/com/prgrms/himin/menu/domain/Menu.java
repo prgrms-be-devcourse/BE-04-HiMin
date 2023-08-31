@@ -17,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.prgrms.himin.menu.dto.request.MenuUpdateRequest;
 import com.prgrms.himin.shop.domain.Shop;
 
 import lombok.AccessLevel;
@@ -118,5 +119,14 @@ public class Menu {
 	@Override
 	public int hashCode() {
 		return id.hashCode();
+	}
+
+	public void updateStatus(MenuStatus status) {
+		this.status = status;
+	}
+
+	public void updateMenuInfo(MenuUpdateRequest.Info request) {
+		this.name = request.getName();
+		this.price = request.getPrice();
 	}
 }

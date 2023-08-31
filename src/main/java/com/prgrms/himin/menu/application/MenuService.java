@@ -9,9 +9,11 @@ import com.prgrms.himin.menu.domain.MenuOptionGroup;
 import com.prgrms.himin.menu.domain.MenuOptionGroupRepository;
 import com.prgrms.himin.menu.domain.MenuOptionRepository;
 import com.prgrms.himin.menu.domain.MenuRepository;
+import com.prgrms.himin.menu.domain.MenuStatus;
 import com.prgrms.himin.menu.dto.request.MenuCreateRequest;
 import com.prgrms.himin.menu.dto.request.MenuOptionCreateRequest;
 import com.prgrms.himin.menu.dto.request.MenuOptionGroupCreateRequest;
+import com.prgrms.himin.menu.dto.request.MenuUpdateRequest;
 import com.prgrms.himin.menu.dto.response.MenuCreateResponse;
 import com.prgrms.himin.menu.dto.response.MenuOptionCreateResponse;
 import com.prgrms.himin.menu.dto.response.MenuOptionGroupCreateResponse;
@@ -100,7 +102,40 @@ public class MenuService {
 		return MenuResponse.from(menu);
 	}
 
-	private void checkShopId(Long shopId, Menu menu) {
+	@Transactional(readOnly = false)
+	public void updateMenu(
+		Long shopId,
+		Long menuId,
+		MenuUpdateRequest.Info request
+	) {
+		Menu menu = menuRepository.findById(menuId)
+			.orElseThrow(() -> new RuntimeException("메뉴를 찾을 수 없습니다."));
+
+		checkShopId(
+			shopId,
+			menu
+		);
+		menu.updateMenuInfo(request);
+	}
+
+	@Transactional(readOnly = false)
+	public void updateMenuStatus(
+		Long shopId,
+		Long menuId,
+		MenuUpdateRequest.Status request
+	) {
+		Menu menu = menuRepository.findById(menuId)
+			.orElseThrow(() -> new RuntimeException("메뉴를 찾을 수 없습니다."));
+
+		checkShopId(shopId, menu);
+		MenuStatus status = request.getStatus();
+		menu.updateStatus(status);
+	}
+
+	private void checkShopId(
+		Long shopId,
+		Menu menu
+	) {
 		Shop shop = menu.getShop();
 		if (!shopId.equals(shop.getShopId())) {
 			throw new RuntimeException("잘못된 가게 id 입니다.");
