@@ -77,6 +77,13 @@ public class OrderService {
 		return OrderResponse.from(order);
 	}
 
+	public OrderResponse getOrder(Long orderId) {
+		Order order = orderRepository.findById(orderId)
+			.orElseThrow(() -> new RuntimeException("찾는 Order가 존재하지 않습니다."));
+
+		return OrderResponse.from(order);
+	}
+
 	private void attachOrderItems(
 		Order order,
 		List<OrderItem> orderItems
