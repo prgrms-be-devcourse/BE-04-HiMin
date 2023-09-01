@@ -3,6 +3,7 @@ package com.prgrms.himin.menu.api;
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -145,6 +146,22 @@ public class MenuController {
 			menuOptionGroupId,
 			optionId,
 			request
+		);
+		return ResponseEntity.noContent().build();
+	}
+
+	@DeleteMapping("/{shopId}/menus/{menuId}/option-group/{menuOptionGroupId}/option/{optionId}")
+	public ResponseEntity<Void> deleteMenuOption(
+		@PathVariable Long shopId,
+		@PathVariable Long menuId,
+		@PathVariable Long menuOptionGroupId,
+		@PathVariable Long optionId
+	) {
+		menuService.deleteMenuOption(
+			shopId,
+			menuId,
+			menuOptionGroupId,
+			optionId
 		);
 		return ResponseEntity.noContent().build();
 	}
