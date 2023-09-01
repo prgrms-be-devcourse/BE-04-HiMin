@@ -115,7 +115,10 @@ public class MenuService {
 			shopId,
 			menu
 		);
-		menu.updateMenuInfo(request);
+		menu.updateMenuInfo(
+			request.getName(),
+			request.getPrice()
+		);
 	}
 
 	@Transactional(readOnly = false)
