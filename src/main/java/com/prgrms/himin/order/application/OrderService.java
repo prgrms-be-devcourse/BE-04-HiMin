@@ -28,9 +28,7 @@ import com.prgrms.himin.shop.domain.Shop;
 import com.prgrms.himin.shop.domain.ShopRepository;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -65,8 +63,6 @@ public class OrderService {
 
 		List<SelectedMenuRequest> selectedMenus = request.getSelectedMenus();
 		List<OrderItem> orderItems = extractOrderItems(selectedMenus);
-		log.info("orderItems size : {}", orderItems.size());
-		log.info("orderItems SelectedOption size : {}", orderItems.get(0).getSelectedOptions().size());
 		attachOrderItem(order, orderItems);
 		OrderHistory orderHistory = new OrderHistory(
 			order,
@@ -95,7 +91,6 @@ public class OrderService {
 			List<Long> menuOptionIds = selectedMenu.getMenuOptionIdList();
 			List<MenuOption> menuOptions = extractMenuOptions(menuOptionIds);
 
-			log.info("before menuoptions size : {}", menuOptions.size());
 			int quantity = selectedMenu.getQuantity();
 			OrderItem orderItem = new OrderItem(
 				menu,
@@ -117,8 +112,6 @@ public class OrderService {
 				.orElseThrow(() -> new RuntimeException("찾는 menuOption이 존재하지 않습니다."));
 			menuOptions.add(menuOption);
 		}
-		log.info("menuOptions Size : {}", menuOptions.size());
-		log.info("menuOptionIds Size : {}", menuOptionIds.size());
 		return menuOptions;
 	}
 }
