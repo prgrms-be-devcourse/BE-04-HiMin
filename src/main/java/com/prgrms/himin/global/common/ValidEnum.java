@@ -13,6 +13,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Constraint(validatedBy = EnumValidator.class)
 public @interface ValidEnum {
+
     String message() default "유효하지 않은 Enum 입니다.";
 
     Class<?>[] groups() default {};
