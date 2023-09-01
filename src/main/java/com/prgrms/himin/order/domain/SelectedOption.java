@@ -62,10 +62,7 @@ public class SelectedOption {
 		if (o == null || getClass() != o.getClass())
 			return false;
 		SelectedOption that = (SelectedOption)o;
-		if (Objects.equals(menuOption.getId(), that.menuOption.getId())) {
-			return true;
-		}
-		return false;
+		return Objects.equals(menuOption.getId(), that.menuOption.getId());
 	}
 
 	@Override
