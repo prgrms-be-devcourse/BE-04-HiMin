@@ -119,4 +119,16 @@ public class Menu {
 	public int hashCode() {
 		return id.hashCode();
 	}
+
+	public void updateStatus(MenuStatus status) {
+		this.status = status;
+	}
+
+	public void updateMenuInfo(
+		String name,
+		int price
+	) {
+		this.name = name;
+		this.price = price;
+	}
 }

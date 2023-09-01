@@ -4,8 +4,10 @@ import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +16,7 @@ import com.prgrms.himin.menu.application.MenuService;
 import com.prgrms.himin.menu.dto.request.MenuCreateRequest;
 import com.prgrms.himin.menu.dto.request.MenuOptionCreateRequest;
 import com.prgrms.himin.menu.dto.request.MenuOptionGroupCreateRequest;
+import com.prgrms.himin.menu.dto.request.MenuUpdateRequest;
 import com.prgrms.himin.menu.dto.response.MenuCreateResponse;
 import com.prgrms.himin.menu.dto.response.MenuOptionCreateResponse;
 import com.prgrms.himin.menu.dto.response.MenuOptionGroupCreateResponse;
@@ -80,5 +83,33 @@ public class MenuController {
 			menuId
 		);
 		return ResponseEntity.ok(menuResponse);
+	}
+
+	@PutMapping("/{shopId}/menus/{menuId}")
+	public ResponseEntity<Void> updateMenu(
+		@PathVariable Long shopId,
+		@PathVariable Long menuId,
+		@RequestBody MenuUpdateRequest.Info request
+	) {
+		menuService.updateMenu(
+			shopId,
+			menuId,
+			request
+		);
+		return ResponseEntity.noContent().build();
+	}
+
+	@PatchMapping("/{shopId}/menus/{menuId}")
+	public ResponseEntity<Void> changeMenuStatus(
+		@PathVariable Long shopId,
+		@PathVariable Long menuId,
+		@RequestBody MenuUpdateRequest.Status request
+	) {
+		menuService.changeMenuStatus(
+			shopId,
+			menuId,
+			request
+		);
+		return ResponseEntity.noContent().build();
 	}
 }
