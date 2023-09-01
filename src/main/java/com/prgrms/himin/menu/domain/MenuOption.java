@@ -56,6 +56,11 @@ public class MenuOption {
 		menuOptionGroup.addMenuOption(this);
 	}
 
+	public void updateOptionInfo(String name, int price) {
+		this.name = name;
+		this.price = price;
+	}
+
 	private void validatePrice(int price) {
 		if (price < MIN_PRICE) {
 			throw new RuntimeException("price는 음수가 되면 안됩니다.");
