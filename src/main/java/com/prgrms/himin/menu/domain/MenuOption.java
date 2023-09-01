@@ -41,7 +41,10 @@ public class MenuOption {
 	@JoinColumn(name = "menu_option_group_id")
 	private MenuOptionGroup menuOptionGroup;
 
-	public MenuOption(String name, int price) {
+	public MenuOption(
+		String name,
+		int price
+	) {
 		validateName(name);
 		validatePrice(price);
 		this.name = name;
@@ -56,7 +59,10 @@ public class MenuOption {
 		menuOptionGroup.addMenuOption(this);
 	}
 
-	public void updateOptionInfo(String name, int price) {
+	public void updateOptionInfo(
+		String name,
+		int price
+	) {
 		this.name = name;
 		this.price = price;
 	}

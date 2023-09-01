@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class MenuOptionUpdateRequest {
+	
 	@Size(max = 30, message = "메뉴 이름은 최대 30글자 입니다.")
 	@NotBlank(message = "메뉴 이름이 비어있으면 안됩니다.")
 	private final String name;
