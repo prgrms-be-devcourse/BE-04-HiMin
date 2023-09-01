@@ -30,6 +30,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "orders")
 public class Order {
 
+	private static final int MIN_ORDER_PRICE = 0;
+
 	private static final int MAX_ADDRESS_LENGTH = 50;
 
 	private static final int MAX_REQUIREMENT_LENGTH = 30;
@@ -93,6 +95,9 @@ public class Order {
 	}
 
 	public void addOrderPrice(int orderItemPrice) {
+		if (orderItemPrice < MIN_ORDER_PRICE) {
+			throw new RuntimeException("가격이 0이하일 수 없습니다.");
+		}
 		price += orderItemPrice;
 	}
 
