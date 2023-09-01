@@ -3,6 +3,8 @@ package com.prgrms.himin.order.api;
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +25,13 @@ public class OrderController {
 
 	@PostMapping
 	public ResponseEntity<OrderResponse> createOrder(@Valid @RequestBody OrderCreateRequest request) {
-		return ResponseEntity.ok(orderService.createOrder(request));
+		OrderResponse response = orderService.createOrder(request);
+		return ResponseEntity.ok(response);
+	}
+
+	@GetMapping("/{orderId}")
+	public ResponseEntity<OrderResponse> getOrder(@PathVariable Long orderId) {
+		OrderResponse response = orderService.getOrder(orderId);
+		return ResponseEntity.ok(response);
 	}
 }
