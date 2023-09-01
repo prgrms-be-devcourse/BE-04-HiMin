@@ -63,8 +63,8 @@ public class OrderItem {
 			return false;
 		OrderItem orderItem = (OrderItem)o;
 		return Objects.equals(
-			orderItemId,
-			orderItem.orderItemId
+			menu.getId(),
+			orderItem.getMenu().getId()
 		);
 	}
 
@@ -99,6 +99,12 @@ public class OrderItem {
 	}
 
 	public int calculateOrderItemPrice() {
-		return menu.getPrice() * quantity;
+		int result = 0;
+		for (SelectedOption selectedOption : selectedOptions) {
+			result += selectedOption.getMenuOption().getPrice() * quantity;
+		}
+		result += menu.getPrice() * quantity;
+
+		return result;
 	}
 }
