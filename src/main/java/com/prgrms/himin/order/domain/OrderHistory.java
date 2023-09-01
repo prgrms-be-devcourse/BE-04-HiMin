@@ -35,11 +35,18 @@ public class OrderHistory {
 	@Column(name = "status", nullable = false)
 	private OrderStatus orderStatus;
 
-	public OrderHistory(
+	private OrderHistory(
 		Order order,
 		OrderStatus orderStatus
 	) {
 		this.order = order;
 		this.orderStatus = orderStatus;
+	}
+
+	public static OrderHistory createOrderHistory(Order order) {
+		return new OrderHistory(
+			order,
+			OrderStatus.ORDERED
+		);
 	}
 }
