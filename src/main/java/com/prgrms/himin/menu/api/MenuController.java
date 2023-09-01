@@ -150,6 +150,18 @@ public class MenuController {
 		return ResponseEntity.noContent().build();
 	}
 
+	@DeleteMapping("/{shopId}/menus/{menuId}")
+	public ResponseEntity<Void> deleteMenu(
+		@PathVariable Long shopId,
+		@PathVariable Long menuId
+	) {
+		menuService.deleteMenu(
+			shopId,
+			menuId
+		);
+		return ResponseEntity.ok().build();
+	}
+
 	@DeleteMapping("/{shopId}/menus/{menuId}/option-group/{menuOptionGroupId}/option/{optionId}")
 	public ResponseEntity<Void> deleteMenuOption(
 		@PathVariable Long shopId,
@@ -163,6 +175,6 @@ public class MenuController {
 			menuOptionGroupId,
 			optionId
 		);
-		return ResponseEntity.noContent().build();
+		return ResponseEntity.ok().build();
 	}
 }

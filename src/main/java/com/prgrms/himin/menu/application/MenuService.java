@@ -206,6 +206,22 @@ public class MenuService {
 	}
 
 	@Transactional(readOnly = false)
+	public void deleteMenu(
+		Long shopId,
+		Long menuId
+	) {
+		Menu menu = menuRepository.findById(menuId)
+			.orElseThrow(() -> new RuntimeException("메뉴를 찾을 수 없습니다."));
+
+		checkShopId(
+			shopId,
+			menu
+		);
+
+		menuRepository.delete(menu);
+	}
+
+	@Transactional(readOnly = false)
 	public void deleteMenuOption(
 		Long shopId,
 		Long menuId,
