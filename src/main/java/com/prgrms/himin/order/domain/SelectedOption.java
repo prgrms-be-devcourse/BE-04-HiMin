@@ -1,5 +1,7 @@
 package com.prgrms.himin.order.domain;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -39,10 +41,10 @@ public class SelectedOption {
 	@JoinColumn(name = "menu_option_id", nullable = false)
 	private MenuOption menuOption;
 
-	public SelectedOption(MenuOption menuOption) {
-		if (menuOption == null) {
-			throw new RuntimeException("menuOption이 null일 수 없습니다.");
-		}
+	private SelectedOption(
+		MenuOption menuOption
+	) {
+		validateMenuOption(menuOption);
 		this.menuOption = menuOption;
 	}
 
@@ -72,5 +74,20 @@ public class SelectedOption {
 			orderItem,
 			menuOption
 		);
+	}
+
+	public static List<SelectedOption> from(List<MenuOption> menuOptions) {
+		List<SelectedOption> selectedOptions = new ArrayList<>();
+		for (MenuOption menuOption : menuOptions) {
+			SelectedOption selectedOption = new SelectedOption(menuOption);
+			selectedOptions.add(selectedOption);
+		}
+		return selectedOptions;
+	}
+
+	private void validateMenuOption(MenuOption menuOption) {
+		if (menuOption == null) {
+			throw new RuntimeException("menuOption이 null일 수 없습니다.");
+		}
 	}
 }
