@@ -222,6 +222,31 @@ public class MenuService {
 	}
 
 	@Transactional(readOnly = false)
+	public void deleteMenuOptionGroup(
+		Long shopId,
+		Long menuId,
+		Long menuOptionGroupId
+	) {
+		Menu menu = menuRepository.findById(menuId)
+			.orElseThrow(() -> new RuntimeException("메뉴를 찾을 수 없습니다."));
+
+		checkShopId(
+			shopId,
+			menu
+		);
+
+		MenuOptionGroup menuOptionGroup = menuOptionGroupRepository.findById(menuOptionGroupId)
+			.orElseThrow(() -> new RuntimeException("메뉴 옵션 그룹 id를 찾을 수 없습니다."));
+
+		checkMenuId(
+			menuId,
+			menuOptionGroup
+		);
+
+		menuOptionGroupRepository.delete(menuOptionGroup);
+	}
+
+	@Transactional(readOnly = false)
 	public void deleteMenuOption(
 		Long shopId,
 		Long menuId,

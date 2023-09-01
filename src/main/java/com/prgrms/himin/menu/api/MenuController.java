@@ -162,6 +162,20 @@ public class MenuController {
 		return ResponseEntity.ok().build();
 	}
 
+	@DeleteMapping("/{shopId}/menus/{menuId}/option-group/{menuOptionGroupId}")
+	public ResponseEntity<Void> deleteMenuOptionGroup(
+		@PathVariable Long shopId,
+		@PathVariable Long menuId,
+		@PathVariable Long menuOptionGroupId
+	) {
+		menuService.deleteMenuOptionGroup(
+			shopId,
+			menuId,
+			menuOptionGroupId
+		);
+		return ResponseEntity.ok().build();
+	}
+
 	@DeleteMapping("/{shopId}/menus/{menuId}/option-group/{menuOptionGroupId}/option/{optionId}")
 	public ResponseEntity<Void> deleteMenuOption(
 		@PathVariable Long shopId,
