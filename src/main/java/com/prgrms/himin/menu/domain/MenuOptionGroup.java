@@ -90,4 +90,8 @@ public class MenuOptionGroup {
 	public int hashCode() {
 		return id.hashCode();
 	}
+
+	public boolean contains(MenuOption menuOption) {
+		return menuOptions.contains(menuOption);
+	}
 }
