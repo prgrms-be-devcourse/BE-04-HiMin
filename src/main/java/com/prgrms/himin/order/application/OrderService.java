@@ -63,7 +63,8 @@ public class OrderService {
 
 		List<SelectedMenuRequest> selectedMenus = request.getSelectedMenus();
 		List<OrderItem> orderItems = extractOrderItems(selectedMenus);
-		attachOrderItem(order, orderItems);
+		attachOrderItems(order, orderItems);
+		
 		OrderHistory orderHistory = new OrderHistory(
 			order,
 			OrderStatus.ORDERED
@@ -75,7 +76,7 @@ public class OrderService {
 		return OrderResponse.from(order);
 	}
 
-	private void attachOrderItem(Order order, List<OrderItem> orderItems) {
+	private void attachOrderItems(Order order, List<OrderItem> orderItems) {
 		for (OrderItem orderItem : orderItems) {
 			orderItem.attachTo(order);
 			order.addOrderPrice(orderItem.calculateOrderItemPrice());
