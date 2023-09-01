@@ -86,7 +86,7 @@ public class MenuController {
 	}
 
 	@PutMapping("/{shopId}/menus/{menuId}")
-	public ResponseEntity<Void> updateMenuName(
+	public ResponseEntity<Void> updateMenu(
 		@PathVariable Long shopId,
 		@PathVariable Long menuId,
 		@RequestBody MenuUpdateRequest.Info request
@@ -100,12 +100,12 @@ public class MenuController {
 	}
 
 	@PatchMapping("/{shopId}/menus/{menuId}")
-	public ResponseEntity<Void> changeShopStatus(
+	public ResponseEntity<Void> changeMenuStatus(
 		@PathVariable Long shopId,
 		@PathVariable Long menuId,
 		@RequestBody MenuUpdateRequest.Status request
 	) {
-		menuService.updateMenuStatus(
+		menuService.changeMenuStatus(
 			shopId,
 			menuId,
 			request

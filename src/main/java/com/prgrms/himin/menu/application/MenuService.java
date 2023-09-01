@@ -122,7 +122,7 @@ public class MenuService {
 	}
 
 	@Transactional(readOnly = false)
-	public void updateMenuStatus(
+	public void changeMenuStatus(
 		Long shopId,
 		Long menuId,
 		MenuUpdateRequest.Status request
@@ -130,7 +130,10 @@ public class MenuService {
 		Menu menu = menuRepository.findById(menuId)
 			.orElseThrow(() -> new RuntimeException("메뉴를 찾을 수 없습니다."));
 
-		checkShopId(shopId, menu);
+		checkShopId(
+			shopId,
+			menu
+		);
 		MenuStatus status = request.getStatus();
 		menu.updateStatus(status);
 	}
