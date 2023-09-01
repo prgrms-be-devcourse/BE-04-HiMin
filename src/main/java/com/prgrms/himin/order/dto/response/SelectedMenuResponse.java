@@ -5,7 +5,6 @@ import java.util.stream.Collectors;
 
 import com.prgrms.himin.order.domain.OrderItem;
 
-import lombok.Builder;
 import lombok.Getter;
 
 @Getter
@@ -15,41 +14,36 @@ public final class SelectedMenuResponse {
 
 	private final int quantity;
 
-	private final List<Long> menuOptionIds;
+	private final List<Long> selectedOptionIds;
 
-	@Builder
-	public SelectedMenuResponse(
+	private SelectedMenuResponse(
 		Long menuId,
 		int quantity,
-		List<Long> menuOptionNames
+		List<Long> selectedOptionIds
 	) {
 		this.menuId = menuId;
 		this.quantity = quantity;
-		this.menuOptionIds = menuOptionNames;
+		this.selectedOptionIds = selectedOptionIds;
 	}
 
 	public static List<SelectedMenuResponse> from(List<OrderItem> orderItems) {
 		List<SelectedMenuResponse> response = orderItems.stream()
 			.map(SelectedMenuResponse::convertFrom)
 			.collect(Collectors.toList());
+
 		return response;
 	}
 
 	private static SelectedMenuResponse convertFrom(OrderItem orderItem) {
-		SelectedMenuResponse response = SelectedMenuResponse.builder()
-			.menuId(orderItem
-				.getMenu()
-				.getId()
-			)
-			.quantity(orderItem.getQuantity())
-			.menuOptionNames(
-				orderItem.getSelectedOptions()
-					.stream()
-					.map(selectedOption -> selectedOption
-						.getMenuOption()
-						.getId())
-					.collect(Collectors.toList()))
-			.build();
+		SelectedMenuResponse response = new SelectedMenuResponse(
+			orderItem.getMenu().getId(),
+			orderItem.getQuantity(),
+			orderItem.getSelectedOptions()
+				.stream()
+				.map(selectedOption -> selectedOption.getMenuOption().getId())
+				.collect(Collectors.toList())
+		);
+
 		return response;
 	}
 }
