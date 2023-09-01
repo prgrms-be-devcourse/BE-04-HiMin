@@ -2,6 +2,7 @@ package com.prgrms.himin.menu.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,7 +17,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.prgrms.himin.order.domain.Order;
 import com.prgrms.himin.shop.domain.Shop;
 
 import lombok.AccessLevel;
@@ -101,5 +101,34 @@ public class Menu {
 		if (name == null || name.length() > MAX_NAME_LENGTH) {
 			throw new RuntimeException("잘못된 메뉴 이름 입니다.");
 		}
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+
+		Menu menu = (Menu)o;
+
+		return Objects.equals(this.id, menu.getId());
+	}
+
+	@Override
+	public int hashCode() {
+		return id.hashCode();
+	}
+
+	public void updateStatus(MenuStatus status) {
+		this.status = status;
+	}
+
+	public void updateMenuInfo(
+		String name,
+		int price
+	) {
+		this.name = name;
+		this.price = price;
 	}
 }
