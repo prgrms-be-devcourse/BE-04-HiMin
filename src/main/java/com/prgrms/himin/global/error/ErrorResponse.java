@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.prgrms.himin.global.error.exception.ErrorCode;
@@ -19,7 +20,7 @@ public class ErrorResponse {
 	private final String error;
 
 	@JsonInclude(JsonInclude.Include.NON_NULL)
-	private final List<FieldError> errors;
+	private final List<FieldErrorResponse> errors;
 
 	private final String code;
 
@@ -37,7 +38,7 @@ public class ErrorResponse {
 	public static ErrorResponse of(ErrorCode errorCode, BindingResult bindingResult) {
 		return new ErrorResponse(
 			errorCode.name(),
-			FieldError.from(bindingResult),
+			FieldErrorResponse.from(bindingResult),
 			errorCode.getCode(),
 			errorCode.getMessage()
 		);
@@ -45,17 +46,17 @@ public class ErrorResponse {
 
 	@Getter
 	@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-	public static class FieldError {
+	public static class FieldErrorResponse {
 
 		private final String field;
 		private final String value;
 		private final String reason;
 
-		private static List<FieldError> from(BindingResult bindingResult) {
-			List<org.springframework.validation.FieldError> fieldErrors = bindingResult.getFieldErrors();
+		private static List<FieldErrorResponse> from(BindingResult bindingResult) {
+			List<FieldError> fieldErrors = bindingResult.getFieldErrors();
 			return fieldErrors.stream()
 				.map(
-					error -> new FieldError(
+					error -> new FieldErrorResponse(
 						error.getField(),
 						error.getRejectedValue() == null ? null : error.getRejectedValue().toString(),
 						error.getDefaultMessage()
