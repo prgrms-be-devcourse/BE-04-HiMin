@@ -159,7 +159,7 @@ public class MenuController {
 			shopId,
 			menuId
 		);
-		return ResponseEntity.noContent().build();
+		return ResponseEntity.ok().build();
 	}
 
 	@DeleteMapping("/{shopId}/menus/{menuId}/option-group/{menuOptionGroupId}/option/{optionId}")
@@ -175,6 +175,6 @@ public class MenuController {
 			menuOptionGroupId,
 			optionId
 		);
-		return ResponseEntity.noContent().build();
+		return ResponseEntity.ok().build();
 	}
 }
