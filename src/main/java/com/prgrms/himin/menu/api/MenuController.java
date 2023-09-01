@@ -17,6 +17,7 @@ import com.prgrms.himin.menu.dto.request.MenuCreateRequest;
 import com.prgrms.himin.menu.dto.request.MenuOptionCreateRequest;
 import com.prgrms.himin.menu.dto.request.MenuOptionGroupCreateRequest;
 import com.prgrms.himin.menu.dto.request.MenuOptionGroupUpdateRequest;
+import com.prgrms.himin.menu.dto.request.MenuOptionUpdateRequest;
 import com.prgrms.himin.menu.dto.request.MenuUpdateRequest;
 import com.prgrms.himin.menu.dto.response.MenuCreateResponse;
 import com.prgrms.himin.menu.dto.response.MenuOptionCreateResponse;
@@ -125,6 +126,24 @@ public class MenuController {
 			shopId,
 			menuId,
 			menuOptionGroupId,
+			request
+		);
+		return ResponseEntity.noContent().build();
+	}
+
+	@PutMapping("/{shopId}/menus/{menuId}/option-group/{menuOptionGroupId}/option/{optionId}")
+	public ResponseEntity<Void> updateMenuOption(
+		@PathVariable Long shopId,
+		@PathVariable Long menuId,
+		@PathVariable Long menuOptionGroupId,
+		@PathVariable Long optionId,
+		@RequestBody MenuOptionUpdateRequest request
+	) {
+		menuService.updateMenuOption(
+			shopId,
+			menuId,
+			menuOptionGroupId,
+			optionId,
 			request
 		);
 		return ResponseEntity.noContent().build();

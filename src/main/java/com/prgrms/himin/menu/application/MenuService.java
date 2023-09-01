@@ -14,6 +14,7 @@ import com.prgrms.himin.menu.dto.request.MenuCreateRequest;
 import com.prgrms.himin.menu.dto.request.MenuOptionCreateRequest;
 import com.prgrms.himin.menu.dto.request.MenuOptionGroupCreateRequest;
 import com.prgrms.himin.menu.dto.request.MenuOptionGroupUpdateRequest;
+import com.prgrms.himin.menu.dto.request.MenuOptionUpdateRequest;
 import com.prgrms.himin.menu.dto.request.MenuUpdateRequest;
 import com.prgrms.himin.menu.dto.response.MenuCreateResponse;
 import com.prgrms.himin.menu.dto.response.MenuOptionCreateResponse;
@@ -166,6 +167,44 @@ public class MenuService {
 		menuOptionGroup.updateName(name);
 	}
 
+	@Transactional(readOnly = false)
+	public void updateMenuOption(
+		Long shopId,
+		Long menuId,
+		Long menuOptionGroupId,
+		Long optionId,
+		MenuOptionUpdateRequest request
+	) {
+		Menu menu = menuRepository.findById(menuId)
+			.orElseThrow(() -> new RuntimeException("메뉴를 찾을 수 없습니다."));
+
+		checkShopId(
+			shopId,
+			menu
+		);
+
+		MenuOptionGroup menuOptionGroup = menuOptionGroupRepository.findById(menuOptionGroupId)
+			.orElseThrow(() -> new RuntimeException("메뉴 옵션 그룹 id를 찾을 수 없습니다."));
+
+		checkMenuId(
+			menuId,
+			menuOptionGroup
+		);
+
+		MenuOption menuOption = menuOptionRepository.findById(optionId)
+			.orElseThrow(() -> new RuntimeException("메뉴 옵션 id를 찾을 수 없습니다."));
+
+		checkMenuOptionGroupId(
+			menuOptionGroupId,
+			menuOption
+		);
+
+		menuOption.updateOptionInfo(
+			request.getName(),
+			request.getPrice()
+		);
+	}
+
 	private void checkShopId(
 		Long shopId,
 		Menu menu
@@ -183,6 +222,16 @@ public class MenuService {
 		Menu menu = menuOptionGroup.getMenu();
 		if (!menuId.equals(menu.getId())) {
 			throw new RuntimeException("잘못된 메뉴 id 입니다.");
+		}
+	}
+
+	private void checkMenuOptionGroupId(
+		Long menuOptionGroupId,
+		MenuOption menuOption
+	) {
+		MenuOptionGroup menuOptionGroup = menuOption.getMenuOptionGroup();
+		if (!menuOptionGroupId.equals(menuOptionGroup.getId())) {
+			throw new RuntimeException("잘못된 메뉴 옵션 그룹 id 입니다.");
 		}
 	}
 }
