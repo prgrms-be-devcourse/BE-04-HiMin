@@ -2,6 +2,7 @@ package com.prgrms.himin.order.dto.request;
 
 import java.util.List;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -31,5 +32,5 @@ public final class OrderCreateRequest {
 	private final String requirement;
 
 	@NotNull(message = "선택메뉴목록이 null이면 안됩니다.")
-	private final List<SelectedMenuRequest> selectedMenus;
+	private final List<@Valid SelectedMenuRequest> selectedMenus;
 }
