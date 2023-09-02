@@ -38,7 +38,7 @@ public class MenuService {
 
 	private final ShopRepository shopRepository;
 
-	@Transactional(readOnly = false)
+	@Transactional
 	public MenuCreateResponse createMenu(Long shopId, MenuCreateRequest request) {
 		Shop shop = shopRepository.findById(shopId)
 			.orElseThrow(
@@ -50,7 +50,7 @@ public class MenuService {
 		return MenuCreateResponse.from(savedMenuEntity);
 	}
 
-	@Transactional(readOnly = false)
+	@Transactional
 	public MenuOptionGroupCreateResponse createMenuOptionGroup(
 		Long shopId,
 		Long menuId,
@@ -67,7 +67,7 @@ public class MenuService {
 		return MenuOptionGroupCreateResponse.from(savedMenuOptionGroupEntity);
 	}
 
-	@Transactional(readOnly = false)
+	@Transactional
 	public MenuOptionCreateResponse createMenuOption(
 		Long shopId,
 		Long menuId,
@@ -104,7 +104,7 @@ public class MenuService {
 		return MenuResponse.from(menu);
 	}
 
-	@Transactional(readOnly = false)
+	@Transactional
 	public void updateMenu(
 		Long shopId,
 		Long menuId,
@@ -123,7 +123,7 @@ public class MenuService {
 		);
 	}
 
-	@Transactional(readOnly = false)
+	@Transactional
 	public void changeMenuStatus(
 		Long shopId,
 		Long menuId,
@@ -140,7 +140,7 @@ public class MenuService {
 		menu.updateStatus(status);
 	}
 
-	@Transactional(readOnly = false)
+	@Transactional
 	public void updateMenuOptionGroup(
 		Long shopId,
 		Long menuId,
@@ -167,7 +167,7 @@ public class MenuService {
 		menuOptionGroup.updateName(name);
 	}
 
-	@Transactional(readOnly = false)
+	@Transactional
 	public void updateMenuOption(
 		Long shopId,
 		Long menuId,
@@ -205,7 +205,7 @@ public class MenuService {
 		);
 	}
 
-	@Transactional(readOnly = false)
+	@Transactional
 	public void deleteMenu(
 		Long shopId,
 		Long menuId
@@ -221,7 +221,7 @@ public class MenuService {
 		menuRepository.delete(menu);
 	}
 
-	@Transactional(readOnly = false)
+	@Transactional
 	public void deleteMenuOptionGroup(
 		Long shopId,
 		Long menuId,
@@ -246,7 +246,7 @@ public class MenuService {
 		menuOptionGroupRepository.delete(menuOptionGroup);
 	}
 
-	@Transactional(readOnly = false)
+	@Transactional
 	public void deleteMenuOption(
 		Long shopId,
 		Long menuId,
