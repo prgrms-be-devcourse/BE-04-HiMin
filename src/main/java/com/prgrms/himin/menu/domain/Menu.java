@@ -71,7 +71,7 @@ public class Menu {
 		this.name = name;
 		this.price = price;
 		this.popularity = popularity;
-		this.status = MenuStatus.unsellable;
+		this.status = MenuStatus.UNSELLABLE;
 	}
 
 	public void attachShop(Shop shop) {
