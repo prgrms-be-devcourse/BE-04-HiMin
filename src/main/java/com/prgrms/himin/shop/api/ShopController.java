@@ -80,6 +80,6 @@ public class ShopController {
 	@DeleteMapping("/{shopId}")
 	public ResponseEntity<Void> deleteShop(@PathVariable Long shopId) {
 		shopService.deleteShop(shopId);
-		return ResponseEntity.noContent().build();
+		return ResponseEntity.ok().build();
 	}
 }
