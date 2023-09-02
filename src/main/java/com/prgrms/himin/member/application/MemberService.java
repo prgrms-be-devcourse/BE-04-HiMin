@@ -34,8 +34,8 @@ public class MemberService {
 	public MemberCreateResponse createMember(MemberCreateRequest request) {
 		Member member = request.toEntity();
 		Address address = new Address(
-			request.getAddressAlias(),
-			request.getAddress()
+			request.addressAlias(),
+			request.address()
 		);
 		address.attachTo(member);
 		Member savedMember = memberRepository.save(member);
@@ -44,8 +44,8 @@ public class MemberService {
 
 	public void login(MemberLoginRequest request) {
 		if (!memberRepository.existsMemberByLoginIdAndPassword(
-			request.getLoginId(),
-			request.getPassword()
+			request.loginId(),
+			request.password()
 		)) {
 			throw new RuntimeException("로그인할 정보가 일치하지 않습니다!");
 		}

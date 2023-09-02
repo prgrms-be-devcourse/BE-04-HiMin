@@ -118,8 +118,8 @@ public class MenuService {
 			menu
 		);
 		menu.updateMenuInfo(
-			request.getName(),
-			request.getPrice()
+			request.name(),
+			request.price()
 		);
 	}
 
@@ -136,7 +136,7 @@ public class MenuService {
 			shopId,
 			menu
 		);
-		MenuStatus status = request.getStatus();
+		MenuStatus status = request.status();
 		menu.updateStatus(status);
 	}
 
@@ -163,7 +163,7 @@ public class MenuService {
 			menuOptionGroup
 		);
 
-		String name = request.getName();
+		String name = request.name();
 		menuOptionGroup.updateName(name);
 	}
 
@@ -200,8 +200,8 @@ public class MenuService {
 		);
 
 		menuOption.updateOptionInfo(
-			request.getName(),
-			request.getPrice()
+			request.name(),
+			request.price()
 		);
 	}
 

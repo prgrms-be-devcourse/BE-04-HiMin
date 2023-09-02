@@ -7,21 +7,17 @@ import javax.validation.constraints.Size;
 
 import com.prgrms.himin.menu.domain.Menu;
 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-
-@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public final class MenuCreateRequest {
-
+public record MenuCreateRequest(
 	@Size(max = 30, message = "메뉴 이름은 최대 30글자 입니다.")
 	@NotBlank(message = "메뉴 이름이 비어있으면 안됩니다.")
-	private final String name;
+	String name,
 
 	@Min(value = 0, message = "price는 음수가 되면 안됩니다.")
-	private final int price;
+	int price,
 
 	@NotNull(message = "popularity가 null값이면 안됩니다.")
-	private final boolean popularity;
+	boolean popularity
+) {
 
 	public Menu toEntity() {
 		return Menu.builder()
