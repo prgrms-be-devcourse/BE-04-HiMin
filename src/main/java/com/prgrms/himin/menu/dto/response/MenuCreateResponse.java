@@ -4,35 +4,15 @@ import com.prgrms.himin.menu.domain.Menu;
 import com.prgrms.himin.menu.domain.MenuStatus;
 
 import lombok.Builder;
-import lombok.Getter;
 
-@Getter
-public final class MenuCreateResponse {
-
-	private final Long menuId;
-
-	private final String name;
-
-	private final int price;
-
-	private final boolean popularity;
-
-	private final MenuStatus status;
-
-	@Builder
-	private MenuCreateResponse(
-		Long menuId,
-		String name,
-		int price,
-		boolean popularity,
-		MenuStatus status
-	) {
-		this.menuId = menuId;
-		this.name = name;
-		this.price = price;
-		this.popularity = popularity;
-		this.status = status;
-	}
+@Builder
+public record MenuCreateResponse(
+	Long menuId,
+	String name,
+	int price,
+	boolean popularity,
+	MenuStatus status
+) {
 
 	public static MenuCreateResponse from(Menu menu) {
 		return MenuCreateResponse.builder()

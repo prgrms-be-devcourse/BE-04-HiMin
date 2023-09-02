@@ -5,26 +5,11 @@ import java.util.stream.Collectors;
 
 import com.prgrms.himin.menu.domain.MenuOptionGroup;
 
-import lombok.Getter;
-
-@Getter
-public final class MenuOptionGroupResponse {
-
-	private final Long menuOptionGroupId;
-
-	private final String name;
-
-	private final List<MenuOptionResponse> menuOptionResponses;
-
-	private MenuOptionGroupResponse(
-		Long menuOptionGroupId,
-		String name,
-		List<MenuOptionResponse> menuOptionResponses
-	) {
-		this.menuOptionGroupId = menuOptionGroupId;
-		this.name = name;
-		this.menuOptionResponses = menuOptionResponses;
-	}
+public record MenuOptionGroupResponse(
+	Long menuOptionGroupId,
+	String name,
+	List<MenuOptionResponse> menuOptionResponses
+) {
 
 	public static MenuOptionGroupResponse from(MenuOptionGroup menuOptionGroup) {
 		List<MenuOptionResponse> menuOptionResponses = menuOptionGroup.getMenuOptions()
