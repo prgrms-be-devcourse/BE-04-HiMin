@@ -6,8 +6,6 @@ import javax.validation.constraints.Size;
 
 import com.prgrms.himin.menu.domain.MenuStatus;
 
-import lombok.Getter;
-
 public record MenuUpdateRequest() {
 
 	public record Info(
@@ -20,7 +18,6 @@ public record MenuUpdateRequest() {
 	) {
 	}
 
-	@Getter
 	public record Status(
 		MenuStatus status
 	) {
