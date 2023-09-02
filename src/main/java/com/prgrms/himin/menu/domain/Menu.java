@@ -7,6 +7,7 @@ import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -48,7 +49,7 @@ public class Menu {
 	@Column(name = "popularity", nullable = false, columnDefinition = "BIT(1)")
 	private boolean popularity;
 
-	@Enumerated
+	@Enumerated(EnumType.STRING)
 	@Column(name = "status", nullable = false)
 	private MenuStatus status;
 

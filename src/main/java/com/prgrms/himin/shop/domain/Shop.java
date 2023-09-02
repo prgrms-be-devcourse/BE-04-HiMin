@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -46,7 +47,7 @@ public class Shop {
 	@Column(name = "name", nullable = false, length = MAX_NAME_LENGTH)
 	private String name;
 
-	@Enumerated
+	@Enumerated(EnumType.STRING)
 	@Column(name = "category", nullable = false)
 	private Category category;
 
