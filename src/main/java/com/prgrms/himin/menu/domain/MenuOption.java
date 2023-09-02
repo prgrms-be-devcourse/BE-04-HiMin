@@ -56,6 +56,7 @@ public class MenuOption {
 			this.menuOptionGroup.removeMenuOption(this);
 		}
 		this.menuOptionGroup = menuOptionGroup;
+
 		menuOptionGroup.addMenuOption(this);
 	}
 

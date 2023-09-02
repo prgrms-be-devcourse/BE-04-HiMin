@@ -39,7 +39,10 @@ public class MenuService {
 	private final ShopRepository shopRepository;
 
 	@Transactional
-	public MenuCreateResponse createMenu(Long shopId, MenuCreateRequest request) {
+	public MenuCreateResponse createMenu(
+		Long shopId,
+		MenuCreateRequest request
+	) {
 		Shop shop = shopRepository.findById(shopId)
 			.orElseThrow(
 				() -> new RuntimeException("존재 하지 않는 가게 id 입니다.")
@@ -47,6 +50,7 @@ public class MenuService {
 		Menu menu = request.toEntity();
 		menu.attachShop(shop);
 		Menu savedMenuEntity = menuRepository.save(menu);
+
 		return MenuCreateResponse.from(savedMenuEntity);
 	}
 
@@ -64,6 +68,7 @@ public class MenuService {
 		checkShopId(shopId, menu);
 		MenuOptionGroup savedMenuOptionGroupEntity = menuOptionGroupRepository.save(menuOptionGroupEntity);
 		savedMenuOptionGroupEntity.attachMenu(menu);
+
 		return MenuOptionGroupCreateResponse.from(savedMenuOptionGroupEntity);
 	}
 
@@ -89,6 +94,7 @@ public class MenuService {
 
 		menuOptionEntity.attachMenuOptionGroup(menuOptionGroup);
 		MenuOption savedMenuOption = menuOptionRepository.save(menuOptionEntity);
+
 		return MenuOptionCreateResponse.from(savedMenuOption);
 	}
 
@@ -111,12 +117,15 @@ public class MenuService {
 		MenuUpdateRequest.Info request
 	) {
 		Menu menu = menuRepository.findById(menuId)
-			.orElseThrow(() -> new RuntimeException("메뉴를 찾을 수 없습니다."));
+			.orElseThrow(
+				() -> new RuntimeException("메뉴를 찾을 수 없습니다.")
+			);
 
 		checkShopId(
 			shopId,
 			menu
 		);
+
 		menu.updateMenuInfo(
 			request.name(),
 			request.price()
@@ -130,12 +139,15 @@ public class MenuService {
 		MenuUpdateRequest.Status request
 	) {
 		Menu menu = menuRepository.findById(menuId)
-			.orElseThrow(() -> new RuntimeException("메뉴를 찾을 수 없습니다."));
+			.orElseThrow(
+				() -> new RuntimeException("메뉴를 찾을 수 없습니다.")
+			);
 
 		checkShopId(
 			shopId,
 			menu
 		);
+
 		MenuStatus status = request.status();
 		menu.updateStatus(status);
 	}
@@ -148,7 +160,9 @@ public class MenuService {
 		MenuOptionGroupUpdateRequest request
 	) {
 		Menu menu = menuRepository.findById(menuId)
-			.orElseThrow(() -> new RuntimeException("메뉴를 찾을 수 없습니다."));
+			.orElseThrow(
+				() -> new RuntimeException("메뉴를 찾을 수 없습니다.")
+			);
 
 		checkShopId(
 			shopId,
@@ -156,7 +170,9 @@ public class MenuService {
 		);
 
 		MenuOptionGroup menuOptionGroup = menuOptionGroupRepository.findById(menuOptionGroupId)
-			.orElseThrow(() -> new RuntimeException("메뉴 옵션 그룹 id를 찾을 수 없습니다."));
+			.orElseThrow(
+				() -> new RuntimeException("메뉴 옵션 그룹 id를 찾을 수 없습니다.")
+			);
 
 		checkMenuId(
 			menuId,
@@ -176,7 +192,9 @@ public class MenuService {
 		MenuOptionUpdateRequest request
 	) {
 		Menu menu = menuRepository.findById(menuId)
-			.orElseThrow(() -> new RuntimeException("메뉴를 찾을 수 없습니다."));
+			.orElseThrow(
+				() -> new RuntimeException("메뉴를 찾을 수 없습니다.")
+			);
 
 		checkShopId(
 			shopId,
@@ -184,7 +202,9 @@ public class MenuService {
 		);
 
 		MenuOptionGroup menuOptionGroup = menuOptionGroupRepository.findById(menuOptionGroupId)
-			.orElseThrow(() -> new RuntimeException("메뉴 옵션 그룹 id를 찾을 수 없습니다."));
+			.orElseThrow(
+				() -> new RuntimeException("메뉴 옵션 그룹 id를 찾을 수 없습니다.")
+			);
 
 		checkMenuId(
 			menuId,
@@ -192,7 +212,9 @@ public class MenuService {
 		);
 
 		MenuOption menuOption = menuOptionRepository.findById(optionId)
-			.orElseThrow(() -> new RuntimeException("메뉴 옵션 id를 찾을 수 없습니다."));
+			.orElseThrow(
+				() -> new RuntimeException("메뉴 옵션 id를 찾을 수 없습니다.")
+			);
 
 		checkMenuOptionGroupId(
 			menuOptionGroupId,
@@ -211,7 +233,9 @@ public class MenuService {
 		Long menuId
 	) {
 		Menu menu = menuRepository.findById(menuId)
-			.orElseThrow(() -> new RuntimeException("메뉴를 찾을 수 없습니다."));
+			.orElseThrow(
+				() -> new RuntimeException("메뉴를 찾을 수 없습니다.")
+			);
 
 		checkShopId(
 			shopId,
@@ -228,7 +252,9 @@ public class MenuService {
 		Long menuOptionGroupId
 	) {
 		Menu menu = menuRepository.findById(menuId)
-			.orElseThrow(() -> new RuntimeException("메뉴를 찾을 수 없습니다."));
+			.orElseThrow(
+				() -> new RuntimeException("메뉴를 찾을 수 없습니다.")
+			);
 
 		checkShopId(
 			shopId,
@@ -236,7 +262,9 @@ public class MenuService {
 		);
 
 		MenuOptionGroup menuOptionGroup = menuOptionGroupRepository.findById(menuOptionGroupId)
-			.orElseThrow(() -> new RuntimeException("메뉴 옵션 그룹 id를 찾을 수 없습니다."));
+			.orElseThrow(
+				() -> new RuntimeException("메뉴 옵션 그룹 id를 찾을 수 없습니다.")
+			);
 
 		checkMenuId(
 			menuId,
@@ -254,7 +282,9 @@ public class MenuService {
 		Long optionId
 	) {
 		Menu menu = menuRepository.findById(menuId)
-			.orElseThrow(() -> new RuntimeException("메뉴를 찾을 수 없습니다."));
+			.orElseThrow(
+				() -> new RuntimeException("메뉴를 찾을 수 없습니다.")
+			);
 
 		checkShopId(
 			shopId,
@@ -262,7 +292,9 @@ public class MenuService {
 		);
 
 		MenuOptionGroup menuOptionGroup = menuOptionGroupRepository.findById(menuOptionGroupId)
-			.orElseThrow(() -> new RuntimeException("메뉴 옵션 그룹 id를 찾을 수 없습니다."));
+			.orElseThrow(
+				() -> new RuntimeException("메뉴 옵션 그룹 id를 찾을 수 없습니다.")
+			);
 
 		checkMenuId(
 			menuId,
@@ -270,7 +302,9 @@ public class MenuService {
 		);
 
 		MenuOption menuOption = menuOptionRepository.findById(optionId)
-			.orElseThrow(() -> new RuntimeException("메뉴 옵션 id를 찾을 수 없습니다."));
+			.orElseThrow(
+				() -> new RuntimeException("메뉴 옵션 id를 찾을 수 없습니다.")
+			);
 
 		checkMenuOptionGroupId(
 			menuOptionGroupId,

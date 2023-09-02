@@ -26,12 +26,16 @@ public class ShopService {
 	public ShopResponse createShop(ShopCreateRequest request) {
 		Shop shop = request.toEntity();
 		Shop savedShop = shopRepository.save(shop);
+
 		return ShopResponse.from(savedShop);
 	}
 
 	public ShopResponse getShop(Long shopId) {
 		Shop shop = shopRepository.findById(shopId)
-			.orElseThrow(() -> new RuntimeException("가게를 찾을 수 없습니다."));
+			.orElseThrow(
+				() -> new RuntimeException("가게를 찾을 수 없습니다.")
+			);
+
 		return ShopResponse.from(shop);
 	}
 
@@ -47,15 +51,21 @@ public class ShopService {
 			address,
 			deliveryTip
 		);
+
 		return shops.stream()
 			.map(ShopResponse::from)
 			.collect(Collectors.toList());
 	}
 
 	@Transactional
-	public void updateShop(Long shopId, ShopUpdateRequest.Info request) {
+	public void updateShop(
+		Long shopId,
+		ShopUpdateRequest.Info request
+	) {
 		Shop shop = shopRepository.findById(shopId)
-			.orElseThrow(() -> new RuntimeException("가게를 찾을 수 없습니다."));
+			.orElseThrow(
+				() -> new RuntimeException("가게를 찾을 수 없습니다.")
+			);
 
 		shop.updateInfo(
 			request.name(),
@@ -70,9 +80,14 @@ public class ShopService {
 	}
 
 	@Transactional
-	public void changeShopStatus(Long shopId, ShopUpdateRequest.Status request) {
+	public void changeShopStatus(
+		Long shopId,
+		ShopUpdateRequest.Status request
+	) {
 		Shop shop = shopRepository.findById(shopId)
-			.orElseThrow(() -> new RuntimeException("가게를 찾을 수 없습니다."));
+			.orElseThrow(
+				() -> new RuntimeException("가게를 찾을 수 없습니다.")
+			);
 
 		shop.changeStatus(request.status());
 	}
@@ -82,6 +97,7 @@ public class ShopService {
 		if (!shopRepository.existsById(shopId)) {
 			throw new RuntimeException("가게를 찾을 수 없습니다.");
 		}
+		
 		shopRepository.deleteById(shopId);
 	}
 }

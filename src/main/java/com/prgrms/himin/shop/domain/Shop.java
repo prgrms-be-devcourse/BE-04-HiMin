@@ -66,7 +66,7 @@ public class Shop {
 	@Column(name = "dibs_count")
 	private int dibsCount;
 
-	@Enumerated
+	@Enumerated(EnumType.STRING)
 	@Column(name = "status", nullable = false)
 	private ShopStatus status;
 

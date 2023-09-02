@@ -34,12 +34,14 @@ public class ShopController {
 	@PostMapping
 	public ResponseEntity<ShopResponse> createShop(@Valid @RequestBody ShopCreateRequest request) {
 		ShopResponse response = shopService.createShop(request);
+
 		return ResponseEntity.ok(response);
 	}
 
 	@GetMapping("/{shopId}")
 	public ResponseEntity<ShopResponse> getShop(@PathVariable Long shopId) {
 		ShopResponse response = shopService.getShop(shopId);
+
 		return ResponseEntity.ok(response);
 	}
 
@@ -56,30 +58,34 @@ public class ShopController {
 			address,
 			deliveryTip
 		);
+
 		return ResponseEntity.ok(responses);
 	}
 
 	@PutMapping("/{shopId}")
 	public ResponseEntity<Void> updateShop(
 		@PathVariable Long shopId,
-		@RequestBody ShopUpdateRequest.Info request
+		@Valid @RequestBody ShopUpdateRequest.Info request
 	) {
 		shopService.updateShop(shopId, request);
+
 		return ResponseEntity.noContent().build();
 	}
 
 	@PatchMapping("/{shopId}")
 	public ResponseEntity<Void> changeShopStatus(
 		@PathVariable Long shopId,
-		@RequestBody ShopUpdateRequest.Status request
+		@Valid @RequestBody ShopUpdateRequest.Status request
 	) {
 		shopService.changeShopStatus(shopId, request);
+
 		return ResponseEntity.noContent().build();
 	}
 
 	@DeleteMapping("/{shopId}")
 	public ResponseEntity<Void> deleteShop(@PathVariable Long shopId) {
 		shopService.deleteShop(shopId);
+		
 		return ResponseEntity.ok().build();
 	}
 }

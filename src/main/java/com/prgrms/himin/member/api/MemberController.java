@@ -33,24 +33,28 @@ public class MemberController {
 	@PostMapping("/sign-up")
 	public ResponseEntity<MemberCreateResponse> createMember(@Valid @RequestBody MemberCreateRequest request) {
 		MemberCreateResponse response = memberService.createMember(request);
+
 		return ResponseEntity.ok(response);
 	}
 
 	@PostMapping("/sign-in")
 	public ResponseEntity<Void> login(@Valid @RequestBody MemberLoginRequest request) {
 		memberService.login(request);
+
 		return ResponseEntity.ok().build();
 	}
 
 	@GetMapping("/members/{memberId}")
 	public ResponseEntity<MemberResponse> getMember(@PathVariable Long memberId) {
 		MemberResponse response = memberService.getMember(memberId);
+
 		return ResponseEntity.ok(response);
 	}
 
 	@DeleteMapping("/withdrawal/{memberId}")
 	public ResponseEntity<Void> deleteMember(@PathVariable Long memberId) {
 		memberService.deleteMember(memberId);
+
 		return ResponseEntity.ok().build();
 	}
 
@@ -59,12 +63,14 @@ public class MemberController {
 		@PathVariable Long memberId,
 		@Valid @RequestBody AddressCreateRequest request) {
 		AddressResponse response = memberService.createAddress(memberId, request);
+
 		return ResponseEntity.ok(response);
 	}
 
 	@GetMapping("/members/{memberId}/addresses")
 	public ResponseEntity<List<AddressResponse>> getAllAddress(@PathVariable Long memberId) {
 		List<AddressResponse> response = memberService.getAllAddress(memberId);
+
 		return ResponseEntity.ok(response);
 	}
 
@@ -74,6 +80,7 @@ public class MemberController {
 		@PathVariable Long addressId
 	) {
 		memberService.deleteAddress(memberId, addressId);
+		
 		return ResponseEntity.ok().build();
 	}
 }

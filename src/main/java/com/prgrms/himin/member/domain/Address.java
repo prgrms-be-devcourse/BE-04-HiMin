@@ -66,6 +66,7 @@ public class Address {
 		if (o == null || getClass() != o.getClass())
 			return false;
 		Address address1 = (Address)o;
+
 		return Objects.equals(addressId, address1.addressId);
 	}
 
