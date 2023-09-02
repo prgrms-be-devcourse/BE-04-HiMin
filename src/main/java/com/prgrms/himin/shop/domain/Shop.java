@@ -145,7 +145,7 @@ public class Shop {
 
 	private void validateOpeningTime(String openingTime) {
 		if (openingTime == null || !TIME_PATTERN.matcher(openingTime).matches()) {
-			throw new InvalidValueException(ErrorCode.SHOP_OPENNING_TIME_BAD_REQUEST);
+			throw new InvalidValueException(ErrorCode.SHOP_OPENING_TIME_BAD_REQUEST);
 		}
 	}
 
