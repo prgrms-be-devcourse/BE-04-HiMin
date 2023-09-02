@@ -52,10 +52,14 @@ public class OrderService {
 	@Transactional
 	public OrderResponse createOrder(OrderCreateRequest request) {
 		Member member = memberRepository.findById(request.memberId())
-			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+			.orElseThrow(
+				() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND)
+			);
 
 		Shop shop = shopRepository.findById(request.shopId())
-			.orElseThrow(() -> new RuntimeException("찾는 shop이 존재하지 않습니다."));
+			.orElseThrow(
+				() -> new EntityNotFoundException(ErrorCode.SHOP_NOT_FOUND)
+			);
 
 		Order order = Order.builder()
 			.address(request.address())
@@ -78,7 +82,9 @@ public class OrderService {
 
 	public OrderResponse getOrder(Long orderId) {
 		Order order = orderRepository.findById(orderId)
-			.orElseThrow(() -> new RuntimeException("찾는 Order가 존재하지 않습니다."));
+			.orElseThrow(
+				() -> new EntityNotFoundException(ErrorCode.ORDER_NOT_FOUND)
+			);
 
 		return OrderResponse.from(order);
 	}
@@ -97,7 +103,9 @@ public class OrderService {
 		List<OrderItem> orderItems = new ArrayList<>();
 		for (SelectedMenuRequest selectedMenu : selectedMenus) {
 			Menu menu = menuRepository.findById(selectedMenu.menuId())
-				.orElseThrow(() -> new RuntimeException("찾는 menu가 존재하지 않습니다."));
+				.orElseThrow(
+					() -> new EntityNotFoundException(ErrorCode.MENU_NOT_FOUND)
+				);
 
 			List<SelectedMenuOptionRequest> selectedMenuOptions = selectedMenu.selectedMenuOptions();
 
@@ -147,7 +155,9 @@ public class OrderService {
 		List<MenuOption> menuOptions = new ArrayList<>();
 		for (Long menuOptionId : menuOptionIds) {
 			MenuOption menuOption = menuOptionRepository.findById(menuOptionId)
-				.orElseThrow(() -> new RuntimeException("찾는 menuOption이 존재하지 않습니다."));
+				.orElseThrow(
+					() -> new EntityNotFoundException(ErrorCode.MENU_OPTION_NOT_FOUND)
+				);
 			menuValidator.validateMenuOptionGroupId(menuOptionGroupId, menuOptionId);
 			menuOptions.add(menuOption);
 		}

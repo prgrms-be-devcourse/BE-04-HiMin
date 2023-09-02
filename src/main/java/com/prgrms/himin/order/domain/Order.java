@@ -16,6 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.prgrms.himin.global.error.exception.BusinessException;
+import com.prgrms.himin.global.error.exception.ErrorCode;
 import com.prgrms.himin.member.domain.Member;
 import com.prgrms.himin.shop.domain.Shop;
 
@@ -76,6 +78,8 @@ public class Order {
 	) {
 		validateAddress(address);
 		validateRequirement(requirement);
+		validateShop(shop);
+		validateMember(member);
 		this.address = address;
 		this.requirement = requirement;
 		this.shop = shop;
@@ -103,13 +107,25 @@ public class Order {
 
 	private void validateAddress(String address) {
 		if (address == null || address.length() > MAX_ADDRESS_LENGTH) {
-			throw new RuntimeException("잘못된 주소입니다.");
+			throw new BusinessException(ErrorCode.MEMBER_ADDRESS_BAD_REQUEST);
 		}
 	}
 
 	private void validateRequirement(String requirement) {
 		if (requirement == null || requirement.length() > MAX_REQUIREMENT_LENGTH) {
-			throw new RuntimeException("잘못된 요청사항입니다.");
+			throw new BusinessException(ErrorCode.ORDER_REQUIREMENT_BAD_REQUEST);
+		}
+	}
+
+	private void validateMember(Member member) {
+		if (member == null) {
+			throw new BusinessException(ErrorCode.MEMBER_BAD_REQUEST);
+		}
+	}
+
+	private void validateShop(Shop shop) {
+		if (shop == null) {
+			throw new BusinessException(ErrorCode.SHOP_BAD_REQUEST);
 		}
 	}
 }

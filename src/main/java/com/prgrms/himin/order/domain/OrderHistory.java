@@ -12,6 +12,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.prgrms.himin.global.error.exception.BusinessException;
+import com.prgrms.himin.global.error.exception.ErrorCode;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,6 +42,7 @@ public class OrderHistory {
 		Order order,
 		OrderStatus orderStatus
 	) {
+		validateOrder(order);
 		this.order = order;
 		this.orderStatus = orderStatus;
 	}
@@ -48,5 +52,11 @@ public class OrderHistory {
 			order,
 			OrderStatus.ORDERED
 		);
+	}
+
+	private void validateOrder(Order order) {
+		if (order == null) {
+			throw new BusinessException(ErrorCode.ORDER_BAD_REQUEST);
+		}
 	}
 }

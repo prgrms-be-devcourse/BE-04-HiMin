@@ -16,6 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.prgrms.himin.global.error.exception.BusinessException;
+import com.prgrms.himin.global.error.exception.ErrorCode;
 import com.prgrms.himin.menu.domain.Menu;
 
 import lombok.AccessLevel;
@@ -51,6 +53,7 @@ public class OrderItem {
 		Menu menu,
 		int quantity
 	) {
+		validateMenu(menu);
 		this.quantity = quantity;
 		this.menu = menu;
 	}
@@ -106,5 +109,11 @@ public class OrderItem {
 		result += menu.getPrice() * quantity;
 
 		return result;
+	}
+
+	private void validateMenu(Menu menu) {
+		if (menu == null) {
+			throw new BusinessException(ErrorCode.MENU_BAD_REQUEST);
+		}
 	}
 }
