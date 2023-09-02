@@ -1,7 +1,6 @@
 package com.prgrms.himin.member.application;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,7 +61,7 @@ public class MemberService {
 		List<AddressResponse> addresses = member.getAddresses()
 			.stream()
 			.map(AddressResponse::from)
-			.collect(Collectors.toList());
+			.toList();
 
 		return MemberResponse.of(member, addresses);
 	}
@@ -101,7 +100,7 @@ public class MemberService {
 		List<Address> addresses = member.getAddresses();
 		List<AddressResponse> addressResponses = addresses.stream()
 			.map(AddressResponse::from)
-			.collect(Collectors.toList());
+			.toList();
 
 		return addressResponses;
 	}
