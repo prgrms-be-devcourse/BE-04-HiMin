@@ -45,12 +45,13 @@ public enum ErrorCode {
 
 	// Shop
 	SHOP_NOT_FOUND("SHOP_001", "가게를 찾을 수 없습니다."),
-	SHOP_NAME_BAD_REQUEST("SHOP_002", "잘못된 가게 이름 입니다."),
-	SHOP_ADDRESS_BAD_REQUEST("SHOP_003", "잘못된 가게 주소 입니다."),
-	SHOP_PHONE_BAD_REQUEST("SHOP_004", "잘못된 가게 번호입니다."),
-	SHOP_DELIVERY_TIP_BAD_REQUEST("SHOP_005", "잘못된 가게 배달팁 입니다."),
-	SHOP_OPENNING_TIME_BAD_REQUEST("SHOP_006", "잘못된 가게 오픈 시간 입니다."),
-	SHOP_CLOSING_TIME_BAD_REQUEST("SHOP_007", "잘못된 가게 마감 시간 입니다.");
+	SHOP_BAD_REQUEST("SHOP_002", "잘못된 가게 입니다."),
+	SHOP_NAME_BAD_REQUEST("SHOP_003", "잘못된 가게 이름 입니다."),
+	SHOP_ADDRESS_BAD_REQUEST("SHOP_004", "잘못된 가게 주소 입니다."),
+	SHOP_PHONE_BAD_REQUEST("SHOP_005", "잘못된 가게 번호입니다."),
+	SHOP_DELIVERY_TIP_BAD_REQUEST("SHOP_006", "잘못된 가게 배달팁 입니다."),
+	SHOP_OPENNING_TIME_BAD_REQUEST("SHOP_007", "잘못된 가게 오픈 시간 입니다."),
+	SHOP_CLOSING_TIME_BAD_REQUEST("SHOP_008", "잘못된 가게 마감 시간 입니다.");
 
 	private final String code;
 	private final String message;

@@ -1,8 +1,12 @@
 package com.prgrms.himin.menu.domain;
 
+import static com.prgrms.himin.global.error.exception.ErrorCode.*;
+
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.prgrms.himin.global.error.exception.EntityNotFoundException;
+import com.prgrms.himin.global.error.exception.InvalidValueException;
 import com.prgrms.himin.shop.domain.Shop;
 
 import lombok.RequiredArgsConstructor;
@@ -25,7 +29,7 @@ public class MenuValidator {
 		Menu menu = getMenu(menuId);
 		Shop shop = menu.getShop();
 		if (!shopId.equals(shop.getShopId())) {
-			throw new RuntimeException("잘못된 가게 id 입니다.");
+			throw new InvalidValueException(SHOP_BAD_REQUEST);
 		}
 	}
 
@@ -35,7 +39,7 @@ public class MenuValidator {
 	) {
 		MenuOptionGroup menuOptionGroup = getMenuOptionGroup(menuOptionGroupID);
 		if (!menuId.equals(menuOptionGroup.getMenu().getId())) {
-			throw new RuntimeException("잘못된 메뉴 id 입니다.");
+			throw new InvalidValueException(MENU_BAD_REQUEST);
 		}
 	}
 
@@ -46,28 +50,28 @@ public class MenuValidator {
 		MenuOption menuOption = getMenuOption(menuOptionId);
 		MenuOptionGroup menuOptionGroup = menuOption.getMenuOptionGroup();
 		if (!menuOptionGroupId.equals(menuOptionGroup.getId())) {
-			throw new RuntimeException("잘못된 메뉴 옵션 그룹 id 입니다.");
+			throw new InvalidValueException(MENU_OPTION_GROUP_BAD_REQUEST);
 		}
 	}
 
 	private Menu getMenu(Long menuId) {
 		return menuRepository.findById(menuId)
 			.orElseThrow(
-				() -> new RuntimeException("존재 하지 않는 메뉴 id 입니다.")
+				() -> new EntityNotFoundException(MENU_NOT_FOUND)
 			);
 	}
 
 	private MenuOptionGroup getMenuOptionGroup(Long menuOptionGroupId) {
 		return menuOptionGroupRepository.findById(menuOptionGroupId)
 			.orElseThrow(
-				() -> new RuntimeException("존재 하지 않는 메뉴 옵션 그룹 id 입니다.")
+				() -> new EntityNotFoundException(MENU_OPTION_GROUP_NOT_FOUND)
 			);
 	}
 
 	private MenuOption getMenuOption(Long menuOptionId) {
 		return menuOptionRepository.findById(menuOptionId)
 			.orElseThrow(
-				() -> new RuntimeException("존재 하지 않는 메뉴 옵션 id 입니다.")
+				() -> new EntityNotFoundException(MENU_OPTION_NOT_FOUND)
 			);
 	}
 }

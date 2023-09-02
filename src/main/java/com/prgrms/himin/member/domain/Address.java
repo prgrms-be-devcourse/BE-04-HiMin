@@ -12,6 +12,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.prgrms.himin.global.error.exception.ErrorCode;
+import com.prgrms.himin.global.error.exception.InvalidValueException;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -77,13 +80,13 @@ public class Address {
 
 	private void validateAddress(String address) {
 		if (address == null || address.length() > MAX_ADDRESS_LENGTH) {
-			throw new RuntimeException("잘못된 주소입니다.");
+			throw new InvalidValueException(ErrorCode.MEMBER_ADDRESS_BAD_REQUEST);
 		}
 	}
 
 	private void validateAddressAlias(String addressAlias) {
 		if (addressAlias == null || addressAlias.length() > MAX_ADDRESS_ALIAS_LENGTH) {
-			throw new RuntimeException("잘못된 주소 가명입니다.");
+			throw new InvalidValueException(ErrorCode.MEMBER_ADDRESS_ALIAS_BAD_REQUEST);
 		}
 	}
 }

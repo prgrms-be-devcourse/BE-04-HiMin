@@ -16,6 +16,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.prgrms.himin.global.error.exception.ErrorCode;
+import com.prgrms.himin.global.error.exception.InvalidValueException;
 import com.prgrms.himin.menu.domain.Menu;
 
 import lombok.AccessLevel;
@@ -119,37 +121,37 @@ public class Shop {
 
 	private void validateName(String name) {
 		if (name == null || name.length() > MAX_NAME_LENGTH) {
-			throw new RuntimeException("잘못된 이름입니다.");
+			throw new InvalidValueException(ErrorCode.SHOP_NAME_BAD_REQUEST);
 		}
 	}
 
 	private void validateAddress(String address) {
 		if (address == null || address.length() > MAX_ADDRESS_LENGTH) {
-			throw new RuntimeException("잘못된 주소입니다.");
+			throw new InvalidValueException(ErrorCode.SHOP_ADDRESS_BAD_REQUEST);
 		}
 	}
 
 	private void validatePhone(String phone) {
 		if (phone == null || !PHONE_PATTERN.matcher(phone).matches() || phone.length() > MAX_PHONE_LENGTH) {
-			throw new RuntimeException("잘못된 전화번호입니다.");
+			throw new InvalidValueException(ErrorCode.SHOP_PHONE_BAD_REQUEST);
 		}
 	}
 
 	private void validateDeliveryTip(int deliveryTip) {
 		if (deliveryTip < 0) {
-			throw new RuntimeException("배달팁은 0원 이상이어야 합니다.");
+			throw new InvalidValueException(ErrorCode.SHOP_DELIVERY_TIP_BAD_REQUEST);
 		}
 	}
 
 	private void validateOpeningTime(String openingTime) {
 		if (openingTime == null || !TIME_PATTERN.matcher(openingTime).matches()) {
-			throw new RuntimeException("잘못된 오픈 시간입니다.");
+			throw new InvalidValueException(ErrorCode.SHOP_OPENNING_TIME_BAD_REQUEST);
 		}
 	}
 
 	private void validateClosingTime(String closingTime) {
 		if (closingTime == null || !TIME_PATTERN.matcher(closingTime).matches()) {
-			throw new RuntimeException("잘못된 마감 시간입니다.");
+			throw new InvalidValueException(ErrorCode.SHOP_CLOSING_TIME_BAD_REQUEST);
 		}
 	}
 

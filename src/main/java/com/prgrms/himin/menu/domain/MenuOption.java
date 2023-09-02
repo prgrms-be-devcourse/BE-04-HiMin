@@ -12,6 +12,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.prgrms.himin.global.error.exception.ErrorCode;
+import com.prgrms.himin.global.error.exception.InvalidValueException;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -70,13 +73,13 @@ public class MenuOption {
 
 	private void validatePrice(int price) {
 		if (price < MIN_PRICE) {
-			throw new RuntimeException("price는 음수가 되면 안됩니다.");
+			throw new InvalidValueException(ErrorCode.MENU_PRICE_BAD_REQUEST);
 		}
 	}
 
 	private void validateName(String name) {
 		if (name == null || name.length() > MAX_NAME_LENGTH) {
-			throw new RuntimeException("잘못된 메뉴 옵션 이름 입니다.");
+			throw new InvalidValueException(ErrorCode.MENU_NAME_BAD_REQUEST);
 		}
 	}
 

@@ -16,6 +16,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.prgrms.himin.global.error.exception.ErrorCode;
+import com.prgrms.himin.global.error.exception.InvalidValueException;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -71,7 +74,7 @@ public class MenuOptionGroup {
 
 	private void validateName(String name) {
 		if (name == null || name.length() > MAX_NAME_LENGTH) {
-			throw new RuntimeException("잘못된 메뉴 옵션 그룹 이름 입니다.");
+			throw new InvalidValueException(ErrorCode.MENU_NAME_BAD_REQUEST);
 		}
 	}
 
