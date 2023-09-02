@@ -52,20 +52,20 @@ public class OrderService {
 
 	@Transactional
 	public OrderResponse createOrder(OrderCreateRequest request) {
-		Member member = memberRepository.findById(request.getMemberId())
+		Member member = memberRepository.findById(request.memberId())
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 
-		Shop shop = shopRepository.findById(request.getShopId())
+		Shop shop = shopRepository.findById(request.shopId())
 			.orElseThrow(() -> new RuntimeException("찾는 shop이 존재하지 않습니다."));
 
 		Order order = Order.builder()
-			.address(request.getAddress())
-			.requirement(request.getRequirement())
+			.address(request.address())
+			.requirement(request.requirement())
 			.shop(shop)
 			.member(member)
 			.build();
 
-		List<SelectedMenuRequest> selectedMenus = request.getSelectedMenus();
+		List<SelectedMenuRequest> selectedMenus = request.selectedMenus();
 		List<OrderItem> orderItems = extractOrderItems(selectedMenus);
 		attachOrderItems(order, orderItems);
 
@@ -97,17 +97,17 @@ public class OrderService {
 	private List<OrderItem> extractOrderItems(List<SelectedMenuRequest> selectedMenus) {
 		List<OrderItem> orderItems = new ArrayList<>();
 		for (SelectedMenuRequest selectedMenu : selectedMenus) {
-			Menu menu = menuRepository.findById(selectedMenu.getMenuId())
+			Menu menu = menuRepository.findById(selectedMenu.menuId())
 				.orElseThrow(() -> new RuntimeException("찾는 menu가 존재하지 않습니다."));
 
-			List<SelectedMenuOptionRequest> selectedMenuOptions = selectedMenu.getSelectedMenuOptions();
+			List<SelectedMenuOptionRequest> selectedMenuOptions = selectedMenu.selectedMenuOptions();
 
 			List<SelectedOption> selectedOptions = extractSelectedOptions(
-				selectedMenu.getMenuId(),
+				selectedMenu.menuId(),
 				selectedMenuOptions
 			);
 
-			int quantity = selectedMenu.getQuantity();
+			int quantity = selectedMenu.quantity();
 			OrderItem orderItem = new OrderItem(
 				menu,
 				quantity
@@ -127,12 +127,12 @@ public class OrderService {
 		List<SelectedOption> selectedOptions = new ArrayList<>();
 
 		for (SelectedMenuOptionRequest selectedMenuOption : selectedMenuOptions) {
-			Long menuOptionGroupId = selectedMenuOption.getMenuOptionGroupId();
+			Long menuOptionGroupId = selectedMenuOption.menuOptionGroupId();
 			MenuOptionGroup menuOptionGroup = menuOptionGroupRepository.findById(menuOptionGroupId)
 				.orElseThrow(() -> new RuntimeException("찾는 menuOptionGroup이 존재하지 않습니다."));
 
 			checkMenuOptionGroup(menuId, menuOptionGroup);
-			List<Long> menuOptionIds = selectedMenuOption.getSelectedMenuOptions();
+			List<Long> menuOptionIds = selectedMenuOption.selectedMenuOptions();
 
 			List<MenuOption> menuOptions = extractMenuOptions(menuOptionGroupId, menuOptionIds);
 			List<SelectedOption> toAdd = SelectedOption.from(menuOptions);
