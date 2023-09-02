@@ -39,6 +39,7 @@ public class MemberService {
 		);
 		address.attachTo(member);
 		Member savedMember = memberRepository.save(member);
+
 		return MemberCreateResponse.from(savedMember);
 	}
 
@@ -53,39 +54,53 @@ public class MemberService {
 
 	public MemberResponse getMember(Long memberId) {
 		Member member = memberRepository.findById(memberId)
-			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+			.orElseThrow(
+				() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND)
+			);
 		List<AddressResponse> addresses = member.getAddresses()
 			.stream()
 			.map(AddressResponse::from)
 			.collect(Collectors.toList());
+
 		return MemberResponse.of(member, addresses);
 	}
 
 	@Transactional
 	public void deleteMember(Long memberId) {
 		Member member = memberRepository.findById(memberId)
-			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+			.orElseThrow(
+				() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND)
+			);
 
 		memberRepository.delete(member);
 	}
 
 	@Transactional
-	public AddressResponse createAddress(Long memberId, AddressCreateRequest request) {
+	public AddressResponse createAddress(
+		Long memberId,
+		AddressCreateRequest request
+	) {
 		Member member = memberRepository.findById(memberId)
-			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+			.orElseThrow(
+				() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND)
+			);
 		Address address = request.toEntity();
 		address.attachTo(member);
 		Address savedAddress = addressRepository.save(address);
+
 		return AddressResponse.from(savedAddress);
 	}
 
 	public List<AddressResponse> getAllAddress(Long memberId) {
 		Member member = memberRepository.findById(memberId)
-			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+			.orElseThrow(
+				() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND)
+			);
 		List<Address> addresses = member.getAddresses();
 		List<AddressResponse> addressResponses = addresses.stream()
 			.map(AddressResponse::from)
 			.collect(Collectors.toList());
+
 		return addressResponses;
 	}
 
@@ -95,9 +110,14 @@ public class MemberService {
 		Long addressId
 	) {
 		Member member = memberRepository.findById(memberId)
-			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+			.orElseThrow(
+				() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND)
+			);
 		Address address = addressRepository.findById(addressId)
-			.orElseThrow(() -> new RuntimeException("찾는 주소가 없습니다."));
+			.orElseThrow(
+				() -> new RuntimeException("찾는 주소가 없습니다.")
+			);
+
 		if (!member.removeAddress(address)) {
 			throw new RuntimeException("찾는 주소는 해당 멤버의 주소가 아닙니다.");
 		}

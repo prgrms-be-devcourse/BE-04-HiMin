@@ -43,6 +43,7 @@ public class MenuController {
 			shopId,
 			request
 		);
+
 		return ResponseEntity.ok(response);
 	}
 
@@ -50,13 +51,14 @@ public class MenuController {
 	public ResponseEntity<MenuOptionGroupCreateResponse> createMenuOptionGroup(
 		@PathVariable Long shopId,
 		@PathVariable Long menuId,
-		@RequestBody MenuOptionGroupCreateRequest request
+		@Valid @RequestBody MenuOptionGroupCreateRequest request
 	) {
 		MenuOptionGroupCreateResponse response = menuService.createMenuOptionGroup(
 			shopId,
 			menuId,
 			request
 		);
+
 		return ResponseEntity.ok(response);
 	}
 
@@ -65,7 +67,7 @@ public class MenuController {
 		@PathVariable Long shopId,
 		@PathVariable Long menuId,
 		@PathVariable Long menuOptionGroupId,
-		@RequestBody MenuOptionCreateRequest request
+		@Valid @RequestBody MenuOptionCreateRequest request
 	) {
 		MenuOptionCreateResponse response = menuService.createMenuOption(
 			shopId,
@@ -73,6 +75,7 @@ public class MenuController {
 			menuOptionGroupId,
 			request
 		);
+
 		return ResponseEntity.ok(response);
 	}
 
@@ -85,6 +88,7 @@ public class MenuController {
 			shopId,
 			menuId
 		);
+
 		return ResponseEntity.ok(menuResponse);
 	}
 
@@ -92,13 +96,14 @@ public class MenuController {
 	public ResponseEntity<Void> updateMenu(
 		@PathVariable Long shopId,
 		@PathVariable Long menuId,
-		@RequestBody MenuUpdateRequest.Info request
+		@Valid @RequestBody MenuUpdateRequest.Info request
 	) {
 		menuService.updateMenu(
 			shopId,
 			menuId,
 			request
 		);
+
 		return ResponseEntity.noContent().build();
 	}
 
@@ -106,13 +111,14 @@ public class MenuController {
 	public ResponseEntity<Void> changeMenuStatus(
 		@PathVariable Long shopId,
 		@PathVariable Long menuId,
-		@RequestBody MenuUpdateRequest.Status request
+		@Valid @RequestBody MenuUpdateRequest.Status request
 	) {
 		menuService.changeMenuStatus(
 			shopId,
 			menuId,
 			request
 		);
+
 		return ResponseEntity.noContent().build();
 	}
 
@@ -121,7 +127,7 @@ public class MenuController {
 		@PathVariable Long shopId,
 		@PathVariable Long menuId,
 		@PathVariable Long menuOptionGroupId,
-		@RequestBody MenuOptionGroupUpdateRequest request
+		@Valid @RequestBody MenuOptionGroupUpdateRequest request
 	) {
 		menuService.updateMenuOptionGroup(
 			shopId,
@@ -129,6 +135,7 @@ public class MenuController {
 			menuOptionGroupId,
 			request
 		);
+
 		return ResponseEntity.noContent().build();
 	}
 
@@ -138,7 +145,7 @@ public class MenuController {
 		@PathVariable Long menuId,
 		@PathVariable Long menuOptionGroupId,
 		@PathVariable Long optionId,
-		@RequestBody MenuOptionUpdateRequest request
+		@Valid @RequestBody MenuOptionUpdateRequest request
 	) {
 		menuService.updateMenuOption(
 			shopId,
@@ -147,6 +154,7 @@ public class MenuController {
 			optionId,
 			request
 		);
+
 		return ResponseEntity.noContent().build();
 	}
 
@@ -159,6 +167,7 @@ public class MenuController {
 			shopId,
 			menuId
 		);
+
 		return ResponseEntity.ok().build();
 	}
 
@@ -173,6 +182,7 @@ public class MenuController {
 			menuId,
 			menuOptionGroupId
 		);
+
 		return ResponseEntity.ok().build();
 	}
 
@@ -189,6 +199,7 @@ public class MenuController {
 			menuOptionGroupId,
 			optionId
 		);
+		
 		return ResponseEntity.ok().build();
 	}
 }

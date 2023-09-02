@@ -79,6 +79,7 @@ public class Menu {
 			this.shop.removeMenu(this);
 		}
 		this.shop = shop;
+
 		shop.addMenu(this);
 	}
 
