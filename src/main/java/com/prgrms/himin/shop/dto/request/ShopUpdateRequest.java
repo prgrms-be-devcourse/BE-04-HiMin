@@ -5,6 +5,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 
+import com.prgrms.himin.global.common.ValidEnum;
 import com.prgrms.himin.shop.domain.Category;
 import com.prgrms.himin.shop.domain.ShopStatus;
 
@@ -15,7 +16,8 @@ public record ShopUpdateRequest() {
 		@NotBlank(message = "이름이 비어있으면 안됩니다.")
 		String name,
 
-		Category category,
+		@ValidEnum(enumClass = Category.class)
+		String category,
 
 		@Size(max = 50, message = "주소는 최대 50글자 입니다.")
 		@NotBlank(message = "주소가 비어있으면 안됩니다.")

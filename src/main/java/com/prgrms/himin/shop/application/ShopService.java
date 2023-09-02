@@ -59,7 +59,7 @@ public class ShopService {
 
 		shop.updateInfo(
 			request.name(),
-			request.category(),
+			Category.valueOf(request.category()),
 			request.address(),
 			request.phone(),
 			request.content(),
