@@ -5,26 +5,11 @@ import java.util.stream.Collectors;
 
 import com.prgrms.himin.order.domain.OrderItem;
 
-import lombok.Getter;
-
-@Getter
-public final class SelectedMenuResponse {
-
-	private final Long menuId;
-
-	private final int quantity;
-
-	private final List<Long> selectedOptionIds;
-
-	private SelectedMenuResponse(
-		Long menuId,
-		int quantity,
-		List<Long> selectedOptionIds
-	) {
-		this.menuId = menuId;
-		this.quantity = quantity;
-		this.selectedOptionIds = selectedOptionIds;
-	}
+public record SelectedMenuResponse(
+	Long menuId,
+	int quantity,
+	List<Long> selectedOptionIds
+) {
 
 	public static List<SelectedMenuResponse> from(List<OrderItem> orderItems) {
 		List<SelectedMenuResponse> response = orderItems.stream()
