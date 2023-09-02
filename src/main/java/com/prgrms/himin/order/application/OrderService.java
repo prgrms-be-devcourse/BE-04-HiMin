@@ -12,10 +12,9 @@ import com.prgrms.himin.member.domain.Member;
 import com.prgrms.himin.member.domain.MemberRepository;
 import com.prgrms.himin.menu.domain.Menu;
 import com.prgrms.himin.menu.domain.MenuOption;
-import com.prgrms.himin.menu.domain.MenuOptionGroup;
-import com.prgrms.himin.menu.domain.MenuOptionGroupRepository;
 import com.prgrms.himin.menu.domain.MenuOptionRepository;
 import com.prgrms.himin.menu.domain.MenuRepository;
+import com.prgrms.himin.menu.domain.MenuValidator;
 import com.prgrms.himin.order.domain.Order;
 import com.prgrms.himin.order.domain.OrderHistory;
 import com.prgrms.himin.order.domain.OrderHistoryRepository;
@@ -44,11 +43,11 @@ public class OrderService {
 
 	private final MenuOptionRepository menuOptionRepository;
 
-	private final MenuOptionGroupRepository menuOptionGroupRepository;
-
 	private final OrderHistoryRepository orderHistoryRepository;
 
 	private final ShopRepository shopRepository;
+
+	private final MenuValidator menuValidator;
 
 	@Transactional
 	public OrderResponse createOrder(OrderCreateRequest request) {
@@ -128,10 +127,9 @@ public class OrderService {
 
 		for (SelectedMenuOptionRequest selectedMenuOption : selectedMenuOptions) {
 			Long menuOptionGroupId = selectedMenuOption.menuOptionGroupId();
-			MenuOptionGroup menuOptionGroup = menuOptionGroupRepository.findById(menuOptionGroupId)
-				.orElseThrow(() -> new RuntimeException("찾는 menuOptionGroup이 존재하지 않습니다."));
 
-			checkMenuOptionGroup(menuId, menuOptionGroup);
+			menuValidator.validateMenuId(menuId, menuOptionGroupId);
+
 			List<Long> menuOptionIds = selectedMenuOption.selectedMenuOptions();
 
 			List<MenuOption> menuOptions = extractMenuOptions(menuOptionGroupId, menuOptionIds);
@@ -150,25 +148,10 @@ public class OrderService {
 		for (Long menuOptionId : menuOptionIds) {
 			MenuOption menuOption = menuOptionRepository.findById(menuOptionId)
 				.orElseThrow(() -> new RuntimeException("찾는 menuOption이 존재하지 않습니다."));
-
-			checkMenuOption(menuOptionGroupId, menuOption);
+			menuValidator.validateMenuOptionGroupId(menuOptionGroupId, menuOptionId);
 			menuOptions.add(menuOption);
 		}
 
 		return menuOptions;
-	}
-
-	private void checkMenuOptionGroup(Long menuId, MenuOptionGroup menuOptionGroup) {
-		if (!menuId.equals(
-			menuOptionGroup.getMenu().getId())) {
-			throw new RuntimeException(new RuntimeException("잘못된 menuOptionGroup 요청입니다."));
-		}
-	}
-
-	private void checkMenuOption(Long menuOptionGroupId, MenuOption menuOption) {
-		if (!menuOptionGroupId.equals(
-			menuOption.getMenuOptionGroup().getId())) {
-			throw new RuntimeException(new RuntimeException("잘못된 menuOption 요청입니다."));
-		}
 	}
 }
