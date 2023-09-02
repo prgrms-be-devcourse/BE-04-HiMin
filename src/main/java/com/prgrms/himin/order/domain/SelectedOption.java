@@ -14,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.prgrms.himin.global.error.exception.BusinessException;
+import com.prgrms.himin.global.error.exception.ErrorCode;
 import com.prgrms.himin.menu.domain.MenuOption;
 
 import lombok.AccessLevel;
@@ -87,7 +89,7 @@ public class SelectedOption {
 
 	private void validateMenuOption(MenuOption menuOption) {
 		if (menuOption == null) {
-			throw new RuntimeException("menuOption이 null일 수 없습니다.");
+			throw new BusinessException(ErrorCode.MENU_OPTION_BAD_REQUEST);
 		}
 	}
 }
