@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.prgrms.himin.global.error.exception.EntityNotFoundException;
+import com.prgrms.himin.global.error.exception.ErrorCode;
 import com.prgrms.himin.shop.domain.Category;
 import com.prgrms.himin.shop.domain.Shop;
 import com.prgrms.himin.shop.domain.ShopRepository;
@@ -33,7 +35,7 @@ public class ShopService {
 	public ShopResponse getShop(Long shopId) {
 		Shop shop = shopRepository.findById(shopId)
 			.orElseThrow(
-				() -> new RuntimeException("가게를 찾을 수 없습니다.")
+				() -> new EntityNotFoundException(ErrorCode.SHOP_NOT_FOUND)
 			);
 
 		return ShopResponse.from(shop);
@@ -64,7 +66,7 @@ public class ShopService {
 	) {
 		Shop shop = shopRepository.findById(shopId)
 			.orElseThrow(
-				() -> new RuntimeException("가게를 찾을 수 없습니다.")
+				() -> new EntityNotFoundException(ErrorCode.SHOP_NOT_FOUND)
 			);
 
 		shop.updateInfo(
@@ -86,7 +88,7 @@ public class ShopService {
 	) {
 		Shop shop = shopRepository.findById(shopId)
 			.orElseThrow(
-				() -> new RuntimeException("가게를 찾을 수 없습니다.")
+				() -> new EntityNotFoundException(ErrorCode.SHOP_NOT_FOUND)
 			);
 
 		shop.changeStatus(request.status());
@@ -95,9 +97,9 @@ public class ShopService {
 	@Transactional
 	public void deleteShop(Long shopId) {
 		if (!shopRepository.existsById(shopId)) {
-			throw new RuntimeException("가게를 찾을 수 없습니다.");
+			throw new EntityNotFoundException(ErrorCode.SHOP_NOT_FOUND);
 		}
-		
+
 		shopRepository.deleteById(shopId);
 	}
 }

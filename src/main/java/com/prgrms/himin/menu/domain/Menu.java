@@ -18,6 +18,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.prgrms.himin.global.error.exception.ErrorCode;
+import com.prgrms.himin.global.error.exception.InvalidValueException;
 import com.prgrms.himin.shop.domain.Shop;
 
 import lombok.AccessLevel;
@@ -95,13 +97,13 @@ public class Menu {
 
 	private void validatePrice(int price) {
 		if (price < MIN_PRICE) {
-			throw new RuntimeException("price는 음수가 되면 안됩니다.");
+			throw new InvalidValueException(ErrorCode.MENU_PRICE_BAD_REQUEST);
 		}
 	}
 
 	private void validateName(String name) {
 		if (name == null || name.length() > MAX_NAME_LENGTH) {
-			throw new RuntimeException("잘못된 메뉴 이름 입니다.");
+			throw new InvalidValueException(ErrorCode.MENU_NAME_BAD_REQUEST);
 		}
 	}
 

@@ -1,8 +1,12 @@
 package com.prgrms.himin.menu.application;
 
+import static com.prgrms.himin.global.error.exception.ErrorCode.*;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.prgrms.himin.global.error.exception.EntityNotFoundException;
+import com.prgrms.himin.global.error.exception.ErrorCode;
 import com.prgrms.himin.menu.domain.Menu;
 import com.prgrms.himin.menu.domain.MenuOption;
 import com.prgrms.himin.menu.domain.MenuOptionGroup;
@@ -48,7 +52,7 @@ public class MenuService {
 	) {
 		Shop shop = shopRepository.findById(shopId)
 			.orElseThrow(
-				() -> new RuntimeException("존재 하지 않는 가게 id 입니다.")
+				() -> new EntityNotFoundException(ErrorCode.SHOP_NOT_FOUND)
 			);
 		Menu menu = request.toEntity();
 		menu.attachShop(shop);
@@ -70,7 +74,7 @@ public class MenuService {
 		MenuOptionGroup menuOptionGroupEntity = request.toEntity();
 		Menu menu = menuRepository.findById(menuId)
 			.orElseThrow(
-				() -> new RuntimeException("존재 하지 않는 메뉴 id 입니다.")
+				() -> new EntityNotFoundException(ErrorCode.MENU_NOT_FOUND)
 			);
 		MenuOptionGroup savedMenuOptionGroupEntity = menuOptionGroupRepository.save(menuOptionGroupEntity);
 		savedMenuOptionGroupEntity.attachMenu(menu);
@@ -96,7 +100,7 @@ public class MenuService {
 		MenuOption menuOptionEntity = request.toEntity();
 		MenuOptionGroup menuOptionGroup = menuOptionGroupRepository.findById(menuOptionGroupId)
 			.orElseThrow(
-				() -> new RuntimeException("존재 하지 않는 메뉴 옵션 그룹 id 입니다.")
+				() -> new EntityNotFoundException(ErrorCode.MENU_OPTION_GROUP_NOT_FOUND)
 			);
 
 		menuOptionEntity.attachMenuOptionGroup(menuOptionGroup);
@@ -114,7 +118,7 @@ public class MenuService {
 			menuId
 		);
 		Menu menu = menuRepository.findById(menuId)
-			.orElseThrow(() -> new RuntimeException("메뉴를 찾을 수 없습니다."));
+			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MENU_NOT_FOUND));
 
 		return MenuResponse.from(menu);
 	}
@@ -131,7 +135,7 @@ public class MenuService {
 		);
 		Menu menu = menuRepository.findById(menuId)
 			.orElseThrow(
-				() -> new RuntimeException("메뉴를 찾을 수 없습니다.")
+				() -> new EntityNotFoundException(ErrorCode.MENU_NOT_FOUND)
 			);
 
 		menu.updateMenuInfo(
@@ -152,7 +156,7 @@ public class MenuService {
 		);
 		Menu menu = menuRepository.findById(menuId)
 			.orElseThrow(
-				() -> new RuntimeException("메뉴를 찾을 수 없습니다.")
+				() -> new EntityNotFoundException(ErrorCode.MENU_NOT_FOUND)
 			);
 
 		MenuStatus status = request.status();
@@ -177,7 +181,7 @@ public class MenuService {
 
 		MenuOptionGroup menuOptionGroup = menuOptionGroupRepository.findById(menuOptionGroupId)
 			.orElseThrow(
-				() -> new RuntimeException("메뉴 옵션 그룹 id를 찾을 수 없습니다.")
+				() -> new EntityNotFoundException(MENU_OPTION_GROUP_NOT_FOUND)
 			);
 
 		String name = request.name();
@@ -207,7 +211,7 @@ public class MenuService {
 
 		MenuOption menuOption = menuOptionRepository.findById(optionId)
 			.orElseThrow(
-				() -> new RuntimeException("메뉴 옵션 id를 찾을 수 없습니다.")
+				() -> new EntityNotFoundException(MENU_OPTION_NOT_FOUND)
 			);
 
 		menuOption.updateOptionInfo(
@@ -227,7 +231,7 @@ public class MenuService {
 		);
 		Menu menu = menuRepository.findById(menuId)
 			.orElseThrow(
-				() -> new RuntimeException("메뉴를 찾을 수 없습니다.")
+				() -> new EntityNotFoundException(MENU_NOT_FOUND)
 			);
 
 		menuRepository.delete(menu);
@@ -249,7 +253,7 @@ public class MenuService {
 		);
 		MenuOptionGroup menuOptionGroup = menuOptionGroupRepository.findById(menuOptionGroupId)
 			.orElseThrow(
-				() -> new RuntimeException("메뉴 옵션 그룹 id를 찾을 수 없습니다.")
+				() -> new EntityNotFoundException(MENU_OPTION_GROUP_NOT_FOUND)
 			);
 
 		menuOptionGroupRepository.delete(menuOptionGroup);
@@ -276,7 +280,7 @@ public class MenuService {
 		);
 		MenuOption menuOption = menuOptionRepository.findById(optionId)
 			.orElseThrow(
-				() -> new RuntimeException("메뉴 옵션 id를 찾을 수 없습니다.")
+				() -> new EntityNotFoundException(MENU_OPTION_NOT_FOUND)
 			);
 
 		menuOptionRepository.delete(menuOption);

@@ -15,6 +15,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.prgrms.himin.global.error.exception.ErrorCode;
+import com.prgrms.himin.global.error.exception.InvalidValueException;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -98,25 +101,25 @@ public class Member {
 
 	private void validateLoginId(String loginId) {
 		if (loginId == null || loginId.length() > ID_MAX_LENGTH) {
-			throw new RuntimeException("잘못된 로그인ID입니다.");
+			throw new InvalidValueException(ErrorCode.MEMBER_LOGIN_ID_BAD_REQUEST);
 		}
 	}
 
 	private void validatePassword(String password) {
 		if (password == null || password.length() > PASSWORD_MAX_LENGTH) {
-			throw new RuntimeException("잘못된 비밀번호입니다.");
+			throw new InvalidValueException(ErrorCode.MEMBER_PASSWORD_BAD_REQUEST);
 		}
 	}
 
 	private void validateName(String name) {
 		if (name == null || name.length() > NAME_MAX_LENGTH) {
-			throw new RuntimeException("잘못된 이름입니다.");
+			throw new InvalidValueException(ErrorCode.MEMBER_NAME_BAD_REQUEST);
 		}
 	}
 
 	private void validatePhone(String phone) {
 		if (phone == null || phone.length() > PHONE_MAX_LENGTH) {
-			throw new RuntimeException("잘못된 핸드폰번호입니다.");
+			throw new InvalidValueException(ErrorCode.MEMBER_PHONE_BAD_REQUEST);
 		}
 	}
 }

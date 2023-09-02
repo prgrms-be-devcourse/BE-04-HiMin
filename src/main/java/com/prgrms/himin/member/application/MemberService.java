@@ -6,8 +6,10 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.prgrms.himin.global.error.exception.BusinessException;
 import com.prgrms.himin.global.error.exception.EntityNotFoundException;
 import com.prgrms.himin.global.error.exception.ErrorCode;
+import com.prgrms.himin.global.error.exception.InvalidValueException;
 import com.prgrms.himin.member.domain.Address;
 import com.prgrms.himin.member.domain.AddressRepository;
 import com.prgrms.himin.member.domain.Member;
@@ -48,7 +50,7 @@ public class MemberService {
 			request.loginId(),
 			request.password()
 		)) {
-			throw new RuntimeException("로그인할 정보가 일치하지 않습니다!");
+			throw new BusinessException(ErrorCode.MEMBER_LOGIN_FAIL);
 		}
 	}
 
@@ -115,11 +117,11 @@ public class MemberService {
 			);
 		Address address = addressRepository.findById(addressId)
 			.orElseThrow(
-				() -> new RuntimeException("찾는 주소가 없습니다.")
+				() -> new InvalidValueException(ErrorCode.MEMBER_ADDRESS_BAD_REQUEST)
 			);
 
 		if (!member.removeAddress(address)) {
-			throw new RuntimeException("찾는 주소는 해당 멤버의 주소가 아닙니다.");
+			throw new BusinessException(ErrorCode.MEMBER_ADDRESS_NOT_MATCH);
 		}
 	}
 }
