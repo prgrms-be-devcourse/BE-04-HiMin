@@ -47,7 +47,7 @@ public class MenuController {
 		return ResponseEntity.ok(response);
 	}
 
-	@PostMapping("/{shopId}/menus/{menuId}/option-group")
+	@PostMapping("/{shopId}/menus/{menuId}/option-groups")
 	public ResponseEntity<MenuOptionGroupCreateResponse> createMenuOptionGroup(
 		@PathVariable Long shopId,
 		@PathVariable Long menuId,
@@ -62,7 +62,7 @@ public class MenuController {
 		return ResponseEntity.ok(response);
 	}
 
-	@PostMapping("/{shopId}/menus/{menuId}/option-group/{menuOptionGroupId}/options")
+	@PostMapping("/{shopId}/menus/{menuId}/option-groups/{menuOptionGroupId}/options")
 	public ResponseEntity<MenuOptionCreateResponse> createMenuOption(
 		@PathVariable Long shopId,
 		@PathVariable Long menuId,
@@ -122,7 +122,7 @@ public class MenuController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@PutMapping("/{shopId}/menus/{menuId}/option-group/{menuOptionGroupId}")
+	@PutMapping("/{shopId}/menus/{menuId}/option-groups/{menuOptionGroupId}")
 	public ResponseEntity<Void> updateMenuOptionGroup(
 		@PathVariable Long shopId,
 		@PathVariable Long menuId,
@@ -139,19 +139,19 @@ public class MenuController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@PutMapping("/{shopId}/menus/{menuId}/option-group/{menuOptionGroupId}/option/{optionId}")
+	@PutMapping("/{shopId}/menus/{menuId}/option-groups/{menuOptionGroupId}/options/{menuOptionId}")
 	public ResponseEntity<Void> updateMenuOption(
 		@PathVariable Long shopId,
 		@PathVariable Long menuId,
 		@PathVariable Long menuOptionGroupId,
-		@PathVariable Long optionId,
+		@PathVariable Long menuOptionId,
 		@Valid @RequestBody MenuOptionUpdateRequest request
 	) {
 		menuService.updateMenuOption(
 			shopId,
 			menuId,
 			menuOptionGroupId,
-			optionId,
+			menuOptionId,
 			request
 		);
 
@@ -171,7 +171,7 @@ public class MenuController {
 		return ResponseEntity.ok().build();
 	}
 
-	@DeleteMapping("/{shopId}/menus/{menuId}/option-group/{menuOptionGroupId}")
+	@DeleteMapping("/{shopId}/menus/{menuId}/option-groups/{menuOptionGroupId}")
 	public ResponseEntity<Void> deleteMenuOptionGroup(
 		@PathVariable Long shopId,
 		@PathVariable Long menuId,
@@ -186,20 +186,20 @@ public class MenuController {
 		return ResponseEntity.ok().build();
 	}
 
-	@DeleteMapping("/{shopId}/menus/{menuId}/option-group/{menuOptionGroupId}/option/{optionId}")
+	@DeleteMapping("/{shopId}/menus/{menuId}/option-groups/{menuOptionGroupId}/options/{menuOptionId}")
 	public ResponseEntity<Void> deleteMenuOption(
 		@PathVariable Long shopId,
 		@PathVariable Long menuId,
 		@PathVariable Long menuOptionGroupId,
-		@PathVariable Long optionId
+		@PathVariable Long menuOptionId
 	) {
 		menuService.deleteMenuOption(
 			shopId,
 			menuId,
 			menuOptionGroupId,
-			optionId
+			menuOptionId
 		);
-		
+
 		return ResponseEntity.ok().build();
 	}
 }
