@@ -185,7 +185,7 @@ class MenuControllerTest {
 				baseURL,
 				savedMenu.getId()
 			);
-			MenuUpdateRequest.Info request = MenuUpdateRequestBuilder.successBuild();
+			MenuUpdateRequest.Info request = MenuUpdateRequestBuilder.infoSuccessBuild();
 			String body = objectMapper.writeValueAsString(request);
 
 			// when
@@ -208,7 +208,7 @@ class MenuControllerTest {
 				baseURL,
 				savedMenu.getId()
 			);
-			MenuUpdateRequest.Info request = MenuUpdateRequestBuilder.failBuild(input);
+			MenuUpdateRequest.Info request = MenuUpdateRequestBuilder.infoFailBuild(input);
 			String body = objectMapper.writeValueAsString(request);
 
 			// when
