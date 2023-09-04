@@ -271,7 +271,10 @@ class MenuControllerTest {
 			// then
 			resultActions.andExpect(status().isNotFound())
 				.andExpect((result) -> assertTrue(
-					result.getResolvedException().getClass().isAssignableFrom((EntityNotFoundException.class))));
+					result.getResolvedException().getClass().isAssignableFrom((EntityNotFoundException.class))))
+				.andExpect(jsonPath("error").value(ErrorCode.MENU_NOT_FOUND.toString()))
+				.andExpect(jsonPath("code").value(ErrorCode.MENU_NOT_FOUND.getCode()))
+				.andExpect(jsonPath("message").value(ErrorCode.MENU_NOT_FOUND.getMessage()));
 		}
 	}
 }
