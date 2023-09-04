@@ -29,7 +29,7 @@ import com.prgrms.himin.setup.request.MemberCreateRequestBuilder;
 @AutoConfigureMockMvc
 class MemberControllerTest {
 
-	String BASE_URL = "/api";
+	final String BASE_URL = "/api";
 	@Autowired
 	MockMvc mvc;
 
@@ -67,7 +67,7 @@ class MemberControllerTest {
 		}
 
 		@ParameterizedTest
-		@MethodSource("provideStringsForIsBlank")
+		@MethodSource("provideRequestForErrorValue")
 		@DisplayName("실패한다.")
 		void fail_test(String wrongLoginId, String expectedMessage) throws Exception {
 			// given
@@ -91,7 +91,7 @@ class MemberControllerTest {
 				.andExpect(jsonPath("message").value(ErrorCode.INVALID_REQUEST.getMessage()));
 		}
 
-		private static Stream<Arguments> provideStringsForIsBlank() {
+		private static Stream<Arguments> provideRequestForErrorValue() {
 			return Stream.of(
 				Arguments.of("123456789012345678901", "loginId은 최대 20글자 입니다."),
 				Arguments.of(null, "loginId가 비어있으면 안됩니다."),
@@ -100,4 +100,5 @@ class MemberControllerTest {
 			);
 		}
 	}
+
 }
