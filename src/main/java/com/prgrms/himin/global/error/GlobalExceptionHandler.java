@@ -7,6 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.prgrms.himin.global.error.exception.BusinessException;
 import com.prgrms.himin.global.error.exception.EntityNotFoundException;
 import com.prgrms.himin.global.error.exception.ErrorCode;
 import com.prgrms.himin.global.error.exception.InvalidValueException;
@@ -42,6 +43,13 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(InvalidValueException.class)
 	protected ResponseEntity<ErrorResponse> handleInvalidValueException(InvalidValueException e) {
 		log.error("InvalidValueException", e);
+		ErrorResponse response = ErrorResponse.from(e.getErrorCode());
+		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(BusinessException.class)
+	protected ResponseEntity<ErrorResponse> handleBusinessException(BusinessException e) {
+		log.error("BusinessException", e);
 		ErrorResponse response = ErrorResponse.from(e.getErrorCode());
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 	}
