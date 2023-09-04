@@ -34,7 +34,6 @@ import com.prgrms.himin.setup.domain.ShopSetUp;
 import com.prgrms.himin.setup.request.MenuCreateRequestBuilder;
 import com.prgrms.himin.setup.request.MenuUpdateRequestBuilder;
 import com.prgrms.himin.shop.api.ShopController;
-import com.prgrms.himin.shop.application.ShopService;
 import com.prgrms.himin.shop.domain.Shop;
 
 @SpringBootTest
@@ -43,9 +42,6 @@ class MenuControllerTest {
 
 	@Autowired
 	ShopController shopController;
-
-	@Autowired
-	ShopService shopService;
 
 	@Autowired
 	MenuRepository menuRepository;
