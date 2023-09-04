@@ -264,7 +264,7 @@ public class MenuService {
 		Long shopId,
 		Long menuId,
 		Long menuOptionGroupId,
-		Long optionId
+		Long menuOptionID
 	) {
 		menuValidator.validateShopId(
 			shopId,
@@ -276,9 +276,9 @@ public class MenuService {
 		);
 		menuValidator.validateMenuOptionGroupId(
 			menuOptionGroupId,
-			optionId
+			menuOptionID
 		);
-		MenuOption menuOption = menuOptionRepository.findById(optionId)
+		MenuOption menuOption = menuOptionRepository.findById(menuOptionID)
 			.orElseThrow(
 				() -> new EntityNotFoundException(MENU_OPTION_NOT_FOUND)
 			);
