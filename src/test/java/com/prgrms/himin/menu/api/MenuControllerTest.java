@@ -139,7 +139,12 @@ class MenuControllerTest {
 				.andDo(print());
 
 			// then
-			resultActions.andExpect(status().isOk());
+			resultActions.andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("menuId").isNotEmpty())
+				.andExpect(jsonPath("name").value(savedMenu.getName()))
+				.andExpect(jsonPath("price").value(savedMenu.getPrice()))
+				.andExpect(jsonPath("popularity").value(savedMenu.isPopularity()));
 		}
 
 		@DisplayName("실패한다.")
