@@ -40,9 +40,6 @@ import com.prgrms.himin.shop.dto.request.ShopUpdateRequest;
 class ShopControllerTest {
 
 	@Autowired
-	ShopController shopController;
-
-	@Autowired
 	ShopRepository shopRepository;
 
 	@Autowired
