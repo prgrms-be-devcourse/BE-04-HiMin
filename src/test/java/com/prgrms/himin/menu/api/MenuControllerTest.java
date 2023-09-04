@@ -1,9 +1,12 @@
 package com.prgrms.himin.menu.api;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,6 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prgrms.himin.global.error.exception.EntityNotFoundException;
 import com.prgrms.himin.global.error.exception.ErrorCode;
 import com.prgrms.himin.menu.domain.Menu;
+import com.prgrms.himin.menu.domain.MenuRepository;
 import com.prgrms.himin.menu.dto.request.MenuCreateRequest;
 import com.prgrms.himin.menu.dto.request.MenuUpdateRequest;
 import com.prgrms.himin.setup.domain.MenuSetUp;
@@ -42,6 +46,9 @@ class MenuControllerTest {
 
 	@Autowired
 	ShopService shopService;
+
+	@Autowired
+	MenuRepository menuRepository;
 
 	@Autowired
 	MockMvc mvc;
@@ -196,6 +203,10 @@ class MenuControllerTest {
 
 			// then
 			resultActions.andExpect(status().isNoContent());
+			Optional<Menu> maySavedMenu = menuRepository.findById(savedMenu.getId());
+			assertThat(maySavedMenu.isPresent()).isTrue();
+			savedMenu = maySavedMenu.get();
+			assertThat(savedMenu.getName()).isEqualTo(request.name());
 		}
 
 		@DisplayName("실패한다.")
@@ -251,6 +262,8 @@ class MenuControllerTest {
 
 			// then
 			resultActions.andExpect(status().isOk());
+			boolean result = menuRepository.existsById(savedMenu.getId());
+			assertThat(result).isFalse();
 		}
 
 		@DisplayName("실패한다.")
