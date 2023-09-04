@@ -10,6 +10,7 @@ import com.prgrms.himin.global.error.exception.ErrorCode;
 import com.prgrms.himin.shop.domain.Category;
 import com.prgrms.himin.shop.domain.Shop;
 import com.prgrms.himin.shop.domain.ShopRepository;
+import com.prgrms.himin.shop.domain.ShopStatus;
 import com.prgrms.himin.shop.dto.request.ShopCreateRequest;
 import com.prgrms.himin.shop.dto.request.ShopUpdateRequest;
 import com.prgrms.himin.shop.dto.response.ShopResponse;
@@ -90,7 +91,7 @@ public class ShopService {
 				() -> new EntityNotFoundException(ErrorCode.SHOP_NOT_FOUND)
 			);
 
-		shop.changeStatus(request.status());
+		shop.changeStatus(ShopStatus.valueOf(request.status()));
 	}
 
 	@Transactional

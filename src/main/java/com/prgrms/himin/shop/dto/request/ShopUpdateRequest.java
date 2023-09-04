@@ -44,7 +44,8 @@ public record ShopUpdateRequest() {
 	}
 
 	public record Status(
-		ShopStatus status
+		@ValidEnum(enumClass = ShopStatus.class)
+		String status
 	) {
 	}
 }
