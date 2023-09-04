@@ -1,0 +1,42 @@
+package com.prgrms.himin.setup.request;
+
+import com.prgrms.himin.shop.domain.Category;
+import com.prgrms.himin.shop.domain.ShopStatus;
+import com.prgrms.himin.shop.dto.request.ShopUpdateRequest;
+
+public class ShopUpdateRequestBuilder {
+
+	public static ShopUpdateRequest.Status statusSuccessBuild() {
+		return new ShopUpdateRequest.Status(ShopStatus.OPEN.toString());
+	}
+
+	public static ShopUpdateRequest.Status statusFailBuild(String status) {
+		return new ShopUpdateRequest.Status(status);
+	}
+
+	public static ShopUpdateRequest.Info infoSuccessBuild() {
+		return new ShopUpdateRequest.Info(
+			"롯데리아",
+			Category.FAST_FOOD.toString(),
+			"경기도 광명시 광명동",
+			"02-2633-4444",
+			"안녕하세요. 롯데리아입니다.",
+			5000,
+			"08:00",
+			"22:00"
+		);
+	}
+
+	public static ShopUpdateRequest.Info infoFailBuild(String name) {
+		return new ShopUpdateRequest.Info(
+			name,
+			Category.FAST_FOOD.toString(),
+			"경기도 광명시 광명동",
+			"02-2633-4444",
+			"안녕하세요. 롯데리아입니다.",
+			5000,
+			"08:00",
+			"22:00"
+		);
+	}
+}
