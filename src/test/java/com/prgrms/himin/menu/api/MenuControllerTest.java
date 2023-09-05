@@ -96,7 +96,6 @@ class MenuControllerTest {
 
 			// then
 			resultActions.andExpect(status().isOk())
-				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("menuId").isNotEmpty())
 				.andExpect(jsonPath("name").value(request.name()))
