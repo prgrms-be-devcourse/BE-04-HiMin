@@ -51,7 +51,7 @@ class MemberControllerTest {
 	@DisplayName("회원 생성을 할수 있다.")
 	class CreateMember {
 
-		private final String SIGN_UP_URL = BASE_URL + "/sign-up";
+		final String SIGN_UP_URL = BASE_URL + "/sign-up";
 
 		@DisplayName("성공한다.")
 		@Test
@@ -121,7 +121,7 @@ class MemberControllerTest {
 	@DisplayName("회원 로그인을 할 수 있다.")
 	class LoginMember {
 
-		private final String SIGN_IN_URL = BASE_URL + "/sign-in";
+		final String SIGN_IN_URL = BASE_URL + "/sign-in";
 
 		@DisplayName("성공한다.")
 		@Test
@@ -174,7 +174,7 @@ class MemberControllerTest {
 	@DisplayName("회원을 조회할 수 있다.")
 	class GetMember {
 
-		private final String GET_MEMBER_URL = BASE_URL + "/members/{memberId}";
+		final String GET_URL = BASE_URL + "/members/{memberId}";
 
 		@DisplayName("성공한다.")
 		@Test
@@ -184,7 +184,7 @@ class MemberControllerTest {
 
 			// when
 			ResultActions resultActions = mvc.perform(get(
-				GET_MEMBER_URL,
+				GET_URL,
 				savedMember.getId())
 			);
 
@@ -214,7 +214,7 @@ class MemberControllerTest {
 
 			// when
 			ResultActions resultActions = mvc.perform(get(
-				GET_MEMBER_URL,
+				GET_URL,
 				wrongMemberId)
 			);
 
