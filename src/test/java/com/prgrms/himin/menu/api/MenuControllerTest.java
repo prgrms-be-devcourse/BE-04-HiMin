@@ -35,7 +35,6 @@ import com.prgrms.himin.setup.domain.MenuSetUp;
 import com.prgrms.himin.setup.domain.ShopSetUp;
 import com.prgrms.himin.setup.request.MenuCreateRequestBuilder;
 import com.prgrms.himin.setup.request.MenuUpdateRequestBuilder;
-import com.prgrms.himin.shop.api.ShopController;
 import com.prgrms.himin.shop.domain.Shop;
 
 @SpringBootTest
@@ -43,9 +42,6 @@ import com.prgrms.himin.shop.domain.Shop;
 class MenuControllerTest {
 
 	final String BASE_URL = "/api/shops/{shopId}/menus";
-
-	@Autowired
-	ShopController shopController;
 
 	@Autowired
 	MenuRepository menuRepository;
