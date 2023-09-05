@@ -317,4 +317,54 @@ class MemberControllerTest {
 		}
 	}
 
+	@Nested
+	@DisplayName("회원을 삭제할 수 있다.")
+	class DeleteMember {
+
+		final String DELETE_URL = BASE_URL + "/withdrawal/{memberId}";
+
+		@DisplayName("성공한다.")
+		@Test
+		void success_test() throws Exception {
+			// given
+			Member savedMember = memberSetUp.saveOne();
+
+			// when
+			ResultActions resultActions = mvc.perform(delete(
+				DELETE_URL,
+				savedMember.getId()
+			));
+
+			// then
+			resultActions.andExpect(status().isOk())
+				.andDo(print());
+
+			boolean result = memberRepository.existsById(savedMember.getId());
+			assertThat(result).isFalse();
+		}
+
+		@DisplayName("존재하지 않는 회원Id 요청으로 실패한다.")
+		@Test
+		void wrong_member_id_fail_test() throws Exception {
+			// given
+			Long wrongMemberId = -1L;
+
+			ResultActions resultActions = mvc.perform(delete(
+				DELETE_URL,
+				wrongMemberId)
+			);
+
+			// then
+			resultActions.andExpect(status().isNotFound())
+				.andExpect(result -> assertTrue(
+					result.getResolvedException().getClass().isAssignableFrom(EntityNotFoundException.class)
+				))
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("error").value(ErrorCode.MEMBER_NOT_FOUND.toString()))
+				.andExpect(jsonPath("code").value(ErrorCode.MEMBER_NOT_FOUND.getCode()))
+				.andExpect(jsonPath("message").value(ErrorCode.MEMBER_NOT_FOUND.getMessage()))
+				.andDo(print());
+		}
+	}
+
 }
