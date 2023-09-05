@@ -101,7 +101,6 @@ public class MenuOptionGroupControllerTest {
 
 			// then
 			resultActions.andExpect(status().isOk())
-				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("menuOptionGroupId").isNotEmpty())
 				.andExpect(jsonPath("name").value(request.name()));
