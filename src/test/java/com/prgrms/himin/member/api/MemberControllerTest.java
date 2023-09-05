@@ -1,5 +1,6 @@
 package com.prgrms.himin.member.api;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
@@ -27,11 +28,14 @@ import com.prgrms.himin.global.error.exception.EntityNotFoundException;
 import com.prgrms.himin.global.error.exception.ErrorCode;
 import com.prgrms.himin.member.domain.Grade;
 import com.prgrms.himin.member.domain.Member;
+import com.prgrms.himin.member.domain.MemberRepository;
 import com.prgrms.himin.member.dto.request.MemberCreateRequest;
 import com.prgrms.himin.member.dto.request.MemberLoginRequest;
+import com.prgrms.himin.member.dto.request.MemberUpdateRequest;
 import com.prgrms.himin.setup.domain.MemberSetUp;
 import com.prgrms.himin.setup.request.MemberCreateRequestBuilder;
 import com.prgrms.himin.setup.request.MemberLoginRequestBuilder;
+import com.prgrms.himin.setup.request.MemberUpdateRequestBuilder;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -46,6 +50,9 @@ class MemberControllerTest {
 
 	@Autowired
 	MemberSetUp memberSetUp;
+
+	@Autowired
+	MemberRepository memberRepository;
 
 	@Nested
 	@DisplayName("회원 생성을 할수 있다.")
@@ -228,6 +235,85 @@ class MemberControllerTest {
 				.andExpect(jsonPath("code").value(ErrorCode.MEMBER_NOT_FOUND.getCode()))
 				.andExpect(jsonPath("message").value(ErrorCode.MEMBER_NOT_FOUND.getMessage()))
 				.andDo(print());
+		}
+	}
+
+	@Nested
+	@DisplayName("회원을 업데이트 할 수 있다.")
+	class UpdateMember {
+
+		final String UPDATE_URL = BASE_URL + "/members/{memberId}";
+
+		@DisplayName("성공한다.")
+		@Test
+		void success_test() throws Exception {
+			// given
+			Member savedMember = memberSetUp.saveOne();
+			MemberUpdateRequest.Info request = MemberUpdateRequestBuilder.infoSuccessBuild();
+			String body = objectMapper.writeValueAsString(request);
+
+			// when
+			ResultActions resultActions = mvc.perform(put(
+				UPDATE_URL,
+				savedMember.getId()
+			).content(body)
+				.contentType(MediaType.APPLICATION_JSON));
+
+			Member updatedMember = memberRepository.findById(savedMember.getId()).get();
+
+			// then
+			resultActions.andExpect(status().isNoContent())
+				.andDo(print());
+
+			assertThat(updatedMember.getLoginId()).isEqualTo(request.loginId());
+			assertThat(updatedMember.getPassword()).isEqualTo(request.password());
+			assertThat(updatedMember.getName()).isEqualTo(request.name());
+			assertThat(updatedMember.getPhone()).isEqualTo(request.phone());
+			assertThat(updatedMember.getBirthday()).isEqualTo(request.birthday());
+		}
+
+		@ParameterizedTest
+		@MethodSource("provideRequestForErrorValue")
+		@DisplayName("잘못된 로그인Id 업데이트 요청으로 실패한다.")
+		void wrong_login_id_update_fail_test(
+			String wrongLoginId,
+			String expectedMessage
+		) throws Exception {
+			// given
+			Member savedMember = memberSetUp.saveOne();
+			MemberUpdateRequest.Info request = MemberUpdateRequestBuilder.infoFailBuild(wrongLoginId);
+			String body = objectMapper.writeValueAsString(request);
+
+			// when
+			ResultActions resultActions = mvc.perform(put(
+				UPDATE_URL,
+				savedMember.getId()
+			)
+				.content(body)
+				.contentType(MediaType.APPLICATION_JSON));
+
+			// then
+			resultActions.andExpect(status().isBadRequest())
+				.andExpect(result -> assertTrue(
+					result.getResolvedException().getClass().isAssignableFrom(MethodArgumentNotValidException.class)
+				))
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("error").value(ErrorCode.INVALID_REQUEST.toString()))
+				.andExpect(jsonPath("errors[0].field").value("loginId"))
+				.andExpect(jsonPath("errors[0].value").value(wrongLoginId))
+				.andExpect(jsonPath("errors[0].reason").value(expectedMessage))
+				.andExpect(jsonPath("code").value(ErrorCode.INVALID_REQUEST.getCode()))
+				.andExpect(jsonPath("message").value(ErrorCode.INVALID_REQUEST.getMessage()))
+				.andDo(print());
+		}
+
+		private static Stream<Arguments> provideRequestForErrorValue() {
+			return Stream.of(
+				Arguments.of("123456789012345678901", "loginId은 최대 20글자 입니다."),
+				Arguments.of(null, "loginId가 비어있으면 안됩니다."),
+				Arguments.of("", "loginId가 비어있으면 안됩니다."),
+				Arguments.of("  ", "loginId가 비어있으면 안됩니다.")
+			);
 		}
 	}
 
