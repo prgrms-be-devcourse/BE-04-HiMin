@@ -25,6 +25,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.prgrms.himin.global.error.exception.EntityNotFoundException;
 import com.prgrms.himin.global.error.exception.ErrorCode;
 import com.prgrms.himin.menu.domain.Menu;
 import com.prgrms.himin.menu.domain.MenuOptionGroup;
@@ -224,6 +225,60 @@ public class MenuOptionGroupControllerTest {
 				.andExpect(jsonPath("errors[0].reason").value(expected))
 				.andExpect(jsonPath("code").value(ErrorCode.INVALID_REQUEST.getCode()))
 				.andExpect(jsonPath("message").value(ErrorCode.INVALID_REQUEST.getMessage()));
+		}
+	}
+
+	@Nested
+	@DisplayName("메뉴 옵션 그룹을 삭제할 수 있다.")
+	class DeleteMenuOptionGroup {
+
+		final String DELETE_URL = BASE_URL + "/{menuOptionGroupId}";
+
+		@Test
+		@DisplayName("성공한다.")
+		void success_test() throws Exception {
+			// given
+			MenuOptionGroup savedMenuOptionGroup = menuOptionGroupSetUp.saveOne(menu);
+
+			// when
+			ResultActions resultActions = mvc.perform(delete(
+					DELETE_URL,
+					shop.getShopId(),
+					menu.getId(),
+					savedMenuOptionGroup.getId()
+				)
+					.contentType(MediaType.APPLICATION_JSON))
+				.andDo(print());
+
+			// then
+			resultActions.andExpect(status().isOk());
+			boolean result = menuOptionGroupRepository.existsById(savedMenuOptionGroup.getId());
+			assertThat(result).isFalse();
+		}
+
+		@DisplayName("실패한다.")
+		@Test
+		void fail_test() throws Exception {
+			// given
+			int notExistMenuOptionGroupId = 10000;
+
+			// when
+			ResultActions resultActions = mvc.perform(delete(
+					DELETE_URL,
+					shop.getShopId(),
+					menu.getId(),
+					notExistMenuOptionGroupId
+				)
+					.contentType(MediaType.APPLICATION_JSON))
+				.andDo(print());
+
+			// then
+			resultActions.andExpect(status().isNotFound())
+				.andExpect((result) -> assertTrue(
+					result.getResolvedException().getClass().isAssignableFrom((EntityNotFoundException.class))))
+				.andExpect(jsonPath("error").value(ErrorCode.MENU_OPTION_GROUP_NOT_FOUND.toString()))
+				.andExpect(jsonPath("code").value(ErrorCode.MENU_OPTION_GROUP_NOT_FOUND.getCode()))
+				.andExpect(jsonPath("message").value(ErrorCode.MENU_OPTION_GROUP_NOT_FOUND.getMessage()));
 		}
 	}
 }
