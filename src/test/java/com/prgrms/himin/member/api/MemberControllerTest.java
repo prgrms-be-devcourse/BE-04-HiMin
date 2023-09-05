@@ -1,5 +1,6 @@
 package com.prgrms.himin.member.api;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -20,8 +21,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.prgrms.himin.global.error.exception.EntityNotFoundException;
 import com.prgrms.himin.global.error.exception.ErrorCode;
 import com.prgrms.himin.member.domain.Grade;
+import com.prgrms.himin.member.domain.Member;
 import com.prgrms.himin.member.dto.request.MemberCreateRequest;
 import com.prgrms.himin.member.dto.request.MemberLoginRequest;
 import com.prgrms.himin.setup.domain.MemberSetUp;
@@ -156,6 +159,64 @@ class MemberControllerTest {
 				.andExpect(jsonPath("error").value(ErrorCode.MEMBER_LOGIN_FAIL.toString()))
 				.andExpect(jsonPath("code").value(ErrorCode.MEMBER_LOGIN_FAIL.getCode()))
 				.andExpect(jsonPath("message").value(ErrorCode.MEMBER_LOGIN_FAIL.getMessage()));
+		}
+	}
+
+	@Nested
+	@DisplayName("회원을 조회할 수 있다.")
+	class GetMember {
+
+		private final String GET_MEMBER_URL = BASE_URL + "/members/{memberId}";
+
+		@DisplayName("성공한다.")
+		@Test
+		void success_test() throws Exception {
+			// given
+			Member savedMember = memberSetUp.saveOne();
+
+			// when
+			ResultActions resultActions = mvc.perform(get(
+				GET_MEMBER_URL,
+				savedMember.getId())
+			);
+
+			// then
+			resultActions.andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("id").value(savedMember.getId()))
+				.andExpect(jsonPath("loginId").value(savedMember.getLoginId()))
+				.andExpect(jsonPath("name").value(savedMember.getName()))
+				.andExpect(jsonPath("phone").value(savedMember.getPhone()))
+				.andExpect(jsonPath("birthday").value(savedMember.getBirthday().toString()))
+				.andExpect(jsonPath("grade").value(Grade.NEW.toString()))
+				.andExpect(jsonPath("addresses[0].addressAlias").value(savedMember.getAddresses()
+					.get(0).getAddressAlias()))
+				.andExpect(jsonPath("addresses[0].address").value(savedMember.getAddresses()
+					.get(0).getAddress()));
+
+		}
+
+		@DisplayName("잘못된 memberId 조회로 실패한다.")
+		@Test
+		void wrong_member_id_fail_test() throws Exception {
+			// given
+			memberSetUp.saveOne();
+
+			// when
+			ResultActions resultActions = mvc.perform(get(
+				GET_MEMBER_URL,
+				-1)
+			);
+
+			// then
+			resultActions.andExpect(status().isNotFound())
+				.andExpect(result -> assertTrue(
+					result.getResolvedException().getClass().isAssignableFrom(EntityNotFoundException.class)
+				))
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("error").value(ErrorCode.MEMBER_NOT_FOUND.toString()))
+				.andExpect(jsonPath("code").value(ErrorCode.MEMBER_NOT_FOUND.getCode()))
+				.andExpect(jsonPath("message").value(ErrorCode.MEMBER_NOT_FOUND.getMessage()));
 		}
 	}
 
