@@ -7,13 +7,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -71,6 +73,15 @@ class MenuControllerTest {
 	@DisplayName("메뉴 생성을 할 수 있다.")
 	class CreateMenu {
 
+		private static Stream<Arguments> provideRequestForErrorValue() {
+			return Stream.of(
+				Arguments.of("마라 칠리 매운 허니버터 와사비 치즈 하바네로 맛 150도 오븐에서 30분이 상 구운 치킨 오븐구이", "메뉴 이름은 최대 30글자 입니다."),
+				Arguments.of(null, "메뉴 이름이 비어있으면 안됩니다."),
+				Arguments.of("", "메뉴 이름이 비어있으면 안됩니다."),
+				Arguments.of("  ", "메뉴 이름이 비어있으면 안됩니다.")
+			);
+		}
+
 		@DisplayName("성공한다.")
 		@Test
 		void success_test() throws Exception {
@@ -99,8 +110,8 @@ class MenuControllerTest {
 
 		@DisplayName("실패한다.")
 		@ParameterizedTest
-		@ValueSource(strings = {"", " "})
-		void fail_test(String input) throws Exception {
+		@MethodSource("provideRequestForErrorValue")
+		void fail_test(String input, String expected) throws Exception {
 			// given
 			MenuCreateRequest request = MenuCreateRequestBuilder.failBuild(input);
 			String body = objectMapper.writeValueAsString(request);
@@ -121,7 +132,7 @@ class MenuControllerTest {
 				.andExpect(jsonPath("error").value(ErrorCode.INVALID_REQUEST.toString()))
 				.andExpect(jsonPath("errors[0].field").value("name"))
 				.andExpect(jsonPath("errors[0].value").value(input))
-				.andExpect(jsonPath("errors[0].reason").value("메뉴 이름이 비어있으면 안됩니다."))
+				.andExpect(jsonPath("errors[0].reason").value(expected))
 				.andExpect(jsonPath("code").value(ErrorCode.INVALID_REQUEST.getCode()))
 				.andExpect(jsonPath("message").value(ErrorCode.INVALID_REQUEST.getMessage()));
 		}
@@ -188,6 +199,15 @@ class MenuControllerTest {
 
 		final String UPDATE_URL = BASE_URL + "/{menuId}";
 
+		private static Stream<Arguments> provideRequestForErrorValue() {
+			return Stream.of(
+				Arguments.of("마라 칠리 매운 허니버터 와사비 치즈 하바네로 맛 150도 오븐에서 30분이 상 구운 치킨 오븐구이", "메뉴 이름은 최대 30글자 입니다."),
+				Arguments.of(null, "메뉴 이름이 비어있으면 안됩니다."),
+				Arguments.of("", "메뉴 이름이 비어있으면 안됩니다."),
+				Arguments.of("  ", "메뉴 이름이 비어있으면 안됩니다.")
+			);
+		}
+
 		@DisplayName("성공한다.")
 		@Test
 		void success_test() throws Exception {
@@ -217,8 +237,8 @@ class MenuControllerTest {
 
 		@DisplayName("실패한다.")
 		@ParameterizedTest
-		@ValueSource(strings = {"", " "})
-		void fail_test(String input) throws Exception {
+		@MethodSource("provideRequestForErrorValue")
+		void fail_test(String input, String expected) throws Exception {
 			// given
 			Menu savedMenu = menuSetUp.saveOne(shop);
 
@@ -242,7 +262,7 @@ class MenuControllerTest {
 				.andExpect(jsonPath("error").value(ErrorCode.INVALID_REQUEST.toString()))
 				.andExpect(jsonPath("errors[0].field").value("name"))
 				.andExpect(jsonPath("errors[0].value").value(input))
-				.andExpect(jsonPath("errors[0].reason").value("메뉴 이름이 비어있으면 안됩니다."))
+				.andExpect(jsonPath("errors[0].reason").value(expected))
 				.andExpect(jsonPath("code").value(ErrorCode.INVALID_REQUEST.getCode()))
 				.andExpect(jsonPath("message").value(ErrorCode.INVALID_REQUEST.getMessage()));
 		}
