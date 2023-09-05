@@ -23,6 +23,7 @@ public enum ErrorCode {
 	MEMBER_PASSWORD_BAD_REQUEST("MEMBER_009", "잘못된 비밀번호 입니다."),
 	MEMBER_NAME_BAD_REQUEST("MEMBER_010", "잘못된 회원 이름 입니다."),
 	MEMBER_PHONE_BAD_REQUEST("MEMBER_011", "잘못된 회원 핸드폰 번호 입니다."),
+	MEMBER_BIRTHDAY_BAD_REQUEST("MEMBER_012", "잘못된 회원 생일입니다."),
 
 	// Menu
 	MENU_NOT_FOUND("MENU_001", "메뉴를 찾을 수 없습니다."),

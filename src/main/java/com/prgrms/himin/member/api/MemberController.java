@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +18,7 @@ import com.prgrms.himin.member.application.MemberService;
 import com.prgrms.himin.member.dto.request.AddressCreateRequest;
 import com.prgrms.himin.member.dto.request.MemberCreateRequest;
 import com.prgrms.himin.member.dto.request.MemberLoginRequest;
+import com.prgrms.himin.member.dto.request.MemberUpdateRequest;
 import com.prgrms.himin.member.dto.response.AddressResponse;
 import com.prgrms.himin.member.dto.response.MemberCreateResponse;
 import com.prgrms.himin.member.dto.response.MemberResponse;
@@ -51,6 +53,19 @@ public class MemberController {
 		return ResponseEntity.ok(response);
 	}
 
+	@PutMapping("/members/{memberId}")
+	public ResponseEntity<Void> updateMember(
+		@PathVariable Long memberId,
+		@Valid @RequestBody MemberUpdateRequest.Info request
+	) {
+		memberService.updateMember(
+			memberId,
+			request
+		);
+
+		return ResponseEntity.noContent().build();
+	}
+
 	@DeleteMapping("/withdrawal/{memberId}")
 	public ResponseEntity<Void> deleteMember(@PathVariable Long memberId) {
 		memberService.deleteMember(memberId);
@@ -80,7 +95,7 @@ public class MemberController {
 		@PathVariable Long addressId
 	) {
 		memberService.deleteAddress(memberId, addressId);
-		
+
 		return ResponseEntity.ok().build();
 	}
 }

@@ -19,11 +19,11 @@ public record MemberCreateRequest(
 	@NotBlank(message = "비밀번호가 비어있으면 안됩니다.")
 	String password,
 
-	@Size(max = 10, message = "이름은 최대 20글자 입니다.")
+	@Size(max = 10, message = "이름은 최대 10글자 입니다.")
 	@NotBlank(message = "이름이 비어있으면 안됩니다.")
 	String name,
 
-	@Size(max = 15, message = "핸드폰번호는 최대 20글자 입니다.")
+	@Size(max = 15, message = "핸드폰번호는 최대 15글자 입니다.")
 	@NotBlank(message = "핸드폰번호가 비어있으면 안됩니다.")
 	String phone,
 

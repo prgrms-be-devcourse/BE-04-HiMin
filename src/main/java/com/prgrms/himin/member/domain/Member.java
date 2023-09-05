@@ -76,6 +76,7 @@ public class Member {
 		validatePassword(password);
 		validateName(name);
 		validatePhone(phone);
+		validateBirthDay(birthday);
 		this.loginId = loginId;
 		this.password = password;
 		this.name = name;
@@ -99,6 +100,25 @@ public class Member {
 		return addresses.remove(address);
 	}
 
+	public void updateInfo(
+		String loginId,
+		String password,
+		String name,
+		String phone,
+		LocalDate birthday
+	) {
+		validateLoginId(loginId);
+		validatePassword(password);
+		validateName(name);
+		validatePhone(phone);
+		validateBirthDay(birthday);
+		this.loginId = loginId;
+		this.password = password;
+		this.name = name;
+		this.phone = phone;
+		this.birthday = birthday;
+	}
+
 	private void validateLoginId(String loginId) {
 		if (loginId == null || loginId.length() > ID_MAX_LENGTH) {
 			throw new InvalidValueException(ErrorCode.MEMBER_LOGIN_ID_BAD_REQUEST);
@@ -120,6 +140,12 @@ public class Member {
 	private void validatePhone(String phone) {
 		if (phone == null || phone.length() > PHONE_MAX_LENGTH) {
 			throw new InvalidValueException(ErrorCode.MEMBER_PHONE_BAD_REQUEST);
+		}
+	}
+
+	private void validateBirthDay(LocalDate birthday) {
+		if (birthday == null || birthday.isAfter(LocalDate.now())) {
+			throw new InvalidValueException(ErrorCode.MEMBER_BIRTHDAY_BAD_REQUEST);
 		}
 	}
 }

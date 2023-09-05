@@ -16,6 +16,7 @@ import com.prgrms.himin.member.domain.MemberRepository;
 import com.prgrms.himin.member.dto.request.AddressCreateRequest;
 import com.prgrms.himin.member.dto.request.MemberCreateRequest;
 import com.prgrms.himin.member.dto.request.MemberLoginRequest;
+import com.prgrms.himin.member.dto.request.MemberUpdateRequest;
 import com.prgrms.himin.member.dto.response.AddressResponse;
 import com.prgrms.himin.member.dto.response.MemberCreateResponse;
 import com.prgrms.himin.member.dto.response.MemberResponse;
@@ -64,6 +65,24 @@ public class MemberService {
 			.toList();
 
 		return MemberResponse.of(member, addresses);
+	}
+
+	@Transactional
+	public void updateMember(
+		Long memberId,
+		MemberUpdateRequest.Info request) {
+		Member member = memberRepository.findById(memberId)
+			.orElseThrow(
+				() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND)
+			);
+
+		member.updateInfo(
+			request.loginId(),
+			request.password(),
+			request.name(),
+			request.phone(),
+			request.birthday()
+		);
 	}
 
 	@Transactional
