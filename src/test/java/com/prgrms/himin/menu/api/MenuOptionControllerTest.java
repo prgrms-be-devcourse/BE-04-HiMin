@@ -110,7 +110,7 @@ public class MenuOptionControllerTest {
 				.andExpect(jsonPath("price").value(request.price()));
 		}
 
-		@DisplayName("실패한다.")
+		@DisplayName("유효하지 않은 요청값이 들어와서 실패한다.")
 		@ParameterizedTest
 		@MethodSource("provideRequestForErrorValue")
 		void fail_test(String input, String expected) throws Exception {
