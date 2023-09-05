@@ -5,7 +5,7 @@ import com.prgrms.himin.menu.dto.request.MenuUpdateRequest;
 public class MenuUpdateRequestBuilder {
 	public static MenuUpdateRequest.Info infoSuccessBuild() {
 		return new MenuUpdateRequest.Info(
-			"짜장면",
+			"짬뽕",
 			5000
 		);
 	}
