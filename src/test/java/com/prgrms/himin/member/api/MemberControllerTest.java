@@ -200,7 +200,8 @@ class MemberControllerTest {
 				.andExpect(jsonPath("addresses[0].addressAlias").value(savedMember.getAddresses()
 					.get(0).getAddressAlias()))
 				.andExpect(jsonPath("addresses[0].address").value(savedMember.getAddresses()
-					.get(0).getAddress()));
+					.get(0).getAddress()))
+				.andDo(print());
 
 		}
 
@@ -209,11 +210,12 @@ class MemberControllerTest {
 		void wrong_member_id_fail_test() throws Exception {
 			// given
 			memberSetUp.saveOne();
+			Long wrongMemberId = -1L;
 
 			// when
 			ResultActions resultActions = mvc.perform(get(
 				GET_MEMBER_URL,
-				-1)
+				wrongMemberId)
 			);
 
 			// then
@@ -224,8 +226,9 @@ class MemberControllerTest {
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("error").value(ErrorCode.MEMBER_NOT_FOUND.toString()))
 				.andExpect(jsonPath("code").value(ErrorCode.MEMBER_NOT_FOUND.getCode()))
-				.andExpect(jsonPath("message").value(ErrorCode.MEMBER_NOT_FOUND.getMessage()));
+				.andExpect(jsonPath("message").value(ErrorCode.MEMBER_NOT_FOUND.getMessage()))
+				.andDo(print());
 		}
 	}
-	
+
 }
