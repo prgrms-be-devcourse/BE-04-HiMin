@@ -25,13 +25,16 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prgrms.himin.global.error.exception.ErrorCode;
 import com.prgrms.himin.menu.domain.Menu;
+import com.prgrms.himin.menu.domain.MenuOption;
 import com.prgrms.himin.menu.domain.MenuOptionGroup;
 import com.prgrms.himin.menu.dto.request.MenuOptionCreateRequest;
+import com.prgrms.himin.menu.dto.request.MenuOptionUpdateRequest;
 import com.prgrms.himin.setup.domain.MenuOptionGroupSetUp;
 import com.prgrms.himin.setup.domain.MenuOptionSetUp;
 import com.prgrms.himin.setup.domain.MenuSetUp;
 import com.prgrms.himin.setup.domain.ShopSetUp;
 import com.prgrms.himin.setup.request.MenuOptionCreateRequestBuilder;
+import com.prgrms.himin.setup.request.MenuOptionUpdateRequestBuilder;
 import com.prgrms.himin.shop.domain.Shop;
 
 @SpringBootTest
@@ -116,6 +119,80 @@ public class MenuOptionControllerTest {
 		void fail_test(String input, String expected) throws Exception {
 			// given
 			MenuOptionCreateRequest request = MenuOptionCreateRequestBuilder.failBuild(input);
+			String body = objectMapper.writeValueAsString(request);
+
+			// when
+			ResultActions resultActions = mvc.perform(post(
+					BASE_URL,
+					shop.getShopId(),
+					menu.getId(),
+					menuOptionGroup.getId()
+				)
+					.content(body)
+					.contentType(MediaType.APPLICATION_JSON))
+				.andDo(print());
+
+			// then
+			resultActions.andExpect(status().isBadRequest())
+				.andExpect((result) -> assertTrue(
+					result.getResolvedException().getClass().isAssignableFrom((MethodArgumentNotValidException.class))))
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("error").value(ErrorCode.INVALID_REQUEST.toString()))
+				.andExpect(jsonPath("errors[0].field").value("name"))
+				.andExpect(jsonPath("errors[0].value").value(input))
+				.andExpect(jsonPath("errors[0].reason").value(expected))
+				.andExpect(jsonPath("code").value(ErrorCode.INVALID_REQUEST.getCode()))
+				.andExpect(jsonPath("message").value(ErrorCode.INVALID_REQUEST.getMessage()));
+		}
+	}
+
+	@Nested
+	@DisplayName("메뉴 옵션을 수정할 수 있다.")
+	class UpdateMenuOption {
+		private static Stream<Arguments> provideRequestForErrorValue() {
+			return Stream.of(
+				Arguments.of("마라 칠리 매운 허니버터 와사비 치즈 하바네로 스노윙 볼케이노 청냥 허니 갈릭 마늘 고추바사삭 맛", "메뉴 옵션 이름은 최대 30글자 입니다."),
+				Arguments.of(null, "메뉴 옵션 이름이 비어있으면 안됩니다."),
+				Arguments.of("", "메뉴 옵션 이름이 비어있으면 안됩니다."),
+				Arguments.of("  ", "메뉴 옵션 이름이 비어있으면 안됩니다.")
+			);
+		}
+
+		@Test
+		@DisplayName("성공한다.")
+		void success_test() throws Exception {
+			// given
+			MenuOption menuOption = menuOptionSetUp.saveOne(menuOptionGroup);
+
+			MenuOptionUpdateRequest request = MenuOptionUpdateRequestBuilder.successBuild();
+			String body = objectMapper.writeValueAsString(request);
+
+			// when
+			ResultActions resultActions = mvc.perform(post(
+					BASE_URL,
+					shop.getShopId(),
+					menu.getId(),
+					menuOptionGroup.getId(),
+					menuOption.getId()
+				)
+					.content(body)
+					.contentType(MediaType.APPLICATION_JSON))
+				.andDo(print());
+
+			// then
+			resultActions.andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("menuOptionId").isNotEmpty())
+				.andExpect(jsonPath("name").value(request.name()))
+				.andExpect(jsonPath("price").value(request.price()));
+		}
+
+		@DisplayName("유효하지 않은 요청값이 들어와서 실패한다.")
+		@ParameterizedTest
+		@MethodSource("provideRequestForErrorValue")
+		void fail_test(String input, String expected) throws Exception {
+			// given
+			MenuOptionUpdateRequest request = MenuOptionUpdateRequestBuilder.failBuild(input);
 			String body = objectMapper.writeValueAsString(request);
 
 			// when
