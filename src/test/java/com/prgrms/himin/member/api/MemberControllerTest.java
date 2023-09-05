@@ -227,5 +227,5 @@ class MemberControllerTest {
 				.andExpect(jsonPath("message").value(ErrorCode.MEMBER_NOT_FOUND.getMessage()));
 		}
 	}
-
+	
 }
