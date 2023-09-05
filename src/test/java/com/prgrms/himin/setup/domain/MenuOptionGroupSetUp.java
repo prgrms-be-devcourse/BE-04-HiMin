@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 @Component
 public class MenuOptionGroupSetUp {
 
-	private MenuOptionGroupRepository menuOptionGroupRepository;
+	private final MenuOptionGroupRepository menuOptionGroupRepository;
 
 	public MenuOptionGroup saveOne(Menu menu) {
 		MenuOptionGroup menuOptionGroup = buildMenuOptionGroup("추가 메뉴");
