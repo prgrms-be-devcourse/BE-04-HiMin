@@ -1,9 +1,14 @@
 package com.prgrms.himin.shop.dto.request;
 
+import java.time.LocalTime;
+
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.prgrms.himin.global.common.ValidEnum;
 import com.prgrms.himin.shop.domain.Category;
@@ -33,13 +38,13 @@ public record ShopUpdateRequest() {
 		@PositiveOrZero(message = "배달팁은 0원 이상이어야 합니다.")
 		int deliveryTip,
 
-		@NotBlank(message = "오픈 시간이 비어있으면 안됩니다.")
-		@Pattern(regexp = "([01]?[0-9]|2[0-3]):[0-5][0-9]", message = "오픈 시간은 HH:MM 형식이어야 합니다.")
-		String openingTime,
+		@NotNull(message = "오픈 시간이 비어있으면 안됩니다.")
+		@DateTimeFormat(pattern = "HH:mm")
+		LocalTime openingTime,
 
-		@NotBlank(message = "마감 시간이 비어있으면 안됩니다.")
-		@Pattern(regexp = "([01]?[0-9]|2[0-3]):[0-5][0-9]", message = "마감 시간은 HH:MM 형식이어야 합니다.")
-		String closingTime
+		@NotNull(message = "마감 시간이 비어있으면 안됩니다.")
+		@DateTimeFormat(pattern = "HH:mm")
+		LocalTime closingTime
 	) {
 	}
 
