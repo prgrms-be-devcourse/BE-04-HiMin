@@ -19,8 +19,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.prgrms.himin.global.error.exception.BusinessException;
 import com.prgrms.himin.global.error.exception.EntityNotFoundException;
 import com.prgrms.himin.global.error.exception.ErrorCode;
 import com.prgrms.himin.member.domain.Grade;
@@ -93,6 +95,9 @@ class MemberControllerTest {
 
 			// then
 			resultActions.andExpect(status().isBadRequest())
+				.andExpect(result -> assertTrue(
+					result.getResolvedException().getClass().isAssignableFrom(MethodArgumentNotValidException.class)
+				))
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("error").value(ErrorCode.INVALID_REQUEST.toString()))
 				.andExpect(jsonPath("errors[0].field").value("loginId"))
@@ -155,6 +160,9 @@ class MemberControllerTest {
 
 			// then
 			resultActions.andExpect(status().isBadRequest())
+				.andExpect(result -> assertTrue(
+					result.getResolvedException().getClass().isAssignableFrom(BusinessException.class)
+				))
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("error").value(ErrorCode.MEMBER_LOGIN_FAIL.toString()))
 				.andExpect(jsonPath("code").value(ErrorCode.MEMBER_LOGIN_FAIL.getCode()))
