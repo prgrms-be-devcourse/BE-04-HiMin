@@ -40,6 +40,8 @@ import com.prgrms.himin.shop.domain.Shop;
 @AutoConfigureMockMvc
 class MenuControllerTest {
 
+	final String BASE_URL = "/api/shops/{shopId}/menus";
+
 	@Autowired
 	ShopController shopController;
 
@@ -58,14 +60,11 @@ class MenuControllerTest {
 	@Autowired
 	MenuSetUp menuSetUp;
 
-	String baseURL;
-
 	Shop shop;
 
 	@BeforeEach
 	void eachSetUp() {
 		this.shop = shopSetUp.saveOne();
-		baseURL = "/api/shops/" + shop.getShopId() + "/menus";
 	}
 
 	@Nested
@@ -80,7 +79,10 @@ class MenuControllerTest {
 			String body = objectMapper.writeValueAsString(request);
 
 			// when
-			ResultActions resultActions = mvc.perform(post(baseURL)
+			ResultActions resultActions = mvc.perform(post(
+					BASE_URL,
+					shop.getShopId()
+				)
 					.content(body)
 					.contentType(MediaType.APPLICATION_JSON))
 				.andDo(print());
@@ -104,7 +106,10 @@ class MenuControllerTest {
 			String body = objectMapper.writeValueAsString(request);
 
 			// when
-			ResultActions resultActions = mvc.perform(post(baseURL)
+			ResultActions resultActions = mvc.perform(post(
+					BASE_URL,
+					shop.getShopId()
+				)
 					.content(body)
 					.contentType(MediaType.APPLICATION_JSON))
 				.andDo(print());
@@ -126,18 +131,20 @@ class MenuControllerTest {
 	@DisplayName("메뉴 조회를 할 수 있다.")
 	class GetMenu {
 
+		final String GET_URL = BASE_URL + "/{menuId}";
+
 		@DisplayName("성공한다.")
 		@Test
 		void success_test() throws Exception {
 			// given
 			Menu savedMenu = menuSetUp.saveOne(shop);
-			final String GET_URL = "%s/%d".formatted(
-				baseURL,
-				savedMenu.getId()
-			);
 
 			// when
-			ResultActions resultActions = mvc.perform(get(GET_URL)
+			ResultActions resultActions = mvc.perform(get(
+					GET_URL,
+					shop.getShopId(),
+					savedMenu.getId()
+				)
 					.contentType(MediaType.APPLICATION_JSON))
 				.andDo(print());
 
@@ -154,14 +161,14 @@ class MenuControllerTest {
 		@Test
 		void fail_test() throws Exception {
 			// given
-			int notExistId = 10000;
-			final String FAIL_GET_URL = "%s/%d".formatted(
-				baseURL,
-				notExistId
-			);
+			int notExistMenuId = 10000;
 
 			// when
-			ResultActions resultActions = mvc.perform(get(FAIL_GET_URL)
+			ResultActions resultActions = mvc.perform(get(
+					GET_URL,
+					shop.getShopId(),
+					notExistMenuId
+				)
 					.contentType(MediaType.APPLICATION_JSON))
 				.andDo(print());
 
@@ -179,20 +186,23 @@ class MenuControllerTest {
 	@DisplayName("메뉴 수정을 할 수 있다.")
 	class UpdateMenu {
 
+		final String UPDATE_URL = BASE_URL + "/{menuId}";
+
 		@DisplayName("성공한다.")
 		@Test
 		void success_test() throws Exception {
 			// given
 			Menu savedMenu = menuSetUp.saveOne(shop);
-			final String UPDATE_URL = "%s/%d".formatted(
-				baseURL,
-				savedMenu.getId()
-			);
+
 			MenuUpdateRequest.Info request = MenuUpdateRequestBuilder.infoSuccessBuild();
 			String body = objectMapper.writeValueAsString(request);
 
 			// when
-			ResultActions resultActions = mvc.perform(put(UPDATE_URL)
+			ResultActions resultActions = mvc.perform(put(
+					UPDATE_URL,
+					shop.getShopId(),
+					savedMenu.getId()
+				)
 					.content(body)
 					.contentType(MediaType.APPLICATION_JSON))
 				.andDo(print());
@@ -211,15 +221,16 @@ class MenuControllerTest {
 		void fail_test(String input) throws Exception {
 			// given
 			Menu savedMenu = menuSetUp.saveOne(shop);
-			final String UPDATE_URL = "%s/%d".formatted(
-				baseURL,
-				savedMenu.getId()
-			);
+
 			MenuUpdateRequest.Info request = MenuUpdateRequestBuilder.infoFailBuild(input);
 			String body = objectMapper.writeValueAsString(request);
 
 			// when
-			ResultActions resultActions = mvc.perform(put(UPDATE_URL)
+			ResultActions resultActions = mvc.perform(put(
+					UPDATE_URL,
+					shop.getShopId(),
+					savedMenu.getId()
+				)
 					.content(body)
 					.contentType(MediaType.APPLICATION_JSON))
 				.andDo(print());
@@ -241,18 +252,20 @@ class MenuControllerTest {
 	@DisplayName("메뉴 삭제를 할 수 있다.")
 	class DeleteMenu {
 
+		final String DELETE_URL = BASE_URL + "/{menuId}";
+
 		@DisplayName("성공한다.")
 		@Test
 		void success_test() throws Exception {
 			// given
 			Menu savedMenu = menuSetUp.saveOne(shop);
-			final String DELETE_URL = "%s/%d".formatted(
-				baseURL,
-				savedMenu.getId()
-			);
 
 			// when
-			ResultActions resultActions = mvc.perform(delete(DELETE_URL)
+			ResultActions resultActions = mvc.perform(delete(
+					DELETE_URL,
+					shop.getShopId(),
+					savedMenu.getId()
+				)
 					.contentType(MediaType.APPLICATION_JSON))
 				.andDo(print());
 
@@ -266,14 +279,14 @@ class MenuControllerTest {
 		@Test
 		void fail_test() throws Exception {
 			// given
-			int notExistId = 10000;
-			final String DELETE_URL = "%s/%d".formatted(
-				baseURL,
-				notExistId
-			);
+			int notExistMenuId = 10000;
 
 			// when
-			ResultActions resultActions = mvc.perform(delete(DELETE_URL)
+			ResultActions resultActions = mvc.perform(delete(
+					DELETE_URL,
+					shop.getShopId(),
+					notExistMenuId
+				)
 					.contentType(MediaType.APPLICATION_JSON))
 				.andDo(print());
 
