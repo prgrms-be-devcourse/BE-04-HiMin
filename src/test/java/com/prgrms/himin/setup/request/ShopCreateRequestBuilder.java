@@ -1,5 +1,7 @@
 package com.prgrms.himin.setup.request;
 
+import java.time.LocalTime;
+
 import com.prgrms.himin.shop.domain.Category;
 import com.prgrms.himin.shop.dto.request.ShopCreateRequest;
 
@@ -13,8 +15,8 @@ public class ShopCreateRequestBuilder {
 			"02-2611-2222",
 			"안녕하세요. 맥도날드입니다.",
 			1000,
-			"09:00",
-			"21:00"
+			LocalTime.of(9, 0),
+			LocalTime.of(21, 0)
 		);
 	}
 
@@ -29,8 +31,8 @@ public class ShopCreateRequestBuilder {
 			"02-2611-2222",
 			"안녕하세요. %s입니다.".formatted(name),
 			1000,
-			"09:00",
-			"21:00"
+			LocalTime.of(9, 0),
+			LocalTime.of(21, 0)
 		);
 	}
 }

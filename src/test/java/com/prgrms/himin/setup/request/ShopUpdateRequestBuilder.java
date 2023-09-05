@@ -1,5 +1,7 @@
 package com.prgrms.himin.setup.request;
 
+import java.time.LocalTime;
+
 import com.prgrms.himin.shop.domain.Category;
 import com.prgrms.himin.shop.domain.ShopStatus;
 import com.prgrms.himin.shop.dto.request.ShopUpdateRequest;
@@ -22,8 +24,8 @@ public class ShopUpdateRequestBuilder {
 			"02-2633-4444",
 			"안녕하세요. 롯데리아입니다.",
 			5000,
-			"08:00",
-			"22:00"
+			LocalTime.of(8, 0),
+			LocalTime.of(22, 0)
 		);
 	}
 
@@ -35,8 +37,8 @@ public class ShopUpdateRequestBuilder {
 			"02-2633-4444",
 			"안녕하세요. 롯데리아입니다.",
 			5000,
-			"08:00",
-			"22:00"
+			LocalTime.of(8, 0),
+			LocalTime.of(22, 0)
 		);
 	}
 }

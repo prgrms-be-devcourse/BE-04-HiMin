@@ -1,5 +1,6 @@
 package com.prgrms.himin.shop.domain;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -39,7 +40,7 @@ public class Shop {
 
 	private static final Pattern PHONE_PATTERN = Pattern.compile("^(02|0[3-9]{1}[0-9]{1}|010)-[0-9]{3,4}-[0-9]{4}$");
 
-	private static final Pattern TIME_PATTERN = Pattern.compile("([01]?[0-9]|2[0-3]):[0-5][0-9]");
+	private static final String TIME_FORMAT = "HH:mm";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -73,10 +74,10 @@ public class Shop {
 	private ShopStatus status;
 
 	@Column(name = "opening_time", nullable = false)
-	private String openingTime;
+	private LocalTime openingTime;
 
 	@Column(name = "closing_time", nullable = false)
-	private String closingTime;
+	private LocalTime closingTime;
 
 	@OneToMany(mappedBy = "shop", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<Menu> menus = new ArrayList<>();
@@ -89,8 +90,8 @@ public class Shop {
 		String phone,
 		String content,
 		int deliveryTip,
-		String openingTime,
-		String closingTime
+		LocalTime openingTime,
+		LocalTime closingTime
 	) {
 		validateName(name);
 		validateAddress(address);
@@ -143,14 +144,14 @@ public class Shop {
 		}
 	}
 
-	private void validateOpeningTime(String openingTime) {
-		if (openingTime == null || !TIME_PATTERN.matcher(openingTime).matches()) {
+	private void validateOpeningTime(LocalTime openingTime) {
+		if (openingTime == null) {
 			throw new InvalidValueException(ErrorCode.SHOP_OPENING_TIME_BAD_REQUEST);
 		}
 	}
 
-	private void validateClosingTime(String closingTime) {
-		if (closingTime == null || !TIME_PATTERN.matcher(closingTime).matches()) {
+	private void validateClosingTime(LocalTime closingTime) {
+		if (closingTime == null) {
 			throw new InvalidValueException(ErrorCode.SHOP_CLOSING_TIME_BAD_REQUEST);
 		}
 	}
@@ -162,8 +163,8 @@ public class Shop {
 		String phone,
 		String content,
 		int deliveryTip,
-		String openingTime,
-		String closingTime
+		LocalTime openingTime,
+		LocalTime closingTime
 	) {
 		validateName(name);
 		validateAddress(address);

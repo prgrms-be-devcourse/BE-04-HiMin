@@ -1,5 +1,6 @@
 package com.prgrms.himin.setup.domain;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -44,8 +45,8 @@ public class ShopSetUp {
 			.phone("02-2611-2222")
 			.content("안녕하세요. %s입니다.".formatted(name))
 			.deliveryTip(1000)
-			.openingTime("09:00")
-			.closingTime("21:00")
+			.openingTime(LocalTime.of(9, 0))
+			.closingTime(LocalTime.of(21, 0))
 			.build();
 	}
 }

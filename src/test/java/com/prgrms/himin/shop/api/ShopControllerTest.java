@@ -84,8 +84,8 @@ class ShopControllerTest {
 				.andExpect(jsonPath("deliveryTip").value(request.deliveryTip()))
 				.andExpect(jsonPath("dibsCount").value(0))
 				.andExpect(jsonPath("status").value(ShopStatus.CLOSE.toString()))
-				.andExpect(jsonPath("openingTime").value(request.openingTime()))
-				.andExpect(jsonPath("closingTime").value(request.closingTime()));
+				.andExpect(jsonPath("openingTime").value(request.openingTime().toString()))
+				.andExpect(jsonPath("closingTime").value(request.closingTime().toString()));
 		}
 
 		@DisplayName("유효하지 않은 요청값이 들어와서 실패한다.")
@@ -159,8 +159,8 @@ class ShopControllerTest {
 				.andExpect(jsonPath("deliveryTip").value(shop.getDeliveryTip()))
 				.andExpect(jsonPath("dibsCount").value(shop.getDibsCount()))
 				.andExpect(jsonPath("status").value(shop.getStatus().toString()))
-				.andExpect(jsonPath("openingTime").value(shop.getOpeningTime()))
-				.andExpect(jsonPath("closingTime").value(shop.getClosingTime()));
+				.andExpect(jsonPath("openingTime").value(shop.getOpeningTime().toString()))
+				.andExpect(jsonPath("closingTime").value(shop.getClosingTime().toString()));
 		}
 
 		@DisplayName("가게가 존재하지 않아서 실패한다.")
@@ -211,8 +211,8 @@ class ShopControllerTest {
 				.andExpect(jsonPath("[0].deliveryTip").value(shops.get(0).getDeliveryTip()))
 				.andExpect(jsonPath("[0].dibsCount").value(shops.get(0).getDibsCount()))
 				.andExpect(jsonPath("[0].status").value(shops.get(0).getStatus().toString()))
-				.andExpect(jsonPath("[0].openingTime").value(shops.get(0).getOpeningTime()))
-				.andExpect(jsonPath("[0].closingTime").value(shops.get(0).getClosingTime()))
+				.andExpect(jsonPath("[0].openingTime").value(shops.get(0).getOpeningTime().toString()))
+				.andExpect(jsonPath("[0].closingTime").value(shops.get(0).getClosingTime().toString()))
 				.andExpect(jsonPath("[1].shopId").value(shops.get(1).getShopId()))
 				.andExpect(jsonPath("[1].name").value(shops.get(1).getName()))
 				.andExpect(jsonPath("[1].category").value(shops.get(1).getCategory().toString()))
@@ -222,8 +222,8 @@ class ShopControllerTest {
 				.andExpect(jsonPath("[1].deliveryTip").value(shops.get(1).getDeliveryTip()))
 				.andExpect(jsonPath("[1].dibsCount").value(shops.get(1).getDibsCount()))
 				.andExpect(jsonPath("[1].status").value(shops.get(1).getStatus().toString()))
-				.andExpect(jsonPath("[1].openingTime").value(shops.get(1).getOpeningTime()))
-				.andExpect(jsonPath("[1].closingTime").value(shops.get(1).getClosingTime()));
+				.andExpect(jsonPath("[1].openingTime").value(shops.get(1).getOpeningTime().toString()))
+				.andExpect(jsonPath("[1].closingTime").value(shops.get(1).getClosingTime().toString()));
 		}
 
 		@DisplayName("검색 조건에 따라 검색할 수 있다.")
@@ -253,8 +253,8 @@ class ShopControllerTest {
 				.andExpect(jsonPath("[0].deliveryTip").value(shops.get(1).getDeliveryTip()))
 				.andExpect(jsonPath("[0].dibsCount").value(shops.get(1).getDibsCount()))
 				.andExpect(jsonPath("[0].status").value(shops.get(1).getStatus().toString()))
-				.andExpect(jsonPath("[0].openingTime").value(shops.get(1).getOpeningTime()))
-				.andExpect(jsonPath("[0].closingTime").value(shops.get(1).getClosingTime()));
+				.andExpect(jsonPath("[0].openingTime").value(shops.get(1).getOpeningTime().toString()))
+				.andExpect(jsonPath("[0].closingTime").value(shops.get(1).getClosingTime().toString()));
 		}
 	}
 
