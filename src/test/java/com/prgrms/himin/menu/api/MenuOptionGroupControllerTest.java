@@ -276,6 +276,7 @@ public class MenuOptionGroupControllerTest {
 			resultActions.andExpect(status().isNotFound())
 				.andExpect((result) -> assertTrue(
 					result.getResolvedException().getClass().isAssignableFrom((EntityNotFoundException.class))))
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("error").value(ErrorCode.MENU_OPTION_GROUP_NOT_FOUND.toString()))
 				.andExpect(jsonPath("code").value(ErrorCode.MENU_OPTION_GROUP_NOT_FOUND.getCode()))
 				.andExpect(jsonPath("message").value(ErrorCode.MENU_OPTION_GROUP_NOT_FOUND.getMessage()));
