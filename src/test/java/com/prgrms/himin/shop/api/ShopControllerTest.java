@@ -91,7 +91,7 @@ class ShopControllerTest {
 		@DisplayName("유효하지 않은 요청값이 들어와서 실패한다.")
 		@ParameterizedTest
 		@MethodSource("provideRequestForErrorValue")
-		void fail_test(String input, String expected) throws Exception {
+		void not_valid_request_fail_test(String input, String expected) throws Exception {
 			// given
 			ShopCreateRequest request = ShopCreateRequestBuilder.failBuild(
 				input,
@@ -165,7 +165,7 @@ class ShopControllerTest {
 
 		@DisplayName("가게가 존재하지 않아서 실패한다.")
 		@Test
-		void fail_test() throws Exception {
+		void not_exist_shop_fail_test() throws Exception {
 			// given
 			Long shopId = 0L;
 
@@ -192,7 +192,7 @@ class ShopControllerTest {
 
 		@DisplayName("전체를 조회한다.")
 		@Test
-		void success_test1() throws Exception {
+		void success_test() throws Exception {
 			// when
 			List<Shop> shops = shopSetUp.saveMany(2);
 
@@ -228,7 +228,7 @@ class ShopControllerTest {
 
 		@DisplayName("검색 조건에 따라 검색할 수 있다.")
 		@Test
-		void get_shops_by_search_options_success_test() throws Exception {
+		void search_by_options_success_test() throws Exception {
 			// given
 			List<Shop> shops = shopSetUp.saveMany(2);
 
@@ -299,7 +299,7 @@ class ShopControllerTest {
 
 		@DisplayName("가게가 존재하지 않아서 실패한다.")
 		@Test
-		void fail_test() throws Exception {
+		void not_exist_shop_fail_test() throws Exception {
 			// given
 			Long shopId = 0L;
 
@@ -328,7 +328,7 @@ class ShopControllerTest {
 		@DisplayName("잘못된 가게 정보가 들어와서 실패한다.")
 		@ParameterizedTest
 		@MethodSource("provideRequestForErrorValue")
-		void fail_test2(String input, String expected) throws Exception {
+		void not_valid_request_fail_test(String input, String expected) throws Exception {
 			// given
 			Shop shop = shopSetUp.saveOne();
 
@@ -402,7 +402,7 @@ class ShopControllerTest {
 
 		@DisplayName("가게가 존재하지 않아서 실패한다.")
 		@Test
-		void fail_test() throws Exception {
+		void not_exist_shop_fail_test() throws Exception {
 			// given
 			Long shopId = 0L;
 
@@ -430,7 +430,7 @@ class ShopControllerTest {
 
 		@DisplayName("잘못된 가게 상태 정보가 들어와서 실패한다.")
 		@Test
-		void fail_test2() throws Exception {
+		void not_valid_request_fail_test() throws Exception {
 			// given
 			Shop shop = shopSetUp.saveOne();
 
@@ -488,7 +488,7 @@ class ShopControllerTest {
 
 		@DisplayName("가게가 존재하지 않아서 실패한다.")
 		@Test
-		void fail_test() throws Exception {
+		void not_exist_shop_fail_test() throws Exception {
 			// given
 			Long shopId = 0L;
 
