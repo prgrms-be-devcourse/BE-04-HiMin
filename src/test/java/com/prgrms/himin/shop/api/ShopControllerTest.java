@@ -228,15 +228,16 @@ class ShopControllerTest {
 
 		@DisplayName("검색 조건에 따라 검색할 수 있다.")
 		@Test
-		void success_test2() throws Exception {
+		void get_shops_by_search_options_success_test() throws Exception {
 			// given
 			List<Shop> shops = shopSetUp.saveMany(2);
 
-			String name = "광명2동";
+			String name = shops.get(1).getName();
+			String searchOption = name.substring(name.length() / 2);
 
 			// when
 			ResultActions resultAction = mvc.perform(get(BASE_URL)
-					.queryParam("name", name)
+					.queryParam("name", searchOption)
 				)
 				.andDo(print());
 
