@@ -23,7 +23,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prgrms.himin.global.error.exception.ErrorCode;
 import com.prgrms.himin.member.domain.Grade;
 import com.prgrms.himin.member.dto.request.MemberCreateRequest;
+import com.prgrms.himin.member.dto.request.MemberLoginRequest;
+import com.prgrms.himin.setup.domain.MemberSetUp;
 import com.prgrms.himin.setup.request.MemberCreateRequestBuilder;
+import com.prgrms.himin.setup.request.MemberLoginRequestBuilder;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -36,9 +39,14 @@ class MemberControllerTest {
 	@Autowired
 	ObjectMapper objectMapper;
 
+	@Autowired
+	MemberSetUp memberSetUp;
+
 	@Nested
 	@DisplayName("회원 생성을 할수 있다.")
 	class CreateMember {
+
+		private final String SIGN_UP_URL = BASE_URL + "/sign-up";
 
 		@DisplayName("성공한다.")
 		@Test
@@ -48,7 +56,7 @@ class MemberControllerTest {
 			String body = objectMapper.writeValueAsString(request);
 
 			// when
-			ResultActions resultActions = mvc.perform(post(BASE_URL + "/sign-up")
+			ResultActions resultActions = mvc.perform(post(SIGN_UP_URL)
 					.content(body)
 					.contentType(MediaType.APPLICATION_JSON))
 				.andDo(print());
@@ -75,7 +83,7 @@ class MemberControllerTest {
 			String body = objectMapper.writeValueAsString(request);
 
 			// when
-			ResultActions resultActions = mvc.perform(post(BASE_URL + "/sign-up")
+			ResultActions resultActions = mvc.perform(post(SIGN_UP_URL)
 					.content(body)
 					.contentType(MediaType.APPLICATION_JSON))
 				.andDo(print());
@@ -98,6 +106,56 @@ class MemberControllerTest {
 				Arguments.of("", "loginId가 비어있으면 안됩니다."),
 				Arguments.of("  ", "loginId가 비어있으면 안됩니다.")
 			);
+		}
+	}
+
+	@Nested
+	@DisplayName("회원 로그인을 할 수 있다.")
+	class LoginMember {
+
+		private final String SIGN_IN_URL = BASE_URL + "/sign-in";
+
+		@DisplayName("성공한다.")
+		@Test
+		void success_test() throws Exception {
+			// given
+			memberSetUp.saveOne();
+			MemberLoginRequest request = MemberLoginRequestBuilder.successBuild();
+			String body = objectMapper.writeValueAsString(request);
+
+			// when
+			ResultActions resultActions = mvc.perform(post(SIGN_IN_URL)
+					.content(body)
+					.contentType(MediaType.APPLICATION_JSON))
+				.andDo(print());
+
+			// then
+			resultActions.andExpect(status().isOk());
+		}
+
+		@DisplayName("잘못된 아이디로 인해 실패한다.")
+		@Test
+		void fail_test() throws Exception {
+			// given
+			memberSetUp.saveOne();
+			MemberLoginRequest request = MemberLoginRequestBuilder.failBuild(
+				"wrong" + "rnqjaah1234",
+				"1234"
+			);
+			String body = objectMapper.writeValueAsString(request);
+
+			// when
+			ResultActions resultActions = mvc.perform(post(SIGN_IN_URL)
+					.content(body)
+					.contentType(MediaType.APPLICATION_JSON))
+				.andDo(print());
+
+			// then
+			resultActions.andExpect(status().isBadRequest())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("error").value(ErrorCode.MEMBER_LOGIN_FAIL.toString()))
+				.andExpect(jsonPath("code").value(ErrorCode.MEMBER_LOGIN_FAIL.getCode()))
+				.andExpect(jsonPath("message").value(ErrorCode.MEMBER_LOGIN_FAIL.getMessage()));
 		}
 	}
 
