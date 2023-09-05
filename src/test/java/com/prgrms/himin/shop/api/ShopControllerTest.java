@@ -131,6 +131,8 @@ class ShopControllerTest {
 	@DisplayName("가게를 조회할 수 있다.")
 	class GetShop {
 
+		final String GET_URL = BASE_URL + "/{shopId}";
+
 		@DisplayName("성공한다.")
 		@Test
 		void success_test() throws Exception {
@@ -139,7 +141,7 @@ class ShopControllerTest {
 
 			// when
 			ResultActions resultAction = mvc.perform(get(
-					BASE_URL + "/{shopId}",
+					GET_URL,
 					shop.getShopId()
 				))
 				.andDo(print());
@@ -168,7 +170,7 @@ class ShopControllerTest {
 
 			// when
 			ResultActions resultAction = mvc.perform(get(
-					BASE_URL + "/{shopId}",
+					GET_URL,
 					shopId
 				))
 				.andDo(print());
@@ -187,6 +189,8 @@ class ShopControllerTest {
 	@DisplayName("가게 정보를 수정할 수 있다.")
 	class UpdateShop {
 
+		final String PUT_URL = BASE_URL + "/{shopId}";
+
 		@DisplayName("성공한다.")
 		@Test
 		void success_test() throws Exception {
@@ -199,7 +203,7 @@ class ShopControllerTest {
 
 			// when
 			ResultActions resultAction = mvc.perform(put(
-					BASE_URL + "/{shopId}",
+					PUT_URL,
 					shop.getShopId()
 				)
 					.content(body)
@@ -232,7 +236,7 @@ class ShopControllerTest {
 
 			// when
 			ResultActions resultAction = mvc.perform(put(
-					BASE_URL + "/{shopId}",
+					PUT_URL,
 					shopId
 				)
 					.content(body)
@@ -261,7 +265,7 @@ class ShopControllerTest {
 
 			// when
 			ResultActions resultAction = mvc.perform(put(
-					BASE_URL + "/{shopId}",
+					PUT_URL,
 					shop.getShopId()
 				)
 					.content(body)
@@ -294,6 +298,8 @@ class ShopControllerTest {
 	@DisplayName("가게 상태를 변경할 수 있다.")
 	class ChangeShopStatus {
 
+		final String PATCH_URL = BASE_URL + "/{shopId}";
+
 		@DisplayName("성공한다.")
 		@Test
 		void success_test() throws Exception {
@@ -306,7 +312,7 @@ class ShopControllerTest {
 
 			// when
 			ResultActions resultAction = mvc.perform(patch(
-					BASE_URL + "/{shopId}",
+					PATCH_URL,
 					shop.getShopId()
 				)
 					.content(body)
@@ -333,7 +339,7 @@ class ShopControllerTest {
 
 			// when
 			ResultActions resultAction = mvc.perform(patch(
-					BASE_URL + "/{shopId}",
+					PATCH_URL,
 					shopId
 				)
 					.content(body)
@@ -361,7 +367,7 @@ class ShopControllerTest {
 
 			// when
 			ResultActions resultAction = mvc.perform(patch(
-					BASE_URL + "/{shopId}",
+					PATCH_URL,
 					shop.getShopId()
 				)
 					.content(body)
@@ -385,6 +391,8 @@ class ShopControllerTest {
 	@DisplayName("가게를 삭제할 수 있다.")
 	class DeleteShop {
 
+		final String DELETE_URL = BASE_URL + "/{shopId}";
+
 		@DisplayName("성공한다.")
 		@Test
 		void success_test() throws Exception {
@@ -393,7 +401,7 @@ class ShopControllerTest {
 
 			// when
 			ResultActions resultAction = mvc.perform(delete(
-					BASE_URL + "/{shopId}",
+					DELETE_URL,
 					shop.getShopId()
 				))
 				.andDo(print());
@@ -413,7 +421,7 @@ class ShopControllerTest {
 
 			// when
 			ResultActions resultAction = mvc.perform(delete(
-					BASE_URL + "/{shopId}",
+					DELETE_URL,
 					shopId)
 				)
 				.andDo(print());
