@@ -4,10 +4,10 @@ import com.prgrms.himin.member.dto.request.MemberLoginRequest;
 
 public class MemberLoginRequestBuilder {
 
-	public static MemberLoginRequest successBuild(String loginId, String password) {
+	public static MemberLoginRequest successBuild() {
 		return new MemberLoginRequest(
-			loginId,
-			password
+			"rnqjaah1234",
+			"1234"
 		);
 	}
 

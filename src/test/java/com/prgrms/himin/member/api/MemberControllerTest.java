@@ -22,7 +22,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prgrms.himin.global.error.exception.ErrorCode;
 import com.prgrms.himin.member.domain.Grade;
-import com.prgrms.himin.member.domain.Member;
 import com.prgrms.himin.member.dto.request.MemberCreateRequest;
 import com.prgrms.himin.member.dto.request.MemberLoginRequest;
 import com.prgrms.himin.setup.domain.MemberSetUp;
@@ -120,11 +119,8 @@ class MemberControllerTest {
 		@Test
 		void success_test() throws Exception {
 			// given
-			Member member = memberSetUp.saveOne();
-			MemberLoginRequest request = MemberLoginRequestBuilder.successBuild(
-				member.getLoginId(),
-				member.getPassword()
-			);
+			memberSetUp.saveOne();
+			MemberLoginRequest request = MemberLoginRequestBuilder.successBuild();
 			String body = objectMapper.writeValueAsString(request);
 
 			// when
@@ -141,10 +137,10 @@ class MemberControllerTest {
 		@Test
 		void fail_test() throws Exception {
 			// given
-			Member member = memberSetUp.saveOne();
+			memberSetUp.saveOne();
 			MemberLoginRequest request = MemberLoginRequestBuilder.failBuild(
-				"wrong" + member.getLoginId(),
-				member.getPassword()
+				"wrong" + "rnqjaah1234",
+				"1234"
 			);
 			String body = objectMapper.writeValueAsString(request);
 
