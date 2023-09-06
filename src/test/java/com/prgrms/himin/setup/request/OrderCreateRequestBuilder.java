@@ -20,4 +20,14 @@ public class OrderCreateRequestBuilder {
 			selectedMenus
 		);
 	}
+
+	public static OrderCreateRequest failBuild() {
+		return new OrderCreateRequest(
+			-1L,
+			-1L,
+			"성동구 사근동",
+			"문앞에 두고 문자부탁드려요",
+			null
+		);
+	}
 }

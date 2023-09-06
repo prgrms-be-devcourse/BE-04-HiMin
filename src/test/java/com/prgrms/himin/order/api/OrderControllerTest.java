@@ -1,5 +1,6 @@
 package com.prgrms.himin.order.api;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -15,8 +16,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.prgrms.himin.global.error.exception.ErrorCode;
 import com.prgrms.himin.member.domain.Member;
 import com.prgrms.himin.menu.domain.Menu;
 import com.prgrms.himin.menu.domain.MenuOption;
@@ -232,6 +235,30 @@ class OrderControllerTest {
 			}
 			resultActions.andExpect(jsonPath("price").value(expectedPrice))
 				.andDo(print());
+		}
+
+		@DisplayName("잘못된 주문생성id 요청으로 인해 실패한다.")
+		@Test
+		void wrong_request_ids_fail_test() throws Exception {
+			// given
+			OrderCreateRequest request = OrderCreateRequestBuilder.failBuild();
+			String body = objectMapper.writeValueAsString(request);
+
+			// when
+			ResultActions resultActions = mvc.perform(post(BASE_URL)
+					.content(body)
+					.contentType(MediaType.APPLICATION_JSON))
+				.andDo(print());
+
+			// then
+			resultActions.andExpect(status().isBadRequest())
+				.andExpect(result -> assertTrue(
+					result.getResolvedException().getClass().isAssignableFrom(MethodArgumentNotValidException.class)
+				))
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("error").value(ErrorCode.INVALID_REQUEST.toString()))
+				.andExpect(jsonPath("code").value(ErrorCode.INVALID_REQUEST.getCode()))
+				.andExpect(jsonPath("message").value(ErrorCode.INVALID_REQUEST.getMessage()));
 		}
 	}
 }
