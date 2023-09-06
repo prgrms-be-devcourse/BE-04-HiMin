@@ -21,6 +21,8 @@ import com.prgrms.himin.member.domain.Member;
 import com.prgrms.himin.menu.domain.Menu;
 import com.prgrms.himin.menu.domain.MenuOption;
 import com.prgrms.himin.menu.domain.MenuOptionGroup;
+import com.prgrms.himin.order.domain.OrderItem;
+import com.prgrms.himin.order.domain.SelectedOption;
 import com.prgrms.himin.order.dto.request.OrderCreateRequest;
 import com.prgrms.himin.order.dto.request.SelectedMenuOptionRequest;
 import com.prgrms.himin.order.dto.request.SelectedMenuRequest;
@@ -28,6 +30,7 @@ import com.prgrms.himin.setup.domain.MemberSetUp;
 import com.prgrms.himin.setup.domain.MenuOptionGroupSetUp;
 import com.prgrms.himin.setup.domain.MenuOptionSetUp;
 import com.prgrms.himin.setup.domain.MenuSetUp;
+import com.prgrms.himin.setup.domain.OrderItemSetUp;
 import com.prgrms.himin.setup.domain.ShopSetUp;
 import com.prgrms.himin.setup.request.OrderCreateRequestBuilder;
 import com.prgrms.himin.setup.request.SelectedMenuOptionRequestBuilder;
@@ -60,6 +63,9 @@ class OrderControllerTest {
 
 	@Autowired
 	ShopSetUp shopSetUp;
+
+	@Autowired
+	OrderItemSetUp orderItemSetUp;
 
 	@Nested
 	@DisplayName("주문 생성을 할 수 있다.")
@@ -140,33 +146,38 @@ class OrderControllerTest {
 				selectedMenuRequest2
 			);
 
-			int expectedPrice = calculateMenuPrice(menu1, selectedMenuRequest1.quantity())
-				+ calculateMenuPrice(menu2, selectedMenuRequest2.quantity());
+			List<SelectedOption> selectedOptions1 = SelectedOption.from(menuOptions1);
+			List<SelectedOption> selectedOptions2 = SelectedOption.from(menuOptions2);
+			List<SelectedOption> selectedOptions3 = SelectedOption.from(menuOptions3);
+			List<SelectedOption> selectedOptions4 = SelectedOption.from(menuOptions4);
+			List<SelectedOption> selectedOptions5 = SelectedOption.from(menuOptions5);
+			List<SelectedOption> selectedOptions6 = SelectedOption.from(menuOptions6);
 
-			for (MenuOption menuOption : menuOptions1) {
-				expectedPrice += calculateMenuOptionPrice(menuOption, selectedMenuRequest1.quantity());
-			}
-			for (MenuOption menuOption : menuOptions2) {
-				expectedPrice += calculateMenuOptionPrice(menuOption, selectedMenuRequest1.quantity());
-			}
-			for (MenuOption menuOption : menuOptions3) {
-				expectedPrice += calculateMenuOptionPrice(menuOption, selectedMenuRequest1.quantity());
-			}
-			for (MenuOption menuOption : menuOptions4) {
-				expectedPrice += calculateMenuOptionPrice(menuOption, selectedMenuRequest2.quantity());
-			}
-			for (MenuOption menuOption : menuOptions5) {
-				expectedPrice += calculateMenuOptionPrice(menuOption, selectedMenuRequest2.quantity());
-			}
-			for (MenuOption menuOption : menuOptions6) {
-				expectedPrice += calculateMenuOptionPrice(menuOption, selectedMenuRequest2.quantity());
-			}
+			OrderItem orderItem1 = orderItemSetUp.makeOne(
+				menu1,
+				selectedMenuRequest1.quantity()
+			);
+			selectedOptions1.forEach(selectedOption -> selectedOption.attachTo(orderItem1));
+			selectedOptions2.forEach(selectedOption -> selectedOption.attachTo(orderItem1));
+			selectedOptions3.forEach(selectedOption -> selectedOption.attachTo(orderItem1));
+
+			OrderItem orderItem2 = orderItemSetUp.makeOne(
+				menu2,
+				selectedMenuRequest2.quantity()
+			);
+			selectedOptions4.forEach(selectedOption -> selectedOption.attachTo(orderItem2));
+			selectedOptions5.forEach(selectedOption -> selectedOption.attachTo(orderItem2));
+			selectedOptions6.forEach(selectedOption -> selectedOption.attachTo(orderItem2));
+
+			int expectedPrice = orderItem1.calculateOrderItemPrice()
+				+ orderItem2.calculateOrderItemPrice();
 
 			OrderCreateRequest request = OrderCreateRequestBuilder.successBuild(
 				member.getId(),
 				shop.getShopId(),
 				selectedMenuRequests
 			);
+
 			String body = objectMapper.writeValueAsString(request);
 
 			// when
