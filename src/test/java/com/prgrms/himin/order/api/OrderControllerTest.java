@@ -195,79 +195,42 @@ class OrderControllerTest {
 				.andExpect(jsonPath("requirement").value(request.requirement()))
 				.andExpect(jsonPath("selectedMenus[0].menuId").value(menu1.getId()))
 				.andExpect(jsonPath("selectedMenus[0].quantity").value(selectedMenuRequest1.quantity()))
-				.andExpect(jsonPath("selectedMenus[0].selectedOptionIds[0]")
-					.value(menuOptions1.get(0).getId()))
-				.andExpect(jsonPath("selectedMenus[0].selectedOptionIds[1]")
-					.value(menuOptions1.get(1).getId()))
-				.andExpect(jsonPath("selectedMenus[0].selectedOptionIds[2]")
-					.value(menuOptions1.get(2).getId()))
-				.andExpect(jsonPath("selectedMenus[0].selectedOptionIds[3]")
-					.value(menuOptions1.get(3).getId()))
-				.andExpect(jsonPath("selectedMenus[0].selectedOptionIds[4]")
-					.value(menuOptions1.get(4).getId()))
-				.andExpect(jsonPath("selectedMenus[0].selectedOptionIds[5]")
-					.value(menuOptions1.get(5).getId()))
-				.andExpect(jsonPath("selectedMenus[0].selectedOptionIds[6]")
-					.value(menuOptions2.get(0).getId()))
-				.andExpect(jsonPath("selectedMenus[0].selectedOptionIds[7]")
-					.value(menuOptions2.get(1).getId()))
-				.andExpect(jsonPath("selectedMenus[0].selectedOptionIds[8]")
-					.value(menuOptions2.get(2).getId()))
-				.andExpect(jsonPath("selectedMenus[0].selectedOptionIds[9]")
-					.value(menuOptions2.get(3).getId()))
-				.andExpect(jsonPath("selectedMenus[0].selectedOptionIds[10]")
-					.value(menuOptions2.get(4).getId()))
-				.andExpect(jsonPath("selectedMenus[0].selectedOptionIds[11]")
-					.value(menuOptions2.get(5).getId()))
-				.andExpect(jsonPath("selectedMenus[0].selectedOptionIds[12]")
-					.value(menuOptions3.get(0).getId()))
-				.andExpect(jsonPath("selectedMenus[0].selectedOptionIds[13]")
-					.value(menuOptions3.get(1).getId()))
-				.andExpect(jsonPath("selectedMenus[0].selectedOptionIds[14]")
-					.value(menuOptions3.get(2).getId()))
-				.andExpect(jsonPath("selectedMenus[0].selectedOptionIds[15]")
-					.value(menuOptions3.get(3).getId()))
-				.andExpect(jsonPath("selectedMenus[0].selectedOptionIds[16]")
-					.value(menuOptions3.get(4).getId()))
-				.andExpect(jsonPath("selectedMenus[0].selectedOptionIds[17]")
-					.value(menuOptions3.get(5).getId()))
-				.andExpect(jsonPath("selectedMenus[1].selectedOptionIds[0]")
-					.value(menuOptions4.get(0).getId()))
-				.andExpect(jsonPath("selectedMenus[1].selectedOptionIds[1]")
-					.value(menuOptions4.get(1).getId()))
-				.andExpect(jsonPath("selectedMenus[1].selectedOptionIds[2]")
-					.value(menuOptions4.get(2).getId()))
-				.andExpect(jsonPath("selectedMenus[1].selectedOptionIds[3]")
-					.value(menuOptions4.get(3).getId()))
-				.andExpect(jsonPath("selectedMenus[1].selectedOptionIds[4]")
-					.value(menuOptions4.get(4).getId()))
-				.andExpect(jsonPath("selectedMenus[1].selectedOptionIds[5]")
-					.value(menuOptions4.get(5).getId()))
-				.andExpect(jsonPath("selectedMenus[1].selectedOptionIds[6]")
-					.value(menuOptions5.get(0).getId()))
-				.andExpect(jsonPath("selectedMenus[1].selectedOptionIds[7]")
-					.value(menuOptions5.get(1).getId()))
-				.andExpect(jsonPath("selectedMenus[1].selectedOptionIds[8]")
-					.value(menuOptions5.get(2).getId()))
-				.andExpect(jsonPath("selectedMenus[1].selectedOptionIds[9]")
-					.value(menuOptions5.get(3).getId()))
-				.andExpect(jsonPath("selectedMenus[1].selectedOptionIds[10]")
-					.value(menuOptions5.get(4).getId()))
-				.andExpect(jsonPath("selectedMenus[1].selectedOptionIds[11]")
-					.value(menuOptions5.get(5).getId()))
-				.andExpect(jsonPath("selectedMenus[1].selectedOptionIds[12]")
-					.value(menuOptions6.get(0).getId()))
-				.andExpect(jsonPath("selectedMenus[1].selectedOptionIds[13]")
-					.value(menuOptions6.get(1).getId()))
-				.andExpect(jsonPath("selectedMenus[1].selectedOptionIds[14]")
-					.value(menuOptions6.get(2).getId()))
-				.andExpect(jsonPath("selectedMenus[1].selectedOptionIds[15]")
-					.value(menuOptions6.get(3).getId()))
-				.andExpect(jsonPath("selectedMenus[1].selectedOptionIds[16]")
-					.value(menuOptions6.get(4).getId()))
-				.andExpect(jsonPath("selectedMenus[1].selectedOptionIds[17]")
-					.value(menuOptions6.get(5).getId()))
-				.andExpect(jsonPath("price").value(expectedPrice))
+				.andExpect(jsonPath("selectedMenus[1].menuId").value(menu2.getId()))
+				.andExpect(jsonPath("selectedMenus[1].quantity").value(selectedMenuRequest2.quantity()));
+
+			for (int menuIndex = 0; menuIndex < selectedMenuRequests.size(); menuIndex++) {
+				for (int menuOptionGroupIdx = 0;
+					 menuOptionGroupIdx < selectedMenuRequests.get(menuIndex)
+						 .selectedMenuOptions()
+						 .size();
+					 menuOptionGroupIdx++
+				) {
+					for (int menuOptionIdx = 0;
+						 menuOptionIdx < selectedMenuRequests.get(menuIndex)
+							 .selectedMenuOptions()
+							 .get(menuOptionGroupIdx)
+							 .selectedMenuOptions().size();
+						 menuOptionIdx++
+					) {
+						resultActions.andExpect(
+							jsonPath("selectedMenus[%d].selectedOptionIds[%d]",
+								menuIndex,
+								menuOptionGroupIdx * selectedMenuRequests.get(menuIndex)
+									.selectedMenuOptions()
+									.get(menuOptionGroupIdx)
+									.selectedMenuOptions()
+									.size()
+									+ menuOptionIdx)
+								.value(selectedMenuRequests.get(menuIndex)
+									.selectedMenuOptions()
+									.get(menuOptionGroupIdx)
+									.selectedMenuOptions()
+									.get(menuOptionIdx)));
+					}
+				}
+
+			}
+			resultActions.andExpect(jsonPath("price").value(expectedPrice))
 				.andDo(print());
 		}
 	}
