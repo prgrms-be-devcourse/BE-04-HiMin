@@ -18,6 +18,7 @@ public class MenuOptionSetUp {
 
 	public MenuOption saveOne(MenuOptionGroup menuOptionGroup) {
 		MenuOption menuOption = buildMenuOption("소고기", 3000);
+		menuOption.attachMenuOptionGroup(menuOptionGroup);
 
 		return menuOptionRepository.save(menuOption);
 	}
