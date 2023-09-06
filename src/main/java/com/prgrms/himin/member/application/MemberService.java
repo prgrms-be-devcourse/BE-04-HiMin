@@ -113,11 +113,7 @@ public class MemberService {
 	}
 
 	public List<AddressResponse> getAllAddress(Long memberId) {
-		Member member = memberRepository.findById(memberId)
-			.orElseThrow(
-				() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND)
-			);
-		List<Address> addresses = member.getAddresses();
+		List<Address> addresses = addressRepository.findAddressesByMemberId(memberId);
 		List<AddressResponse> addressResponses = addresses.stream()
 			.map(AddressResponse::from)
 			.toList();
