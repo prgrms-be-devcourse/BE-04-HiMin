@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.prgrms.himin.member.application.MemberService;
 import com.prgrms.himin.member.dto.request.AddressCreateRequest;
+import com.prgrms.himin.member.dto.request.AddressUpdateRequest;
 import com.prgrms.himin.member.dto.request.MemberCreateRequest;
 import com.prgrms.himin.member.dto.request.MemberLoginRequest;
 import com.prgrms.himin.member.dto.request.MemberUpdateRequest;
@@ -77,7 +78,10 @@ public class MemberController {
 	public ResponseEntity<AddressResponse> createAddress(
 		@PathVariable Long memberId,
 		@Valid @RequestBody AddressCreateRequest request) {
-		AddressResponse response = memberService.createAddress(memberId, request);
+		AddressResponse response = memberService.createAddress(
+			memberId,
+			request
+		);
 
 		return ResponseEntity.ok(response);
 	}
@@ -94,8 +98,26 @@ public class MemberController {
 		@PathVariable Long memberId,
 		@PathVariable Long addressId
 	) {
-		memberService.deleteAddress(memberId, addressId);
+		memberService.deleteAddress(
+			memberId,
+			addressId
+		);
 
 		return ResponseEntity.ok().build();
+	}
+
+	@PutMapping("/members/{memberId}/addresses/{addressId}")
+	public ResponseEntity<Void> updateAddress(
+		@PathVariable Long memberId,
+		@PathVariable Long addressId,
+		@Valid @RequestBody AddressUpdateRequest request
+	) {
+		memberService.updateAddress(
+			memberId,
+			addressId,
+			request
+		);
+
+		return ResponseEntity.noContent().build();
 	}
 }
