@@ -62,6 +62,16 @@ public class Address {
 		member.addAddress(this);
 	}
 
+	public void updateAddress(
+		String addressAlias,
+		String address
+	) {
+		validateAddressAlias(addressAlias);
+		validateAddress(address);
+		this.addressAlias = addressAlias;
+		this.address = address;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o)

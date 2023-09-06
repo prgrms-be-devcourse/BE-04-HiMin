@@ -14,6 +14,7 @@ import com.prgrms.himin.member.domain.AddressRepository;
 import com.prgrms.himin.member.domain.Member;
 import com.prgrms.himin.member.domain.MemberRepository;
 import com.prgrms.himin.member.dto.request.AddressCreateRequest;
+import com.prgrms.himin.member.dto.request.AddressUpdateRequest;
 import com.prgrms.himin.member.dto.request.MemberCreateRequest;
 import com.prgrms.himin.member.dto.request.MemberLoginRequest;
 import com.prgrms.himin.member.dto.request.MemberUpdateRequest;
@@ -141,5 +142,26 @@ public class MemberService {
 		if (!member.removeAddress(address)) {
 			throw new BusinessException(ErrorCode.MEMBER_ADDRESS_NOT_MATCH);
 		}
+	}
+
+	@Transactional
+	public void updateAddress(
+		Long memberId,
+		Long addressId,
+		AddressUpdateRequest request
+	) {
+		Address address = addressRepository.findById(addressId)
+			.orElseThrow(
+				() -> new InvalidValueException(ErrorCode.MEMBER_ADDRESS_BAD_REQUEST)
+			);
+
+		if (!address.getMember().getId().equals(memberId)) {
+			throw new BusinessException(ErrorCode.MEMBER_ADDRESS_NOT_MATCH);
+		}
+
+		address.updateAddress(
+			request.addressAlias(),
+			request.address()
+		);
 	}
 }
