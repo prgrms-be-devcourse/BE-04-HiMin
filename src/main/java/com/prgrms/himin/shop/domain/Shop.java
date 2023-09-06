@@ -3,7 +3,6 @@ package com.prgrms.himin.shop.domain;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -19,6 +18,7 @@ import javax.persistence.Table;
 
 import com.prgrms.himin.global.error.exception.ErrorCode;
 import com.prgrms.himin.global.error.exception.InvalidValueException;
+import com.prgrms.himin.global.util.PhonePolicy;
 import com.prgrms.himin.menu.domain.Menu;
 
 import lombok.AccessLevel;
@@ -37,8 +37,6 @@ public class Shop {
 	private static final int MAX_ADDRESS_LENGTH = 50;
 
 	private static final int MAX_PHONE_LENGTH = 15;
-
-	private static final Pattern PHONE_PATTERN = Pattern.compile("^(02|0[3-9]{1}[0-9]{1}|010)-[0-9]{3,4}-[0-9]{4}$");
 
 	private static final String TIME_FORMAT = "HH:mm";
 
@@ -133,7 +131,7 @@ public class Shop {
 	}
 
 	private void validatePhone(String phone) {
-		if (phone == null || !PHONE_PATTERN.matcher(phone).matches() || phone.length() > MAX_PHONE_LENGTH) {
+		if (phone == null || !PhonePolicy.matches(phone) || phone.length() > MAX_PHONE_LENGTH) {
 			throw new InvalidValueException(ErrorCode.SHOP_PHONE_BAD_REQUEST);
 		}
 	}

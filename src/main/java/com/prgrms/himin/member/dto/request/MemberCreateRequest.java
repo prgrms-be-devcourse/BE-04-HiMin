@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -25,6 +26,7 @@ public record MemberCreateRequest(
 
 	@Size(max = 15, message = "핸드폰번호는 최대 15글자 입니다.")
 	@NotBlank(message = "핸드폰번호가 비어있으면 안됩니다.")
+	@Pattern(regexp = "^(02|0[3-9]{1}[0-9]{1}|010)-[0-9]{3,4}-[0-9]{4}$", message = "전화번호 형식이어야 합니다.")
 	String phone,
 
 	@NotNull(message = "생일값이 null이면 안됩니다.")
