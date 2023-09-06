@@ -12,6 +12,8 @@ import com.prgrms.himin.member.domain.Member;
 import com.prgrms.himin.member.domain.MemberRepository;
 import com.prgrms.himin.menu.domain.Menu;
 import com.prgrms.himin.menu.domain.MenuOption;
+import com.prgrms.himin.menu.domain.MenuOptionGroup;
+import com.prgrms.himin.menu.domain.MenuOptionGroupRepository;
 import com.prgrms.himin.menu.domain.MenuOptionRepository;
 import com.prgrms.himin.menu.domain.MenuRepository;
 import com.prgrms.himin.menu.domain.MenuValidator;
@@ -43,6 +45,8 @@ public class OrderService {
 
 	private final MenuOptionRepository menuOptionRepository;
 
+	private final MenuOptionGroupRepository menuOptionGroupRepository;
+
 	private final OrderHistoryRepository orderHistoryRepository;
 
 	private final ShopRepository shopRepository;
@@ -69,7 +73,10 @@ public class OrderService {
 			.build();
 
 		List<SelectedMenuRequest> selectedMenus = request.selectedMenus();
-		List<OrderItem> orderItems = extractOrderItems(selectedMenus);
+		List<OrderItem> orderItems = extractOrderItems(
+			selectedMenus,
+			request.shopId()
+		);
 		attachOrderItems(order, orderItems);
 
 		OrderHistory orderHistory = OrderHistory.createOrderHistory(order);
@@ -99,13 +106,21 @@ public class OrderService {
 		}
 	}
 
-	private List<OrderItem> extractOrderItems(List<SelectedMenuRequest> selectedMenus) {
+	private List<OrderItem> extractOrderItems(
+		List<SelectedMenuRequest> selectedMenus,
+		Long shopId
+	) {
 		List<OrderItem> orderItems = new ArrayList<>();
 		for (SelectedMenuRequest selectedMenu : selectedMenus) {
 			Menu menu = menuRepository.findById(selectedMenu.menuId())
 				.orElseThrow(
 					() -> new EntityNotFoundException(ErrorCode.MENU_NOT_FOUND)
 				);
+
+			menuValidator.validateShopId(
+				shopId,
+				menu
+			);
 
 			List<SelectedMenuOptionRequest> selectedMenuOptions = selectedMenu.selectedMenuOptions();
 
@@ -135,8 +150,15 @@ public class OrderService {
 
 		for (SelectedMenuOptionRequest selectedMenuOption : selectedMenuOptions) {
 			Long menuOptionGroupId = selectedMenuOption.menuOptionGroupId();
+			MenuOptionGroup menuOptionGroup = menuOptionGroupRepository.findById(menuOptionGroupId)
+				.orElseThrow(
+					() -> new EntityNotFoundException(ErrorCode.MENU_OPTION_GROUP_NOT_FOUND)
+				);
 
-			menuValidator.validateMenuId(menuId, menuOptionGroupId);
+			menuValidator.validateMenuId(
+				menuId,
+				menuOptionGroup
+			);
 
 			List<Long> menuOptionIds = selectedMenuOption.selectedMenuOptions();
 
@@ -158,7 +180,12 @@ public class OrderService {
 				.orElseThrow(
 					() -> new EntityNotFoundException(ErrorCode.MENU_OPTION_NOT_FOUND)
 				);
-			menuValidator.validateMenuOptionGroupId(menuOptionGroupId, menuOptionId);
+
+			menuValidator.validateMenuOptionGroupId(
+				menuOptionGroupId,
+				menuOption
+			);
+			
 			menuOptions.add(menuOption);
 		}
 
