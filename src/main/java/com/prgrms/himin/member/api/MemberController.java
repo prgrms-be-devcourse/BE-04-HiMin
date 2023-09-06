@@ -77,7 +77,10 @@ public class MemberController {
 	public ResponseEntity<AddressResponse> createAddress(
 		@PathVariable Long memberId,
 		@Valid @RequestBody AddressCreateRequest request) {
-		AddressResponse response = memberService.createAddress(memberId, request);
+		AddressResponse response = memberService.createAddress(
+			memberId,
+			request
+		);
 
 		return ResponseEntity.ok(response);
 	}
@@ -94,7 +97,10 @@ public class MemberController {
 		@PathVariable Long memberId,
 		@PathVariable Long addressId
 	) {
-		memberService.deleteAddress(memberId, addressId);
+		memberService.deleteAddress(
+			memberId,
+			addressId
+		);
 
 		return ResponseEntity.ok().build();
 	}
