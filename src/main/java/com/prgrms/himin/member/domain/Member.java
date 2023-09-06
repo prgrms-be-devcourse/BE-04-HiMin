@@ -17,6 +17,7 @@ import javax.persistence.Table;
 
 import com.prgrms.himin.global.error.exception.ErrorCode;
 import com.prgrms.himin.global.error.exception.InvalidValueException;
+import com.prgrms.himin.global.util.PhonePolicy;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -138,7 +139,7 @@ public class Member {
 	}
 
 	private void validatePhone(String phone) {
-		if (phone == null || phone.length() > PHONE_MAX_LENGTH) {
+		if (phone == null || phone.length() > PHONE_MAX_LENGTH || !PhonePolicy.matches(phone)) {
 			throw new InvalidValueException(ErrorCode.MEMBER_PHONE_BAD_REQUEST);
 		}
 	}
