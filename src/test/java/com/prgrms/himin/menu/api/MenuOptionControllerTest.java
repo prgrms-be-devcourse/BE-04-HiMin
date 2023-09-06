@@ -254,11 +254,11 @@ public class MenuOptionControllerTest {
 			assertThat(result).isFalse();
 		}
 
-		@DisplayName("실패한다.")
+		@DisplayName("유효하지 않은 id로 인해 실패한다.")
 		@Test
 		void fail_test() throws Exception {
 			// given
-			int notExistMenuId = 10000;
+			long notExistMenuOptionId = 10000;
 
 			// when
 			ResultActions resultActions = mvc.perform(delete(
@@ -266,7 +266,7 @@ public class MenuOptionControllerTest {
 					shop.getShopId(),
 					menu.getId(),
 					menuOptionGroup.getId(),
-					notExistMenuId
+					notExistMenuOptionId
 				)
 					.contentType(MediaType.APPLICATION_JSON))
 				.andDo(print());
