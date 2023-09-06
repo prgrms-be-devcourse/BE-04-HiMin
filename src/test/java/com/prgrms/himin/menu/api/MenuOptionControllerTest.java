@@ -1,5 +1,6 @@
 package com.prgrms.himin.menu.api;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
@@ -23,10 +24,12 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.prgrms.himin.global.error.exception.EntityNotFoundException;
 import com.prgrms.himin.global.error.exception.ErrorCode;
 import com.prgrms.himin.menu.domain.Menu;
 import com.prgrms.himin.menu.domain.MenuOption;
 import com.prgrms.himin.menu.domain.MenuOptionGroup;
+import com.prgrms.himin.menu.domain.MenuOptionRepository;
 import com.prgrms.himin.menu.dto.request.MenuOptionCreateRequest;
 import com.prgrms.himin.menu.dto.request.MenuOptionUpdateRequest;
 import com.prgrms.himin.setup.domain.MenuOptionGroupSetUp;
@@ -60,6 +63,9 @@ public class MenuOptionControllerTest {
 
 	@Autowired
 	MenuOptionGroupSetUp menuOptionGroupSetUp;
+
+	@Autowired
+	MenuOptionRepository menuOptionRepository;
 
 	Shop shop;
 
@@ -217,6 +223,62 @@ public class MenuOptionControllerTest {
 				.andExpect(jsonPath("errors[0].reason").value(expected))
 				.andExpect(jsonPath("code").value(ErrorCode.INVALID_REQUEST.getCode()))
 				.andExpect(jsonPath("message").value(ErrorCode.INVALID_REQUEST.getMessage()));
+		}
+	}
+
+	@Nested
+	@DisplayName("메뉴 옵션을 삭제할 수 있다.")
+	class DeleteMenuOption {
+		final String DELETE_URL = BASE_URL + "/{menuOptionId}";
+
+		@DisplayName("성공한다.")
+		@Test
+		void success_test() throws Exception {
+			// given
+			MenuOption savedMenuOption = menuOptionSetUp.saveOne(menuOptionGroup);
+
+			// when
+			ResultActions resultActions = mvc.perform(delete(
+					DELETE_URL,
+					shop.getShopId(),
+					menu.getId(),
+					menuOptionGroup.getId(),
+					savedMenuOption.getId()
+				)
+					.contentType(MediaType.APPLICATION_JSON))
+				.andDo(print());
+
+			// then
+			resultActions.andExpect(status().isOk());
+			boolean result = menuOptionRepository.existsById(savedMenuOption.getId());
+			assertThat(result).isFalse();
+		}
+
+		@DisplayName("실패한다.")
+		@Test
+		void fail_test() throws Exception {
+			// given
+			int notExistMenuId = 10000;
+
+			// when
+			ResultActions resultActions = mvc.perform(delete(
+					DELETE_URL,
+					shop.getShopId(),
+					menu.getId(),
+					menuOptionGroup.getId(),
+					notExistMenuId
+				)
+					.contentType(MediaType.APPLICATION_JSON))
+				.andDo(print());
+
+			// then
+			resultActions.andExpect(status().isNotFound())
+				.andExpect((result) -> assertTrue(
+					result.getResolvedException().getClass().isAssignableFrom((EntityNotFoundException.class))))
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("error").value(ErrorCode.MENU_OPTION_NOT_FOUND.toString()))
+				.andExpect(jsonPath("code").value(ErrorCode.MENU_OPTION_NOT_FOUND.getCode()))
+				.andExpect(jsonPath("message").value(ErrorCode.MENU_OPTION_NOT_FOUND.getMessage()));
 		}
 	}
 }
