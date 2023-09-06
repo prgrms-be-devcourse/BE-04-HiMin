@@ -132,6 +132,8 @@ public class Menu {
 		String name,
 		int price
 	) {
+		validateName(name);
+		validatePrice(price);
 		this.name = name;
 		this.price = price;
 	}
