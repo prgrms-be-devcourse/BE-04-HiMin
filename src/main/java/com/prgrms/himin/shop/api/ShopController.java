@@ -53,7 +53,7 @@ public class ShopController {
 		@RequestParam(required = false) Integer deliveryTip,
 		@RequestParam(required = false, defaultValue = "10") int size,
 		@RequestParam(required = false) Long cursor,
-		@RequestParam(required = false) ShopSort sort
+		@RequestParam(required = false) String sort
 	) {
 		ShopsReponse responses = shopService.getShops(
 			name,
@@ -62,7 +62,7 @@ public class ShopController {
 			deliveryTip,
 			size,
 			cursor,
-			sort
+			ShopSort.from(sort)
 		);
 
 		return ResponseEntity.ok(responses);

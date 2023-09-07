@@ -54,7 +54,8 @@ public enum ErrorCode {
 	SHOP_PHONE_BAD_REQUEST("SHOP_005", "잘못된 가게 번호입니다."),
 	SHOP_DELIVERY_TIP_BAD_REQUEST("SHOP_006", "잘못된 가게 배달팁 입니다."),
 	SHOP_OPENING_TIME_BAD_REQUEST("SHOP_007", "잘못된 가게 오픈 시간 입니다."),
-	SHOP_CLOSING_TIME_BAD_REQUEST("SHOP_008", "잘못된 가게 마감 시간 입니다.");
+	SHOP_CLOSING_TIME_BAD_REQUEST("SHOP_008", "잘못된 가게 마감 시간 입니다."),
+	SHOP_SORT_BAD_REQUEST("SHOP_009", "잘못된 가게 정렬 조건 입니다.");
 
 	private final String code;
 	private final String message;
