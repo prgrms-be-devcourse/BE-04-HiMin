@@ -19,11 +19,13 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.prgrms.himin.global.error.exception.EntityNotFoundException;
 import com.prgrms.himin.global.error.exception.ErrorCode;
 import com.prgrms.himin.member.domain.Member;
 import com.prgrms.himin.menu.domain.Menu;
 import com.prgrms.himin.menu.domain.MenuOption;
 import com.prgrms.himin.menu.domain.MenuOptionGroup;
+import com.prgrms.himin.order.domain.Order;
 import com.prgrms.himin.order.domain.OrderItem;
 import com.prgrms.himin.order.domain.SelectedOption;
 import com.prgrms.himin.order.dto.request.OrderCreateRequest;
@@ -34,6 +36,8 @@ import com.prgrms.himin.setup.domain.MenuOptionGroupSetUp;
 import com.prgrms.himin.setup.domain.MenuOptionSetUp;
 import com.prgrms.himin.setup.domain.MenuSetUp;
 import com.prgrms.himin.setup.domain.OrderItemSetUp;
+import com.prgrms.himin.setup.domain.OrderSetUp;
+import com.prgrms.himin.setup.domain.SelectedOptionSetUp;
 import com.prgrms.himin.setup.domain.ShopSetUp;
 import com.prgrms.himin.setup.request.OrderCreateRequestBuilder;
 import com.prgrms.himin.setup.request.SelectedMenuOptionRequestBuilder;
@@ -68,7 +72,13 @@ class OrderControllerTest {
 	ShopSetUp shopSetUp;
 
 	@Autowired
+	OrderSetUp orderSetUp;
+
+	@Autowired
 	OrderItemSetUp orderItemSetUp;
+
+	@Autowired
+	SelectedOptionSetUp selectedOptionSetUp;
 
 	@Nested
 	@DisplayName("주문 생성을 할 수 있다.")
@@ -259,6 +269,98 @@ class OrderControllerTest {
 				.andExpect(jsonPath("error").value(ErrorCode.INVALID_REQUEST.toString()))
 				.andExpect(jsonPath("code").value(ErrorCode.INVALID_REQUEST.getCode()))
 				.andExpect(jsonPath("message").value(ErrorCode.INVALID_REQUEST.getMessage()));
+		}
+	}
+
+	@Nested
+	@DisplayName("주문 조회를 할 수 있다.")
+	class FindOrder {
+
+		final String GET_URL = BASE_URL + "/{orderId}";
+
+		@DisplayName("성공한다")
+		@Test
+		void success_test() throws Exception {
+			// given
+			Member member = memberSetUp.saveOne();
+			Shop shop = shopSetUp.saveOne();
+			Menu menu = menuSetUp.saveOne(shop);
+			MenuOptionGroup menuOptionGroup = menuOptionGroupSetUp.saveOne(menu);
+			List<MenuOption> menuOptions = menuOptionSetUp.saveMany(menuOptionGroup);
+			List<SelectedOption> selectedOptions = selectedOptionSetUp.makeMany(menuOptions);
+
+			OrderItem orderItem = orderItemSetUp.makeOne(menu);
+
+			Order order = orderSetUp.saveOne(
+				member,
+				shop,
+				orderItem,
+				selectedOptions
+			);
+
+			int expectedPrice = orderItem.calculateOrderItemPrice();
+
+			// when
+			ResultActions resultActions = mvc.perform(get(
+				GET_URL,
+				order.getOrderId()
+			));
+
+			// then
+			resultActions.andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("orderId").value(order.getOrderId()))
+				.andExpect(jsonPath("memberId").value(member.getId()))
+				.andExpect(jsonPath("shopId").value(shop.getShopId()))
+				.andExpect(jsonPath("address").value(order.getAddress()))
+				.andExpect(jsonPath("requirement").value(order.getRequirement()))
+				.andExpect(jsonPath("selectedMenus[0].menuId").value(menu.getId()))
+				.andExpect(jsonPath("selectedMenus[0].quantity").value(orderItem.getQuantity()));
+
+			for (int menuOptionIdx = 0; menuOptionIdx < selectedOptions.size(); menuOptionIdx++) {
+				resultActions.andExpect(jsonPath("selectedMenus[0].selectedOptionIds[%d]", menuOptionIdx)
+					.value(selectedOptions.get(menuOptionIdx).getSelectedOptionId()));
+			}
+
+			resultActions.andExpect(jsonPath("price").value(expectedPrice));
+		}
+
+		@DisplayName("잘못된 orderId 조회로 실패한다.")
+		@Test
+		void wrong_order_id_fail_test() throws Exception {
+			// given
+			Member member = memberSetUp.saveOne();
+			Shop shop = shopSetUp.saveOne();
+			Menu menu = menuSetUp.saveOne(shop);
+			MenuOptionGroup menuOptionGroup = menuOptionGroupSetUp.saveOne(menu);
+			List<MenuOption> menuOptions = menuOptionSetUp.saveMany(menuOptionGroup);
+			List<SelectedOption> selectedOptions = selectedOptionSetUp.makeMany(menuOptions);
+			Long wrongOrderId = -1L;
+
+			OrderItem orderItem = orderItemSetUp.makeOne(menu);
+
+			orderSetUp.saveOne(
+				member,
+				shop,
+				orderItem,
+				selectedOptions
+			);
+
+			// when
+			ResultActions resultActions = mvc.perform(get(
+				GET_URL,
+				wrongOrderId
+			));
+
+			resultActions.andExpect(status().isNotFound())
+				.andExpect(result -> assertTrue(
+					result.getResolvedException().getClass().isAssignableFrom(EntityNotFoundException.class)
+				))
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("error").value(ErrorCode.ORDER_NOT_FOUND.toString()))
+				.andExpect(jsonPath("code").value(ErrorCode.ORDER_NOT_FOUND.getCode()))
+				.andExpect(jsonPath("message").value(ErrorCode.ORDER_NOT_FOUND.getMessage()))
+				.andDo(print());
 		}
 	}
 }
