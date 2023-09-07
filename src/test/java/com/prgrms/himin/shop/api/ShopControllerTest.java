@@ -232,7 +232,7 @@ class ShopControllerTest {
 				.andExpect(jsonPath("sort").doesNotExist());
 		}
 
-		@DisplayName("검색 조건에 따라 검색할 수 있다.")
+		@DisplayName("검색 조건에 따라 가게를 검색한다.")
 		@Test
 		void search_by_options_success_test() throws Exception {
 			// given
@@ -266,9 +266,9 @@ class ShopControllerTest {
 				.andExpect(jsonPath("sort").doesNotExist());
 		}
 
-		@DisplayName("정렬 조건을 통해 조회한다.")
+		@DisplayName("정렬 조건을 통해 가게를 조회한다.")
 		@Test
-		void order_by_sort_test() throws Exception {
+		void order_by_sort_success_test() throws Exception {
 			// when
 			List<Shop> shops = shopSetUp.saveMany();
 
@@ -308,7 +308,7 @@ class ShopControllerTest {
 				.andExpect(jsonPath("sort").value(ShopSort.from(sort).toString()));
 		}
 
-		@DisplayName("커서를 통해 조회한다.")
+		@DisplayName("커서를 통해 가게를 조회한다.")
 		@Test
 		void cursor_success_test() throws Exception {
 			// when
