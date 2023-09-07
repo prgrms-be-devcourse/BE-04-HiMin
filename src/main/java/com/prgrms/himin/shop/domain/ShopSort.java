@@ -29,6 +29,10 @@ public enum ShopSort {
 	}
 
 	public static ShopSort from(String name) {
+		if (name == null) {
+			return null;
+		}
+
 		if (SHOP_SORT_MAP.containsKey(name)) {
 			return SHOP_SORT_MAP.get(name);
 		}
