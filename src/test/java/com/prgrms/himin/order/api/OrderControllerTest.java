@@ -325,7 +325,7 @@ class OrderControllerTest {
 			resultActions.andExpect(jsonPath("price").value(expectedPrice));
 		}
 
-		@DisplayName("잘못된 orderId 조회로 실패하낟.")
+		@DisplayName("잘못된 orderId 조회로 실패한다.")
 		@Test
 		void wrong_order_id_fail_test() throws Exception {
 			// given
