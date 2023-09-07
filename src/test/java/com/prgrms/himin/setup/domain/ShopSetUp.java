@@ -1,9 +1,7 @@
 package com.prgrms.himin.setup.domain;
 
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
 
 import org.springframework.stereotype.Component;
 
@@ -25,13 +23,28 @@ public class ShopSetUp {
 		return shopRepository.save(shop);
 	}
 
-	public List<Shop> saveMany(int count) {
-		List<Shop> shops = new ArrayList<>();
-		IntStream.range(0, count).forEach(i -> shops.add(
-			shopRepository.save(buildShop("멕도날드 광명%d동점".formatted(i + 1), Category.FAST_FOOD))
-		));
+	public List<Shop> saveMany() {
+		List<Shop> shops = getShops();
 
-		return shops;
+		return shopRepository.saveAll(shops);
+	}
+
+	public List<Shop> getShops() {
+		final Shop shop1 = buildShop(
+			"맥도날드",
+			Category.FAST_FOOD,
+			1000
+		);
+		final Shop shop2 = buildShop(
+			"롯데리아",
+			Category.FAST_FOOD,
+			2000
+		);
+
+		return List.of(
+			shop1,
+			shop2
+		);
 	}
 
 	private Shop buildShop(
@@ -45,6 +58,23 @@ public class ShopSetUp {
 			.phone("02-2611-2222")
 			.content("안녕하세요. %s입니다.".formatted(name))
 			.deliveryTip(1000)
+			.openingTime(LocalTime.of(9, 0))
+			.closingTime(LocalTime.of(21, 0))
+			.build();
+	}
+
+	private Shop buildShop(
+		String name,
+		Category category,
+		int deliveryTip
+	) {
+		return Shop.builder()
+			.name(name)
+			.category(category)
+			.address("경기도 광명시 광명동")
+			.phone("02-2611-2222")
+			.content("안녕하세요. %s입니다.".formatted(name))
+			.deliveryTip(deliveryTip)
 			.openingTime(LocalTime.of(9, 0))
 			.closingTime(LocalTime.of(21, 0))
 			.build();

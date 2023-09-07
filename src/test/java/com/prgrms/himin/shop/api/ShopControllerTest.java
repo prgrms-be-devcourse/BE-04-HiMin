@@ -196,7 +196,7 @@ class ShopControllerTest {
 		@Test
 		void success_test() throws Exception {
 			// when
-			List<Shop> shops = shopSetUp.saveMany(2);
+			List<Shop> shops = shopSetUp.saveMany();
 
 			ResultActions resultAction = mvc.perform(get(BASE_URL))
 				.andDo(print());
@@ -235,7 +235,7 @@ class ShopControllerTest {
 		@Test
 		void search_by_options_success_test() throws Exception {
 			// given
-			List<Shop> shops = shopSetUp.saveMany(2);
+			List<Shop> shops = shopSetUp.saveMany();
 
 			String name = shops.get(1).getName();
 			String searchOption = name.substring(name.length() / 2);
