@@ -33,6 +33,7 @@ import com.prgrms.himin.setup.request.ShopUpdateRequestBuilder;
 import com.prgrms.himin.shop.domain.Category;
 import com.prgrms.himin.shop.domain.Shop;
 import com.prgrms.himin.shop.domain.ShopRepository;
+import com.prgrms.himin.shop.domain.ShopSort;
 import com.prgrms.himin.shop.domain.ShopStatus;
 import com.prgrms.himin.shop.dto.request.ShopCreateRequest;
 import com.prgrms.himin.shop.dto.request.ShopUpdateRequest;
@@ -263,6 +264,48 @@ class ShopControllerTest {
 				.andExpect(jsonPath("size").value(10))
 				.andExpect(jsonPath("nextCursor").value(shops.get(1).getShopId()))
 				.andExpect(jsonPath("sort").doesNotExist());
+		}
+
+		@DisplayName("정렬 조건을 통해 조회한다.")
+		@Test
+		void order_by_sort_test() throws Exception {
+			// when
+			List<Shop> shops = shopSetUp.saveMany();
+
+			String sort = "deliveryTipAsc";
+
+			ResultActions resultAction = mvc.perform(get(BASE_URL)
+					.queryParam("sort", sort))
+				.andDo(print());
+
+			// then
+			resultAction.andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("shopsReponses[0].shopId").value(shops.get(1).getShopId()))
+				.andExpect(jsonPath("shopsReponses[0].name").value(shops.get(1).getName()))
+				.andExpect(jsonPath("shopsReponses[0].category").value(shops.get(1).getCategory().toString()))
+				.andExpect(jsonPath("shopsReponses[0].address").value(shops.get(1).getAddress()))
+				.andExpect(jsonPath("shopsReponses[0].phone").value(shops.get(1).getPhone()))
+				.andExpect(jsonPath("shopsReponses[0].content").value(shops.get(1).getContent()))
+				.andExpect(jsonPath("shopsReponses[0].deliveryTip").value(shops.get(1).getDeliveryTip()))
+				.andExpect(jsonPath("shopsReponses[0].dibsCount").value(shops.get(1).getDibsCount()))
+				.andExpect(jsonPath("shopsReponses[0].status").value(shops.get(1).getStatus().toString()))
+				.andExpect(jsonPath("shopsReponses[0].openingTime").value(shops.get(1).getOpeningTime().toString()))
+				.andExpect(jsonPath("shopsReponses[0].closingTime").value(shops.get(1).getClosingTime().toString()))
+				.andExpect(jsonPath("shopsReponses[1].shopId").value(shops.get(0).getShopId()))
+				.andExpect(jsonPath("shopsReponses[1].name").value(shops.get(0).getName()))
+				.andExpect(jsonPath("shopsReponses[1].category").value(shops.get(0).getCategory().toString()))
+				.andExpect(jsonPath("shopsReponses[1].address").value(shops.get(0).getAddress()))
+				.andExpect(jsonPath("shopsReponses[1].phone").value(shops.get(0).getPhone()))
+				.andExpect(jsonPath("shopsReponses[1].content").value(shops.get(0).getContent()))
+				.andExpect(jsonPath("shopsReponses[1].deliveryTip").value(shops.get(0).getDeliveryTip()))
+				.andExpect(jsonPath("shopsReponses[1].dibsCount").value(shops.get(0).getDibsCount()))
+				.andExpect(jsonPath("shopsReponses[1].status").value(shops.get(0).getStatus().toString()))
+				.andExpect(jsonPath("shopsReponses[1].openingTime").value(shops.get(0).getOpeningTime().toString()))
+				.andExpect(jsonPath("shopsReponses[1].closingTime").value(shops.get(0).getClosingTime().toString()))
+				.andExpect(jsonPath("size").value(10))
+				.andExpect(jsonPath("nextCursor").value(shops.get(0).getShopId()))
+				.andExpect(jsonPath("sort").value(ShopSort.from(sort).toString()));
 		}
 	}
 

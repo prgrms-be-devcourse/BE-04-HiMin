@@ -33,7 +33,7 @@ public class ShopSetUp {
 		final Shop shop1 = buildShop(
 			"맥도날드",
 			Category.FAST_FOOD,
-			1000
+			3000
 		);
 		final Shop shop2 = buildShop(
 			"롯데리아",
