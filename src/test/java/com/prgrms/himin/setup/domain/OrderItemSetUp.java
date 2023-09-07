@@ -17,4 +17,13 @@ public class OrderItemSetUp {
 			quantity
 		);
 	}
+
+	public OrderItem makeOne(
+		Menu menu
+	) {
+		return new OrderItem(
+			menu,
+			5
+		);
+	}
 }
