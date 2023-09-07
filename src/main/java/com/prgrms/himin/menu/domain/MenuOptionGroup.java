@@ -2,7 +2,6 @@ package com.prgrms.himin.menu.domain;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -81,23 +80,6 @@ public class MenuOptionGroup {
 	public void updateName(String name) {
 		validateName(name);
 		this.name = name;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o)
-			return true;
-		if (o == null || getClass() != o.getClass())
-			return false;
-
-		MenuOptionGroup that = (MenuOptionGroup)o;
-
-		return Objects.equals(this.id, that.id);
-	}
-
-	@Override
-	public int hashCode() {
-		return id.hashCode();
 	}
 
 	public boolean contains(MenuOption menuOption) {

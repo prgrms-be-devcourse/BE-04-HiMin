@@ -2,7 +2,6 @@ package com.prgrms.himin.order.domain;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -56,30 +55,6 @@ public class OrderItem {
 		validateMenu(menu);
 		this.quantity = quantity;
 		this.menu = menu;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o)
-			return true;
-		if (o == null || getClass() != o.getClass())
-			return false;
-		OrderItem orderItem = (OrderItem)o;
-		return Objects.equals(
-			menu.getId(),
-			orderItem.getMenu().getId()
-		);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(
-			orderItemId,
-			quantity,
-			order,
-			menu,
-			selectedOptions
-		);
 	}
 
 	public void attachTo(Order order) {

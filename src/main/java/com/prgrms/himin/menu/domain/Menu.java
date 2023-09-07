@@ -2,7 +2,6 @@ package com.prgrms.himin.menu.domain;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -105,23 +104,6 @@ public class Menu {
 		if (name == null || name.length() > MAX_NAME_LENGTH) {
 			throw new InvalidValueException(ErrorCode.MENU_NAME_BAD_REQUEST);
 		}
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o)
-			return true;
-		if (o == null || getClass() != o.getClass())
-			return false;
-
-		Menu menu = (Menu)o;
-
-		return Objects.equals(this.id, menu.getId());
-	}
-
-	@Override
-	public int hashCode() {
-		return id.hashCode();
 	}
 
 	public void updateStatus(MenuStatus status) {
