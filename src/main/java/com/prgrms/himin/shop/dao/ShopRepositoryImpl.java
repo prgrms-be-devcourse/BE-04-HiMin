@@ -39,10 +39,10 @@ public class ShopRepositoryImpl implements ShopRepositoryCustom {
 			.selectFrom(shop)
 			.where(
 				containsName(name),
-				eqCategory(category),
+				equalCategory(category),
 				containsAddress(address),
-				loeDeliveryTip(deliveryTip),
-				gtCursor(cursor)
+				lowOrEqualDeliveryTip(deliveryTip),
+				greaterThanCursor(cursor)
 			)
 			.orderBy(orderBySort(sort))
 			.limit(size)
@@ -53,7 +53,7 @@ public class ShopRepositoryImpl implements ShopRepositoryCustom {
 		return name != null ? shop.name.contains(name) : null;
 	}
 
-	private BooleanExpression eqCategory(Category category) {
+	private BooleanExpression equalCategory(Category category) {
 		return category != null ? shop.category.eq(category) : null;
 	}
 
@@ -61,7 +61,7 @@ public class ShopRepositoryImpl implements ShopRepositoryCustom {
 		return address != null ? shop.address.contains(address) : null;
 	}
 
-	private BooleanExpression loeDeliveryTip(Integer deliveryTip) {
+	private BooleanExpression lowOrEqualDeliveryTip(Integer deliveryTip) {
 		return deliveryTip != null ? shop.deliveryTip.loe(deliveryTip) : null;
 	}
 
@@ -69,7 +69,7 @@ public class ShopRepositoryImpl implements ShopRepositoryCustom {
 		return sort != null ? sort.getOrderSpecifier() : OrderByNull.DEFAULT;
 	}
 
-	private Predicate gtCursor(Long cursor) {
+	private Predicate greaterThanCursor(Long cursor) {
 		return cursor != null ? shop.shopId.gt(cursor) : null;
 	}
 }
