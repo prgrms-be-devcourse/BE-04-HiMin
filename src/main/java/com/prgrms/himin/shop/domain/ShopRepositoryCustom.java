@@ -4,10 +4,13 @@ import java.util.List;
 
 public interface ShopRepositoryCustom {
 
-    List<Shop> searchShops(
-            String name,
-            Category category,
-            String address,
-            Integer deliveryTip
-    );
+	List<Shop> searchShops(
+		String name,
+		Category category,
+		String address,
+		Integer deliveryTip,
+		int size,
+		Long cursor,
+		ShopSort sort
+	);
 }

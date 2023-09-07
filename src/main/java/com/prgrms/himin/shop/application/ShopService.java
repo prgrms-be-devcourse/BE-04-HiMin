@@ -10,10 +10,12 @@ import com.prgrms.himin.global.error.exception.ErrorCode;
 import com.prgrms.himin.shop.domain.Category;
 import com.prgrms.himin.shop.domain.Shop;
 import com.prgrms.himin.shop.domain.ShopRepository;
+import com.prgrms.himin.shop.domain.ShopSort;
 import com.prgrms.himin.shop.domain.ShopStatus;
 import com.prgrms.himin.shop.dto.request.ShopCreateRequest;
 import com.prgrms.himin.shop.dto.request.ShopUpdateRequest;
 import com.prgrms.himin.shop.dto.response.ShopResponse;
+import com.prgrms.himin.shop.dto.response.ShopsReponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -41,22 +43,37 @@ public class ShopService {
 		return ShopResponse.from(shop);
 	}
 
-	public List<ShopResponse> getShops(
+	public ShopsReponse getShops(
 		String name,
 		Category category,
 		String address,
-		Integer deliveryTip
+		Integer deliveryTip,
+		int size,
+		Long cursor,
+		ShopSort sort
 	) {
 		List<Shop> shops = shopRepository.searchShops(
 			name,
 			category,
 			address,
-			deliveryTip
+			deliveryTip,
+			size,
+			cursor,
+			sort
 		);
 
-		return shops.stream()
+		Long nextCursor = shops.isEmpty() ? cursor : shops.get(shops.size() - 1).getShopId();
+
+		List<ShopResponse> responses = shops.stream()
 			.map(ShopResponse::from)
 			.toList();
+
+		return new ShopsReponse(
+			responses,
+			size,
+			nextCursor,
+			sort
+		);
 	}
 
 	@Transactional
