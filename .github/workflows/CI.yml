@@ -26,10 +26,10 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      - name: Make application.properties
+      - name: Make application.yml
         run: |
-          cd ./src/main/resources
-          touch ./application.properties
+          cd ./src/main
+          touch ./resources/application.yml
           
           echo "${{ secrets.DATABASE_PROPERTIES }}" >> ./application.yml
         shell: bash
