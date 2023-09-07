@@ -196,9 +196,10 @@ class ShopControllerTest {
 		@DisplayName("전체를 조회한다.")
 		@Test
 		void success_test() throws Exception {
-			// when
+			// given
 			List<Shop> shops = shopSetUp.saveMany();
 
+			// when
 			ResultActions resultAction = mvc.perform(get(BASE_URL))
 				.andDo(print());
 
@@ -269,11 +270,12 @@ class ShopControllerTest {
 		@DisplayName("정렬 조건을 통해 가게를 조회한다.")
 		@Test
 		void order_by_sort_success_test() throws Exception {
-			// when
+			// given
 			List<Shop> shops = shopSetUp.saveMany();
 
 			String sort = "deliveryTipAsc";
 
+			// when
 			ResultActions resultAction = mvc.perform(get(BASE_URL)
 					.queryParam("sort", sort))
 				.andDo(print());
@@ -311,11 +313,12 @@ class ShopControllerTest {
 		@DisplayName("커서를 통해 가게를 조회한다.")
 		@Test
 		void cursor_success_test() throws Exception {
-			// when
+			// given
 			List<Shop> shops = shopSetUp.saveMany();
 
 			Long cursor = shops.get(1).getShopId() - 1;
 
+			// when
 			ResultActions resultAction = mvc.perform(get(BASE_URL)
 					.queryParam("cursor", String.valueOf(cursor)))
 				.andDo(print());
