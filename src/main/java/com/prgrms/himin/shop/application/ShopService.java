@@ -62,7 +62,7 @@ public class ShopService {
 			sort
 		);
 
-		Long nextCursor = shops.isEmpty() ? cursor : shops.get(shops.size() - 1).getShopId();
+		Long nextCursor = getNextCursor(cursor, shops);
 
 		List<ShopResponse> responses = shops.stream()
 			.map(ShopResponse::from)
@@ -74,6 +74,15 @@ public class ShopService {
 			nextCursor,
 			sort
 		);
+	}
+
+	private Long getNextCursor(Long cursor, List<Shop> shops) {
+		if (shops.isEmpty()) {
+			return cursor;
+		} else {
+			int lastIndex = shops.size() - 1;
+			return shops.get(lastIndex).getShopId();
+		}
 	}
 
 	@Transactional
