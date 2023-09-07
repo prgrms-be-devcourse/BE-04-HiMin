@@ -22,6 +22,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,6 +38,7 @@ import com.prgrms.himin.setup.request.MenuCreateRequestBuilder;
 import com.prgrms.himin.setup.request.MenuUpdateRequestBuilder;
 import com.prgrms.himin.shop.domain.Shop;
 
+@Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
 class MenuControllerTest {
@@ -286,8 +288,8 @@ class MenuControllerTest {
 
 			// then
 			resultActions.andExpect(status().isOk());
-			boolean result = menuRepository.existsById(savedMenu.getId());
-			assertThat(result).isFalse();
+			Optional<Menu> menu = menuRepository.findById(savedMenu.getId());
+			assertThat(menu).isEmpty();
 		}
 
 		@DisplayName("실패한다.")

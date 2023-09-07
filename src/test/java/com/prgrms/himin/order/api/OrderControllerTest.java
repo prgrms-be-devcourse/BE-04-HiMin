@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -44,6 +45,7 @@ import com.prgrms.himin.setup.request.SelectedMenuOptionRequestBuilder;
 import com.prgrms.himin.setup.request.SelectedMenuRequestBuilder;
 import com.prgrms.himin.shop.domain.Shop;
 
+@Transactional
 @AutoConfigureMockMvc
 @SpringBootTest
 class OrderControllerTest {
@@ -315,11 +317,12 @@ class OrderControllerTest {
 				.andExpect(jsonPath("address").value(order.getAddress()))
 				.andExpect(jsonPath("requirement").value(order.getRequirement()))
 				.andExpect(jsonPath("selectedMenus[0].menuId").value(menu.getId()))
-				.andExpect(jsonPath("selectedMenus[0].quantity").value(orderItem.getQuantity()));
+				.andExpect(jsonPath("selectedMenus[0].quantity").value(orderItem.getQuantity()))
+				.andDo(print());
 
 			for (int menuOptionIdx = 0; menuOptionIdx < selectedOptions.size(); menuOptionIdx++) {
 				resultActions.andExpect(jsonPath("selectedMenus[0].selectedOptionIds[%d]", menuOptionIdx)
-					.value(selectedOptions.get(menuOptionIdx).getSelectedOptionId()));
+					.value(menuOptions.get(menuOptionIdx).getId()));
 			}
 
 			resultActions.andExpect(jsonPath("price").value(expectedPrice));

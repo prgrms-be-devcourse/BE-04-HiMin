@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -252,8 +253,8 @@ public class MenuOptionControllerTest {
 
 			// then
 			resultActions.andExpect(status().isOk());
-			boolean result = menuOptionRepository.existsById(savedMenuOption.getId());
-			assertThat(result).isFalse();
+			Optional<MenuOption> menuOption = menuOptionRepository.findById(savedMenuOption.getId());
+			assertThat(menuOption).isEmpty();
 		}
 
 		@DisplayName("유효하지 않은 id로 인해 실패한다.")
