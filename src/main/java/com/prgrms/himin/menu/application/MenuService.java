@@ -54,6 +54,7 @@ public class MenuService {
 			.orElseThrow(
 				() -> new EntityNotFoundException(ErrorCode.SHOP_NOT_FOUND)
 			);
+
 		Menu menu = request.toEntity();
 		menu.attachShop(shop);
 		Menu savedMenuEntity = menuRepository.save(menu);
@@ -67,15 +68,17 @@ public class MenuService {
 		Long menuId,
 		MenuOptionGroupCreateRequest request
 	) {
-		menuValidator.validateShopId(
-			shopId,
-			menuId
-		);
-		MenuOptionGroup menuOptionGroupEntity = request.toEntity();
 		Menu menu = menuRepository.findById(menuId)
 			.orElseThrow(
 				() -> new EntityNotFoundException(ErrorCode.MENU_NOT_FOUND)
 			);
+
+		menuValidator.validateShopId(
+			shopId,
+			menu
+		);
+
+		MenuOptionGroup menuOptionGroupEntity = request.toEntity();
 		MenuOptionGroup savedMenuOptionGroupEntity = menuOptionGroupRepository.save(menuOptionGroupEntity);
 		savedMenuOptionGroupEntity.attachMenu(menu);
 
@@ -89,19 +92,27 @@ public class MenuService {
 		Long menuOptionGroupId,
 		MenuOptionCreateRequest request
 	) {
-		menuValidator.validateShopId(
-			shopId,
-			menuId
-		);
-		menuValidator.validateMenuId(
-			menuId,
-			menuOptionGroupId
-		);
-		MenuOption menuOptionEntity = request.toEntity();
+		Menu menu = menuRepository.findById(menuId)
+			.orElseThrow(
+				() -> new EntityNotFoundException(MENU_NOT_FOUND)
+			);
+
 		MenuOptionGroup menuOptionGroup = menuOptionGroupRepository.findById(menuOptionGroupId)
 			.orElseThrow(
 				() -> new EntityNotFoundException(ErrorCode.MENU_OPTION_GROUP_NOT_FOUND)
 			);
+
+		menuValidator.validateShopId(
+			shopId,
+			menu
+		);
+
+		menuValidator.validateMenuId(
+			menuId,
+			menuOptionGroup
+		);
+
+		MenuOption menuOptionEntity = request.toEntity();
 
 		menuOptionEntity.attachMenuOptionGroup(menuOptionGroup);
 		MenuOption savedMenuOption = menuOptionRepository.save(menuOptionEntity);
@@ -113,12 +124,15 @@ public class MenuService {
 		Long shopId,
 		Long menuId
 	) {
+		Menu menu = menuRepository.findById(menuId)
+			.orElseThrow(
+				() -> new EntityNotFoundException(ErrorCode.MENU_NOT_FOUND)
+			);
+
 		menuValidator.validateShopId(
 			shopId,
-			menuId
+			menu
 		);
-		Menu menu = menuRepository.findById(menuId)
-			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MENU_NOT_FOUND));
 
 		return MenuResponse.from(menu);
 	}
@@ -129,14 +143,15 @@ public class MenuService {
 		Long menuId,
 		MenuUpdateRequest.Info request
 	) {
-		menuValidator.validateShopId(
-			shopId,
-			menuId
-		);
 		Menu menu = menuRepository.findById(menuId)
 			.orElseThrow(
 				() -> new EntityNotFoundException(ErrorCode.MENU_NOT_FOUND)
 			);
+
+		menuValidator.validateShopId(
+			shopId,
+			menu
+		);
 
 		menu.updateMenuInfo(
 			request.name(),
@@ -150,14 +165,15 @@ public class MenuService {
 		Long menuId,
 		MenuUpdateRequest.Status request
 	) {
-		menuValidator.validateShopId(
-			shopId,
-			menuId
-		);
 		Menu menu = menuRepository.findById(menuId)
 			.orElseThrow(
 				() -> new EntityNotFoundException(ErrorCode.MENU_NOT_FOUND)
 			);
+
+		menuValidator.validateShopId(
+			shopId,
+			menu
+		);
 
 		MenuStatus status = request.status();
 		menu.updateStatus(status);
@@ -170,19 +186,25 @@ public class MenuService {
 		Long menuOptionGroupId,
 		MenuOptionGroupUpdateRequest request
 	) {
-		menuValidator.validateShopId(
-			shopId,
-			menuId
-		);
-		menuValidator.validateMenuId(
-			menuId,
-			menuOptionGroupId
-		);
+		Menu menu = menuRepository.findById(menuId)
+			.orElseThrow(
+				() -> new EntityNotFoundException(ErrorCode.MENU_NOT_FOUND)
+			);
 
 		MenuOptionGroup menuOptionGroup = menuOptionGroupRepository.findById(menuOptionGroupId)
 			.orElseThrow(
 				() -> new EntityNotFoundException(MENU_OPTION_GROUP_NOT_FOUND)
 			);
+
+		menuValidator.validateShopId(
+			shopId,
+			menu
+		);
+
+		menuValidator.validateMenuId(
+			menuId,
+			menuOptionGroup
+		);
 
 		String name = request.name();
 		menuOptionGroup.updateName(name);
@@ -196,23 +218,35 @@ public class MenuService {
 		Long optionId,
 		MenuOptionUpdateRequest request
 	) {
-		menuValidator.validateShopId(
-			shopId,
-			menuId
-		);
-		menuValidator.validateMenuId(
-			menuId,
-			menuOptionGroupId
-		);
-		menuValidator.validateMenuOptionGroupId(
-			menuOptionGroupId,
-			optionId
-		);
+		Menu menu = menuRepository.findById(menuId)
+			.orElseThrow(
+				() -> new EntityNotFoundException(ErrorCode.MENU_NOT_FOUND)
+			);
+
+		MenuOptionGroup menuOptionGroup = menuOptionGroupRepository.findById(menuOptionGroupId)
+			.orElseThrow(
+				() -> new EntityNotFoundException(MENU_OPTION_GROUP_NOT_FOUND)
+			);
 
 		MenuOption menuOption = menuOptionRepository.findById(optionId)
 			.orElseThrow(
 				() -> new EntityNotFoundException(MENU_OPTION_NOT_FOUND)
 			);
+
+		menuValidator.validateShopId(
+			shopId,
+			menu
+		);
+
+		menuValidator.validateMenuId(
+			menuId,
+			menuOptionGroup
+		);
+
+		menuValidator.validateMenuOptionGroupId(
+			menuOptionGroupId,
+			menuOption
+		);
 
 		menuOption.updateOptionInfo(
 			request.name(),
@@ -225,14 +259,15 @@ public class MenuService {
 		Long shopId,
 		Long menuId
 	) {
-		menuValidator.validateShopId(
-			shopId,
-			menuId
-		);
 		Menu menu = menuRepository.findById(menuId)
 			.orElseThrow(
 				() -> new EntityNotFoundException(MENU_NOT_FOUND)
 			);
+
+		menuValidator.validateShopId(
+			shopId,
+			menu
+		);
 
 		menuRepository.delete(menu);
 	}
@@ -243,18 +278,25 @@ public class MenuService {
 		Long menuId,
 		Long menuOptionGroupId
 	) {
-		menuValidator.validateShopId(
-			shopId,
-			menuId
-		);
-		menuValidator.validateMenuId(
-			menuId,
-			menuOptionGroupId
-		);
+		Menu menu = menuRepository.findById(menuId)
+			.orElseThrow(
+				() -> new EntityNotFoundException(MENU_NOT_FOUND)
+			);
+
 		MenuOptionGroup menuOptionGroup = menuOptionGroupRepository.findById(menuOptionGroupId)
 			.orElseThrow(
 				() -> new EntityNotFoundException(MENU_OPTION_GROUP_NOT_FOUND)
 			);
+
+		menuValidator.validateShopId(
+			shopId,
+			menu
+		);
+
+		menuValidator.validateMenuId(
+			menuId,
+			menuOptionGroup
+		);
 
 		menuOptionGroupRepository.delete(menuOptionGroup);
 	}
@@ -266,22 +308,35 @@ public class MenuService {
 		Long menuOptionGroupId,
 		Long menuOptionID
 	) {
-		menuValidator.validateShopId(
-			shopId,
-			menuId
-		);
-		menuValidator.validateMenuId(
-			menuId,
-			menuOptionGroupId
-		);
-		menuValidator.validateMenuOptionGroupId(
-			menuOptionGroupId,
-			menuOptionID
-		);
+		Menu menu = menuRepository.findById(menuId)
+			.orElseThrow(
+				() -> new EntityNotFoundException(MENU_NOT_FOUND)
+			);
+
+		MenuOptionGroup menuOptionGroup = menuOptionGroupRepository.findById(menuOptionGroupId)
+			.orElseThrow(
+				() -> new EntityNotFoundException(MENU_OPTION_GROUP_NOT_FOUND)
+			);
+
 		MenuOption menuOption = menuOptionRepository.findById(menuOptionID)
 			.orElseThrow(
 				() -> new EntityNotFoundException(MENU_OPTION_NOT_FOUND)
 			);
+
+		menuValidator.validateShopId(
+			shopId,
+			menu
+		);
+
+		menuValidator.validateMenuId(
+			menuId,
+			menuOptionGroup
+		);
+
+		menuValidator.validateMenuOptionGroupId(
+			menuOptionGroupId,
+			menuOption
+		);
 
 		menuOptionRepository.delete(menuOption);
 	}
