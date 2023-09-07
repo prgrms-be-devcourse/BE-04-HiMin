@@ -307,6 +307,37 @@ class ShopControllerTest {
 				.andExpect(jsonPath("nextCursor").value(shops.get(0).getShopId()))
 				.andExpect(jsonPath("sort").value(ShopSort.from(sort).toString()));
 		}
+
+		@DisplayName("커서를 통해 조회한다.")
+		@Test
+		void cursor_success_test() throws Exception {
+			// when
+			List<Shop> shops = shopSetUp.saveMany();
+
+			Long cursor = shops.get(1).getShopId() - 1;
+
+			ResultActions resultAction = mvc.perform(get(BASE_URL)
+					.queryParam("cursor", String.valueOf(cursor)))
+				.andDo(print());
+
+			// then
+			resultAction.andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("shopsReponses[0].shopId").value(shops.get(1).getShopId()))
+				.andExpect(jsonPath("shopsReponses[0].name").value(shops.get(1).getName()))
+				.andExpect(jsonPath("shopsReponses[0].category").value(shops.get(1).getCategory().toString()))
+				.andExpect(jsonPath("shopsReponses[0].address").value(shops.get(1).getAddress()))
+				.andExpect(jsonPath("shopsReponses[0].phone").value(shops.get(1).getPhone()))
+				.andExpect(jsonPath("shopsReponses[0].content").value(shops.get(1).getContent()))
+				.andExpect(jsonPath("shopsReponses[0].deliveryTip").value(shops.get(1).getDeliveryTip()))
+				.andExpect(jsonPath("shopsReponses[0].dibsCount").value(shops.get(1).getDibsCount()))
+				.andExpect(jsonPath("shopsReponses[0].status").value(shops.get(1).getStatus().toString()))
+				.andExpect(jsonPath("shopsReponses[0].openingTime").value(shops.get(1).getOpeningTime().toString()))
+				.andExpect(jsonPath("shopsReponses[0].closingTime").value(shops.get(1).getClosingTime().toString()))
+				.andExpect(jsonPath("size").value(10))
+				.andExpect(jsonPath("nextCursor").value(shops.get(1).getShopId()))
+				.andExpect(jsonPath("sort").doesNotExist());
+		}
 	}
 
 	@Nested
