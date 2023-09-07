@@ -19,6 +19,7 @@ public record OrderResponse(
 
 	public static OrderResponse from(Order order) {
 		List<SelectedMenuResponse> selectedMenus = SelectedMenuResponse.from(order.getOrderItems());
+		
 		return OrderResponse.builder()
 			.orderId(order.getOrderId())
 			.memberId(order.getMember().getId())
