@@ -230,7 +230,8 @@ class ShopControllerTest {
 				.andExpect(jsonPath("shopsReponses[1].closingTime").value(shops.get(1).getClosingTime().toString()))
 				.andExpect(jsonPath("size").value(10))
 				.andExpect(jsonPath("nextCursor").value(shops.get(1).getShopId()))
-				.andExpect(jsonPath("sort").doesNotExist());
+				.andExpect(jsonPath("sort").doesNotExist())
+				.andExpect(jsonPath("isLast").value(true));
 		}
 
 		@DisplayName("검색 조건에 따라 가게를 검색한다.")
@@ -264,7 +265,8 @@ class ShopControllerTest {
 				.andExpect(jsonPath("shopsReponses[0].closingTime").value(shops.get(1).getClosingTime().toString()))
 				.andExpect(jsonPath("size").value(10))
 				.andExpect(jsonPath("nextCursor").value(shops.get(1).getShopId()))
-				.andExpect(jsonPath("sort").doesNotExist());
+				.andExpect(jsonPath("sort").doesNotExist())
+				.andExpect(jsonPath("isLast").value(true));
 		}
 
 		@DisplayName("정렬 조건을 통해 가게를 조회한다.")
@@ -307,7 +309,8 @@ class ShopControllerTest {
 				.andExpect(jsonPath("shopsReponses[1].closingTime").value(shops.get(0).getClosingTime().toString()))
 				.andExpect(jsonPath("size").value(10))
 				.andExpect(jsonPath("nextCursor").value(shops.get(0).getShopId()))
-				.andExpect(jsonPath("sort").value(ShopSort.from(sort).toString()));
+				.andExpect(jsonPath("sort").value(ShopSort.from(sort).toString()))
+				.andExpect(jsonPath("isLast").value(true));
 		}
 
 		@DisplayName("커서를 통해 가게를 조회한다.")
@@ -339,7 +342,8 @@ class ShopControllerTest {
 				.andExpect(jsonPath("shopsReponses[0].closingTime").value(shops.get(1).getClosingTime().toString()))
 				.andExpect(jsonPath("size").value(10))
 				.andExpect(jsonPath("nextCursor").value(shops.get(1).getShopId()))
-				.andExpect(jsonPath("sort").doesNotExist());
+				.andExpect(jsonPath("sort").doesNotExist())
+				.andExpect(jsonPath("isLast").value(true));
 		}
 	}
 
