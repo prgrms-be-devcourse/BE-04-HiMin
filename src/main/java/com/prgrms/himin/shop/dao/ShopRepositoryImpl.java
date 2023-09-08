@@ -45,7 +45,7 @@ public class ShopRepositoryImpl implements ShopRepositoryCustom {
 				greaterThanCursor(cursor)
 			)
 			.orderBy(orderBySort(sort))
-			.limit(size)
+			.limit(size + 1)
 			.fetch();
 	}
 

@@ -62,27 +62,50 @@ public class ShopService {
 			sort
 		);
 
-		Long nextCursor = getNextCursor(cursor, shops);
-
-		List<ShopResponse> responses = shops.stream()
-			.map(ShopResponse::from)
-			.toList();
-
 		return new ShopsReponse(
-			responses,
+			getShopResponses(shops),
 			size,
-			nextCursor,
-			sort
+			getNextCursor(shops, size),
+			sort,
+			isLast(shops, size)
 		);
 	}
 
-	private Long getNextCursor(Long cursor, List<Shop> shops) {
+	private Long getNextCursor(List<Shop> shops, int size) {
 		if (shops.isEmpty()) {
-			return cursor;
-		} else {
-			int lastIndex = shops.size() - 1;
-			return shops.get(lastIndex).getShopId();
+			Shop lastShop = shopRepository.findFirstByOrderByShopIdDesc();
+			if (lastShop == null) {
+				return null;
+			}
+
+			return lastShop.getShopId();
 		}
+
+		int lastIndex = getLastIndex(shops, size);
+
+		return shops.get(lastIndex).getShopId();
+	}
+
+	private static int getLastIndex(List<Shop> shops, int size) {
+		if (shops.size() <= size) {
+			return shops.size() - 1;
+		}
+
+		return shops.size() - 2;
+	}
+
+	private boolean isLast(List<Shop> shops, int size) {
+		if (shops.size() <= size) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private static List<ShopResponse> getShopResponses(List<Shop> shops) {
+		return shops.stream()
+			.map(ShopResponse::from)
+			.toList();
 	}
 
 	@Transactional

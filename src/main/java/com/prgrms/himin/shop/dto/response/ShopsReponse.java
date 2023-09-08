@@ -8,6 +8,7 @@ public record ShopsReponse(
 	List<ShopResponse> shopsReponses,
 	int size,
 	Long nextCursor,
-	ShopSort sort
+	ShopSort sort,
+	boolean isLast
 ) {
 }
