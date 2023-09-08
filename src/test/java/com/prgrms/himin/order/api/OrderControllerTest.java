@@ -185,7 +185,8 @@ class OrderControllerTest {
 			selectedOptions6.forEach(selectedOption -> selectedOption.attachTo(orderItem2));
 
 			int expectedPrice = orderItem1.calculateOrderItemPrice()
-				+ orderItem2.calculateOrderItemPrice();
+				+ orderItem2.calculateOrderItemPrice()
+				+ shop.getDeliveryTip();
 
 			OrderCreateRequest request = OrderCreateRequestBuilder.successBuild(
 				member.getId(),
@@ -300,7 +301,8 @@ class OrderControllerTest {
 				selectedOptions
 			);
 
-			int expectedPrice = orderItem.calculateOrderItemPrice();
+			order.calculateOrderPrice();
+			int expectedPrice = order.getPrice();
 
 			// when
 			ResultActions resultActions = mvc.perform(get(

@@ -98,11 +98,11 @@ public class Order {
 		orderItems.remove(orderItem);
 	}
 
-	public void addOrderPrice(int orderItemPrice) {
-		if (orderItemPrice < MIN_ORDER_PRICE) {
-			throw new RuntimeException("가격이 0이하일 수 없습니다.");
+	public void calculateOrderPrice() {
+		for (OrderItem orderItem : orderItems) {
+			price += orderItem.calculateOrderItemPrice();
 		}
-		price += orderItemPrice;
+		price += shop.getDeliveryTip();
 	}
 
 	private void validateAddress(String address) {
