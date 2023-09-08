@@ -36,7 +36,7 @@ public class OrderSetUp {
 			.forEach(selectedOption -> selectedOption.attachTo(orderItem));
 		orderItem.attachTo(order);
 
-		order.addOrderPrice(orderItem.calculateOrderItemPrice());
+		order.calculateOrderPrice();
 		orderRepository.save(order);
 
 		return order;

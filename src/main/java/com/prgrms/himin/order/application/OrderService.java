@@ -78,13 +78,14 @@ public class OrderService {
 			request.shopId()
 		);
 		attachOrderItems(order, orderItems);
+		order.calculateOrderPrice();
 
 		OrderHistory orderHistory = OrderHistory.createOrderHistory(order);
 
-		orderRepository.save(order);
+		Order savedOrder = orderRepository.save(order);
 		orderHistoryRepository.save(orderHistory);
 
-		return OrderResponse.from(order);
+		return OrderResponse.from(savedOrder);
 	}
 
 	public OrderResponse getOrder(Long orderId) {
@@ -102,7 +103,6 @@ public class OrderService {
 	) {
 		for (OrderItem orderItem : orderItems) {
 			orderItem.attachTo(order);
-			order.addOrderPrice(orderItem.calculateOrderItemPrice());
 		}
 	}
 
@@ -185,7 +185,7 @@ public class OrderService {
 				menuOptionGroupId,
 				menuOption
 			);
-			
+
 			menuOptions.add(menuOption);
 		}
 
