@@ -10,10 +10,12 @@ import com.prgrms.himin.global.error.exception.ErrorCode;
 import com.prgrms.himin.shop.domain.Category;
 import com.prgrms.himin.shop.domain.Shop;
 import com.prgrms.himin.shop.domain.ShopRepository;
+import com.prgrms.himin.shop.domain.ShopSort;
 import com.prgrms.himin.shop.domain.ShopStatus;
 import com.prgrms.himin.shop.dto.request.ShopCreateRequest;
 import com.prgrms.himin.shop.dto.request.ShopUpdateRequest;
 import com.prgrms.himin.shop.dto.response.ShopResponse;
+import com.prgrms.himin.shop.dto.response.ShopsReponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -41,19 +43,66 @@ public class ShopService {
 		return ShopResponse.from(shop);
 	}
 
-	public List<ShopResponse> getShops(
+	public ShopsReponse getShops(
 		String name,
 		Category category,
 		String address,
-		Integer deliveryTip
+		Integer deliveryTip,
+		int size,
+		Long cursor,
+		ShopSort sort
 	) {
 		List<Shop> shops = shopRepository.searchShops(
 			name,
 			category,
 			address,
-			deliveryTip
+			deliveryTip,
+			size,
+			cursor,
+			sort
 		);
 
+		return new ShopsReponse(
+			getShopResponses(shops),
+			size,
+			getNextCursor(shops, size),
+			sort,
+			isLast(shops, size)
+		);
+	}
+
+	private Long getNextCursor(List<Shop> shops, int size) {
+		if (shops.isEmpty()) {
+			Shop lastShop = shopRepository.findFirstByOrderByShopIdDesc();
+			if (lastShop == null) {
+				return null;
+			}
+
+			return lastShop.getShopId();
+		}
+
+		int lastIndex = getLastIndex(shops, size);
+
+		return shops.get(lastIndex).getShopId();
+	}
+
+	private static int getLastIndex(List<Shop> shops, int size) {
+		if (shops.size() <= size) {
+			return shops.size() - 1;
+		}
+
+		return shops.size() - 2;
+	}
+
+	private boolean isLast(List<Shop> shops, int size) {
+		if (shops.size() <= size) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private static List<ShopResponse> getShopResponses(List<Shop> shops) {
 		return shops.stream()
 			.map(ShopResponse::from)
 			.toList();
