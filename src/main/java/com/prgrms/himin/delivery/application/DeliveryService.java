@@ -1,5 +1,6 @@
 package com.prgrms.himin.delivery.application;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +15,7 @@ import com.prgrms.himin.delivery.dto.response.DeliveryResponse;
 import com.prgrms.himin.global.error.exception.BusinessException;
 import com.prgrms.himin.global.error.exception.EntityNotFoundException;
 import com.prgrms.himin.global.error.exception.ErrorCode;
+import com.prgrms.himin.order.event.DeliveryFinishedEvent;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,12 +30,14 @@ public class DeliveryService {
 
 	private final RiderRepository riderRepository;
 
+	private final ApplicationEventPublisher publisher;
+
 	@Transactional
 	public DeliveryResponse createDelivery(Long orderId) {
 		Delivery delivery = new Delivery(orderId);
 		Delivery savedDelivery = deliveryRepository.save(delivery);
 
-		DeliveryHistory deliveryHistory = DeliveryHistory.createdDeliveryHistory(savedDelivery);
+		DeliveryHistory deliveryHistory = DeliveryHistory.createBeforeDeliveryHistory(savedDelivery);
 		DeliveryHistory savedDeliveryHistory = deliveryHistoryRepository.save(deliveryHistory);
 
 		DeliveryResponse response = DeliveryResponse.of(
@@ -61,7 +65,7 @@ public class DeliveryService {
 
 		delivery.attach(rider);
 
-		DeliveryHistory deliveryHistory = DeliveryHistory.allocatedDeliveryHistory(delivery);
+		DeliveryHistory deliveryHistory = DeliveryHistory.createAllocatedDeliveryHistory(delivery);
 		DeliveryHistory savedDeliveryHistory = deliveryHistoryRepository.save(deliveryHistory);
 
 		DeliveryHistoryResponse response = DeliveryHistoryResponse.of(
@@ -92,7 +96,7 @@ public class DeliveryService {
 				() -> new EntityNotFoundException(ErrorCode.DELIVERY_NOT_FOUND)
 			);
 
-		DeliveryHistory deliveryHistory = DeliveryHistory.startedDeliveryHistory(delivery);
+		DeliveryHistory deliveryHistory = DeliveryHistory.createStartDeliveryHistory(delivery);
 		DeliveryHistory savedDeliveryHistory = deliveryHistoryRepository.save(deliveryHistory);
 
 		DeliveryHistoryResponse response = DeliveryHistoryResponse.of(
@@ -123,13 +127,15 @@ public class DeliveryService {
 				() -> new EntityNotFoundException(ErrorCode.DELIVERY_NOT_FOUND)
 			);
 
-		DeliveryHistory deliveryHistory = DeliveryHistory.arrivedDeliveryHistory(delivery);
+		DeliveryHistory deliveryHistory = DeliveryHistory.createArrivedDeliveryHistory(delivery);
 		DeliveryHistory savedDeliveryHistory = deliveryHistoryRepository.save(deliveryHistory);
 
 		DeliveryHistoryResponse response = DeliveryHistoryResponse.of(
 			rider,
 			savedDeliveryHistory
 		);
+
+		publisher.publishEvent(new DeliveryFinishedEvent(delivery.getOrderId()));
 
 		return response;
 	}

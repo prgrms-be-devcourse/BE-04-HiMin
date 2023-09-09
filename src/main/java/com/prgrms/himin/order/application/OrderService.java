@@ -88,6 +88,17 @@ public class OrderService {
 		return OrderResponse.from(savedOrder);
 	}
 
+	@Transactional
+	public void finishOrder(Long orderId) {
+		Order order = orderRepository.findById(orderId)
+			.orElseThrow(
+				() -> new EntityNotFoundException(ErrorCode.ORDER_NOT_FOUND)
+			);
+
+		OrderHistory orderHistory = OrderHistory.createDeliveredOrderHistory(order);
+		orderHistoryRepository.save(orderHistory);
+	}
+
 	public OrderResponse getOrder(Long orderId) {
 		Order order = orderRepository.findById(orderId)
 			.orElseThrow(
