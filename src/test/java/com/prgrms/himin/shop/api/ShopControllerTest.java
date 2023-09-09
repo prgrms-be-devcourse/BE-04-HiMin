@@ -27,6 +27,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prgrms.himin.global.error.exception.EntityNotFoundException;
 import com.prgrms.himin.global.error.exception.ErrorCode;
+import com.prgrms.himin.menu.domain.Menu;
+import com.prgrms.himin.setup.domain.MenuSetUp;
 import com.prgrms.himin.setup.domain.ShopSetUp;
 import com.prgrms.himin.setup.request.ShopCreateRequestBuilder;
 import com.prgrms.himin.setup.request.ShopUpdateRequestBuilder;
@@ -43,6 +45,8 @@ import com.prgrms.himin.shop.dto.request.ShopUpdateRequest;
 @AutoConfigureMockMvc
 class ShopControllerTest {
 
+	final String BASE_URL = "/api/shops";
+
 	@Autowired
 	ShopRepository shopRepository;
 
@@ -55,11 +59,21 @@ class ShopControllerTest {
 	@Autowired
 	ShopSetUp shopSetUp;
 
-	final String BASE_URL = "/api/shops";
+	@Autowired
+	MenuSetUp menuSetUp;
 
 	@Nested
 	@DisplayName("가게 생성을 할 수 있다.")
 	class CreateShop {
+
+		private static Stream<Arguments> provideRequestForErrorValue() {
+			return Stream.of(
+				Arguments.of("가장 긴 가게 이름을 가지고 있는 맥도날드", "가게 이름은 최대 20글자 입니다."),
+				Arguments.of(null, "이름이 비어있으면 안됩니다."),
+				Arguments.of("", "이름이 비어있으면 안됩니다."),
+				Arguments.of("  ", "이름이 비어있으면 안됩니다.")
+			);
+		}
 
 		@DisplayName("성공한다.")
 		@Test
@@ -119,15 +133,6 @@ class ShopControllerTest {
 				.andExpect(jsonPath("errors[0].reason").value(expected))
 				.andExpect(jsonPath("code").value(ErrorCode.INVALID_REQUEST.getCode()))
 				.andExpect(jsonPath("message").value(ErrorCode.INVALID_REQUEST.getMessage()));
-		}
-
-		private static Stream<Arguments> provideRequestForErrorValue() {
-			return Stream.of(
-				Arguments.of("가장 긴 가게 이름을 가지고 있는 맥도날드", "가게 이름은 최대 20글자 입니다."),
-				Arguments.of(null, "이름이 비어있으면 안됩니다."),
-				Arguments.of("", "이름이 비어있으면 안됩니다."),
-				Arguments.of("  ", "이름이 비어있으면 안됩니다.")
-			);
 		}
 	}
 
@@ -269,6 +274,43 @@ class ShopControllerTest {
 				.andExpect(jsonPath("isLast").value(true));
 		}
 
+		@DisplayName("메뉴이름을 포함한 가게를 검색한다.")
+		@Test
+		void search_by_menuName_success_test() throws Exception {
+			// given
+			List<Shop> shops = shopSetUp.saveMany();
+			Shop targetShop = shops.get(1);
+
+			List<Menu> menus = menuSetUp.saveMany(targetShop);
+			String menuName = menus.get(0).getName();
+			String menuNameForOption = menuName.substring(menuName.length() / 2);
+
+			// when
+			ResultActions resultAction = mvc.perform(get(BASE_URL)
+					.queryParam("menuName", menuNameForOption)
+				)
+				.andDo(print());
+
+			// then
+			resultAction.andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("shopsReponses[0].shopId").value(shops.get(1).getShopId()))
+				.andExpect(jsonPath("shopsReponses[0].name").value(shops.get(1).getName()))
+				.andExpect(jsonPath("shopsReponses[0].category").value(shops.get(1).getCategory().toString()))
+				.andExpect(jsonPath("shopsReponses[0].address").value(shops.get(1).getAddress()))
+				.andExpect(jsonPath("shopsReponses[0].phone").value(shops.get(1).getPhone()))
+				.andExpect(jsonPath("shopsReponses[0].content").value(shops.get(1).getContent()))
+				.andExpect(jsonPath("shopsReponses[0].deliveryTip").value(shops.get(1).getDeliveryTip()))
+				.andExpect(jsonPath("shopsReponses[0].dibsCount").value(shops.get(1).getDibsCount()))
+				.andExpect(jsonPath("shopsReponses[0].status").value(shops.get(1).getStatus().toString()))
+				.andExpect(jsonPath("shopsReponses[0].openingTime").value(shops.get(1).getOpeningTime().toString()))
+				.andExpect(jsonPath("shopsReponses[0].closingTime").value(shops.get(1).getClosingTime().toString()))
+				.andExpect(jsonPath("size").value(10))
+				.andExpect(jsonPath("nextCursor").value(shops.get(1).getShopId()))
+				.andExpect(jsonPath("sort").doesNotExist())
+				.andExpect(jsonPath("isLast").value(true));
+		}
+
 		@DisplayName("정렬 조건을 통해 가게를 조회한다.")
 		@Test
 		void order_by_sort_success_test() throws Exception {
@@ -352,6 +394,15 @@ class ShopControllerTest {
 	class UpdateShop {
 
 		final String PUT_URL = BASE_URL + "/{shopId}";
+
+		private static Stream<Arguments> provideRequestForErrorValue() {
+			return Stream.of(
+				Arguments.of("가장 긴 가게 이름을 가지고 있는 맥도날드", "가게 이름은 최대 20글자 입니다."),
+				Arguments.of(null, "이름이 비어있으면 안됩니다."),
+				Arguments.of("", "이름이 비어있으면 안됩니다."),
+				Arguments.of("  ", "이름이 비어있으면 안됩니다.")
+			);
+		}
 
 		@DisplayName("성공한다.")
 		@Test
@@ -444,15 +495,6 @@ class ShopControllerTest {
 				.andExpect(jsonPath("$.errors[0].reason").value(expected))
 				.andExpect(jsonPath("code").value(ErrorCode.INVALID_REQUEST.getCode()))
 				.andExpect(jsonPath("message").value(ErrorCode.INVALID_REQUEST.getMessage()));
-		}
-
-		private static Stream<Arguments> provideRequestForErrorValue() {
-			return Stream.of(
-				Arguments.of("가장 긴 가게 이름을 가지고 있는 맥도날드", "가게 이름은 최대 20글자 입니다."),
-				Arguments.of(null, "이름이 비어있으면 안됩니다."),
-				Arguments.of("", "이름이 비어있으면 안됩니다."),
-				Arguments.of("  ", "이름이 비어있으면 안됩니다.")
-			);
 		}
 	}
 
