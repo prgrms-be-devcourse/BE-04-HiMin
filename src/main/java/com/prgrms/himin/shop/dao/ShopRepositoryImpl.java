@@ -1,5 +1,6 @@
 package com.prgrms.himin.shop.dao;
 
+import static com.prgrms.himin.menu.domain.QMenu.*;
 import static com.prgrms.himin.shop.domain.QShop.*;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import com.prgrms.himin.shop.domain.Category;
 import com.prgrms.himin.shop.domain.Shop;
 import com.prgrms.himin.shop.domain.ShopRepositoryCustom;
 import com.prgrms.himin.shop.domain.ShopSort;
+import com.prgrms.himin.shop.dto.request.ShopSearchCondition;
 import com.querydsl.core.types.NullExpression;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -27,10 +29,7 @@ public class ShopRepositoryImpl implements ShopRepositoryCustom {
 
 	@Override
 	public List<Shop> searchShops(
-		String name,
-		Category category,
-		String address,
-		Integer deliveryTip,
+		ShopSearchCondition shopSearchCondition,
 		int size,
 		Long cursor,
 		ShopSort sort
@@ -38,12 +37,14 @@ public class ShopRepositoryImpl implements ShopRepositoryCustom {
 		return jpaQueryFactory
 			.selectFrom(shop)
 			.where(
-				containsName(name),
-				equalCategory(category),
-				containsAddress(address),
-				lowOrEqualDeliveryTip(deliveryTip),
-				greaterThanCursor(cursor)
+				containsName(shopSearchCondition.name()),
+				equalCategory(shopSearchCondition.category()),
+				containsAddress(shopSearchCondition.address()),
+				lowOrEqualDeliveryTip(shopSearchCondition.deliveryTip()),
+				greaterThanCursor(cursor),
+				containsMenuName(shopSearchCondition.menuName())
 			)
+			.leftJoin(shop.menus, menu).fetchJoin()
 			.orderBy(orderBySort(sort))
 			.limit(size + 1)
 			.fetch();
@@ -71,6 +72,10 @@ public class ShopRepositoryImpl implements ShopRepositoryCustom {
 
 	private Predicate greaterThanCursor(Long cursor) {
 		return cursor != null ? shop.shopId.gt(cursor) : null;
+	}
+
+	private BooleanExpression containsMenuName(String menuName) {
+		return menuName != null ? menu.name.contains(menuName) : null;
 	}
 }
 
