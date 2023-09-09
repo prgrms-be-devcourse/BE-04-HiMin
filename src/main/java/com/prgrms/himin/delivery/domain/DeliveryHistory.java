@@ -38,31 +38,32 @@ public class DeliveryHistory extends BaseEntity {
 
 	private DeliveryHistory(
 		Delivery delivery,
-		DeliveryStatus deliveryStatus) {
+		DeliveryStatus deliveryStatus
+	) {
 		this.delivery = delivery;
 		this.deliveryStatus = deliveryStatus;
 	}
 
-	public static DeliveryHistory createdDeliveryHistory(Delivery delivery) {
+	public static DeliveryHistory createBeforeDeliveryHistory(Delivery delivery) {
 		return new DeliveryHistory(
 			delivery,
 			DeliveryStatus.BEFORE_DELIVERY);
 	}
 
-	public static DeliveryHistory startedDeliveryHistory(Delivery delivery) {
+	public static DeliveryHistory createStartDeliveryHistory(Delivery delivery) {
 		return new DeliveryHistory(
 			delivery,
 			DeliveryStatus.DELIVERING);
 	}
 
-	public static DeliveryHistory allocatedDeliveryHistory(Delivery delivery) {
+	public static DeliveryHistory createAllocatedDeliveryHistory(Delivery delivery) {
 		return new DeliveryHistory(
 			delivery,
 			DeliveryStatus.ALLOCATED
 		);
 	}
 
-	public static DeliveryHistory arrivedDeliveryHistory(Delivery delivery) {
+	public static DeliveryHistory createArrivedDeliveryHistory(Delivery delivery) {
 		return new DeliveryHistory(
 			delivery,
 			DeliveryStatus.ARRIVED);

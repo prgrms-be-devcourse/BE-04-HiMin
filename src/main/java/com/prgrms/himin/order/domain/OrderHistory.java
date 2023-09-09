@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.prgrms.himin.global.common.BaseEntity;
 import com.prgrms.himin.global.error.exception.BusinessException;
 import com.prgrms.himin.global.error.exception.ErrorCode;
 
@@ -23,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @Table(name = "order_histories")
-public class OrderHistory {
+public class OrderHistory extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,6 +52,13 @@ public class OrderHistory {
 		return new OrderHistory(
 			order,
 			OrderStatus.ORDERED
+		);
+	}
+
+	public static OrderHistory createDeliveredOrderHistory(Order order) {
+		return new OrderHistory(
+			order,
+			OrderStatus.DELIVERED
 		);
 	}
 
