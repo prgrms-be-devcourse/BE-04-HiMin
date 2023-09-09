@@ -11,6 +11,7 @@ import com.prgrms.himin.delivery.domain.Rider;
 import com.prgrms.himin.delivery.domain.RiderRepository;
 import com.prgrms.himin.delivery.dto.response.DeliveryHistoryResponse;
 import com.prgrms.himin.delivery.dto.response.DeliveryResponse;
+import com.prgrms.himin.global.error.exception.BusinessException;
 import com.prgrms.himin.global.error.exception.EntityNotFoundException;
 import com.prgrms.himin.global.error.exception.ErrorCode;
 
@@ -69,5 +70,45 @@ public class DeliveryService {
 		);
 
 		return response;
+	}
+
+	public DeliveryHistoryResponse startDelivery(
+		Long deliveryId,
+		Long riderId
+	) {
+		Delivery delivery = deliveryRepository.findById(deliveryId)
+			.orElseThrow(
+				() -> new EntityNotFoundException(ErrorCode.DELIVERY_NOT_FOUND)
+			);
+
+		validateRider(
+			riderId,
+			delivery
+		);
+
+		Rider rider = riderRepository.findById(riderId)
+			.orElseThrow(
+				() -> new EntityNotFoundException(ErrorCode.DELIVERY_NOT_FOUND)
+			);
+
+		DeliveryHistory deliveryHistory = DeliveryHistory.startedDeliveryHistory(delivery);
+		DeliveryHistory savedDeliveryHistory = deliveryHistoryRepository.save(deliveryHistory);
+
+		DeliveryHistoryResponse response = DeliveryHistoryResponse.of(
+			rider,
+			savedDeliveryHistory
+		);
+
+		return response;
+	}
+
+	private void validateRider(
+		Long riderId,
+		Delivery delivery
+	) {
+		Rider rider = delivery.getRider();
+		if (!riderId.equals(rider.getRiderId())) {
+			throw new BusinessException(ErrorCode.DELIVERY_RIDER_BAD_REQUEST);
+		}
 	}
 }

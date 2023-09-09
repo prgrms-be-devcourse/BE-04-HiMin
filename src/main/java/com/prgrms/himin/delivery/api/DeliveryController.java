@@ -38,4 +38,17 @@ public class DeliveryController {
 
 		return ResponseEntity.ok(response);
 	}
+
+	@PostMapping("/{deliveryId}/pick-up/{riderId}")
+	public ResponseEntity<DeliveryHistoryResponse> startDelivery(
+		@PathVariable Long deliveryId,
+		@PathVariable Long riderId
+	) {
+		DeliveryHistoryResponse response = deliveryService.startDelivery(
+			deliveryId,
+			riderId
+		);
+
+		return ResponseEntity.ok(response);
+	}
 }
