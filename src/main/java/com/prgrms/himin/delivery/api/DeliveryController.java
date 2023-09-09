@@ -51,4 +51,17 @@ public class DeliveryController {
 
 		return ResponseEntity.ok(response);
 	}
+
+	@PostMapping("/{deliveryId}/arrival/{riderId}")
+	public ResponseEntity<DeliveryHistoryResponse> finishDelivery(
+		@PathVariable Long deliveryId,
+		@PathVariable Long riderId
+	) {
+		DeliveryHistoryResponse response = deliveryService.finishDelivery(
+			deliveryId,
+			riderId
+		);
+
+		return ResponseEntity.ok(response);
+	}
 }
