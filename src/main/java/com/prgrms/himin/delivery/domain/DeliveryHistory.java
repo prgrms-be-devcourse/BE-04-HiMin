@@ -36,19 +36,35 @@ public class DeliveryHistory extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private DeliveryStatus deliveryStatus;
 
-	private DeliveryHistory(DeliveryStatus deliveryStatus) {
+	private DeliveryHistory(
+		Delivery delivery,
+		DeliveryStatus deliveryStatus) {
+		this.delivery = delivery;
 		this.deliveryStatus = deliveryStatus;
 	}
 
-	public static DeliveryHistory createdDeliveryHistory() {
-		return new DeliveryHistory(DeliveryStatus.BEFORE_DELIVERY);
+	public static DeliveryHistory createdDeliveryHistory(Delivery delivery) {
+		return new DeliveryHistory(
+			delivery,
+			DeliveryStatus.BEFORE_DELIVERY);
 	}
 
-	public static DeliveryHistory startedDeliveryHistory() {
-		return new DeliveryHistory(DeliveryStatus.DELIVERING);
+	public static DeliveryHistory startedDeliveryHistory(Delivery delivery) {
+		return new DeliveryHistory(
+			delivery,
+			DeliveryStatus.DELIVERING);
 	}
 
-	public static DeliveryHistory arrivedDeliveryHistory() {
-		return new DeliveryHistory(DeliveryStatus.ARRIVED);
+	public static DeliveryHistory allocatedDeliveryHistory(Delivery delivery) {
+		return new DeliveryHistory(
+			delivery,
+			DeliveryStatus.ALLOCATED
+		);
+	}
+
+	public static DeliveryHistory arrivedDeliveryHistory(Delivery delivery) {
+		return new DeliveryHistory(
+			delivery,
+			DeliveryStatus.ARRIVED);
 	}
 }
