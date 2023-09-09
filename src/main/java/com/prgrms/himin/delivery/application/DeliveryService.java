@@ -44,7 +44,7 @@ public class DeliveryService {
 	}
 
 	@Transactional
-	public DeliveryHistoryResponse allocateDelivery(
+	public DeliveryHistoryResponse allocateRider(
 		Long deliveryId,
 		Long riderId
 	) {

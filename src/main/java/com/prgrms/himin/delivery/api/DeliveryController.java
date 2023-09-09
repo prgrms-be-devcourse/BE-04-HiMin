@@ -31,7 +31,7 @@ public class DeliveryController {
 		@PathVariable Long deliveryId,
 		@PathVariable Long riderId
 	) {
-		DeliveryHistoryResponse response = deliveryService.allocateDelivery(
+		DeliveryHistoryResponse response = deliveryService.allocateRider(
 			deliveryId,
 			riderId
 		);
