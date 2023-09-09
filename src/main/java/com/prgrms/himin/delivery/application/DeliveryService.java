@@ -28,7 +28,7 @@ public class DeliveryService {
 		DeliveryHistory deliveryHistory = DeliveryHistory.startedDeliveryHistory();
 		DeliveryHistory savedDeliveryHistory = deliveryHistoryRepository.save(deliveryHistory);
 
-		DeliveryResponse response = DeliveryResponse.from(
+		DeliveryResponse response = DeliveryResponse.of(
 			savedDelivery,
 			savedDeliveryHistory.getDeliveryStatus()
 		);

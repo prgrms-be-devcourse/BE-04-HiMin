@@ -8,7 +8,7 @@ public record DeliveryResponse(
 	DeliveryStatus deliveryStatus
 ) {
 
-	public static DeliveryResponse from(
+	public static DeliveryResponse of(
 		Delivery delivery,
 		DeliveryStatus deliveryStatus
 	) {
