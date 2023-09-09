@@ -72,6 +72,7 @@ public class DeliveryService {
 		return response;
 	}
 
+	@Transactional
 	public DeliveryHistoryResponse startDelivery(
 		Long deliveryId,
 		Long riderId
@@ -92,6 +93,37 @@ public class DeliveryService {
 			);
 
 		DeliveryHistory deliveryHistory = DeliveryHistory.startedDeliveryHistory(delivery);
+		DeliveryHistory savedDeliveryHistory = deliveryHistoryRepository.save(deliveryHistory);
+
+		DeliveryHistoryResponse response = DeliveryHistoryResponse.of(
+			rider,
+			savedDeliveryHistory
+		);
+
+		return response;
+	}
+
+	@Transactional
+	public DeliveryHistoryResponse finishDelivery(
+		Long deliveryId,
+		Long riderId
+	) {
+		Delivery delivery = deliveryRepository.findById(deliveryId)
+			.orElseThrow(
+				() -> new EntityNotFoundException(ErrorCode.DELIVERY_NOT_FOUND)
+			);
+
+		validateRider(
+			riderId,
+			delivery
+		);
+
+		Rider rider = riderRepository.findById(riderId)
+			.orElseThrow(
+				() -> new EntityNotFoundException(ErrorCode.DELIVERY_NOT_FOUND)
+			);
+
+		DeliveryHistory deliveryHistory = DeliveryHistory.arrivedDeliveryHistory(delivery);
 		DeliveryHistory savedDeliveryHistory = deliveryHistoryRepository.save(deliveryHistory);
 
 		DeliveryHistoryResponse response = DeliveryHistoryResponse.of(
