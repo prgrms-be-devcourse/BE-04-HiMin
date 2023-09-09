@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.prgrms.himin.delivery.application.DeliveryService;
+import com.prgrms.himin.delivery.dto.response.DeliveryHistoryResponse;
 import com.prgrms.himin.delivery.dto.response.DeliveryResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,19 @@ public class DeliveryController {
 	@PostMapping("/{orderId}")
 	public ResponseEntity<DeliveryResponse> createDelivery(@PathVariable Long orderId) {
 		DeliveryResponse response = deliveryService.createDelivery(orderId);
+
+		return ResponseEntity.ok(response);
+	}
+
+	@PostMapping("/{deliveryId}/allocation/{riderId}")
+	public ResponseEntity<DeliveryHistoryResponse> allocateRider(
+		@PathVariable Long deliveryId,
+		@PathVariable Long riderId
+	) {
+		DeliveryHistoryResponse response = deliveryService.allocateRider(
+			deliveryId,
+			riderId
+		);
 
 		return ResponseEntity.ok(response);
 	}

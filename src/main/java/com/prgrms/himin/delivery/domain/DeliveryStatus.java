@@ -4,6 +4,8 @@ public enum DeliveryStatus {
 
 	BEFORE_DELIVERY,
 
+	ALLOCATED,
+
 	DELIVERING,
 
 	ARRIVED

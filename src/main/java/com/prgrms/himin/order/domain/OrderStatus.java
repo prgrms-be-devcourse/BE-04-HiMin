@@ -6,9 +6,7 @@ public enum OrderStatus {
 
 	COOKING,
 
-	BEFORE_DELIVERY,
-
-	DELIVERING,
+	COOK_COMPLETE,
 
 	DELIVERED
 }
