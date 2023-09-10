@@ -55,6 +55,14 @@ public class OrderService {
 
 	private final MenuValidator menuValidator;
 
+	private static int getLastIndex(List<Order> orders, int size) {
+		if (orders.size() <= size) {
+			return orders.size() - 1;
+		}
+
+		return orders.size() - 2;
+	}
+
 	@Transactional
 	public OrderResponse createOrder(OrderCreateRequest request) {
 		Member member = memberRepository.findById(request.memberId())
@@ -225,9 +233,31 @@ public class OrderService {
 		return new OrderListResponse(
 			getOrderResponses(orders),
 			size,
-			cursor,
+			getNextCursor(
+				memberId,
+				orders,
+				size
+			),
 			isLast(orders, size)
 		);
+	}
+
+	private Long getNextCursor(
+		Long memberId,
+		List<Order> orders,
+		int size
+	) {
+		if (orders.isEmpty()) {
+			Order lastOrder = orderRepository.findFirstByMember_IdOrderByOrderIdDesc(memberId);
+			if (lastOrder == null) {
+				return null;
+			}
+
+			return lastOrder.getOrderId();
+		}
+
+		int lastIndex = getLastIndex(orders, size);
+		return orders.get(lastIndex).getOrderId();
 	}
 
 	private List<OrderResponse> getOrderResponses(List<Order> orders) {
