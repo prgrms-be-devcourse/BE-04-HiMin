@@ -5,8 +5,8 @@ import static java.util.stream.Collectors.*;
 import static org.apache.logging.log4j.util.Strings.*;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
@@ -78,11 +78,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 		String token = request.getHeader(headerKey);
 		if (isNotEmpty(token)) {
 			log.debug("JWT 인증 API 감지: {}", token);
-			try {
-				URLDecoder.decode(token, "UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				log.error(e.getMessage(), e);
-			}
+			URLDecoder.decode(token, StandardCharsets.UTF_8);
 		}
 
 		return null;
