@@ -2,6 +2,7 @@ package com.prgrms.himin.member.application;
 
 import java.util.List;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +17,6 @@ import com.prgrms.himin.member.domain.MemberRepository;
 import com.prgrms.himin.member.dto.request.AddressCreateRequest;
 import com.prgrms.himin.member.dto.request.AddressUpdateRequest;
 import com.prgrms.himin.member.dto.request.MemberCreateRequest;
-import com.prgrms.himin.member.dto.request.MemberLoginRequest;
 import com.prgrms.himin.member.dto.request.MemberUpdateRequest;
 import com.prgrms.himin.member.dto.response.AddressResponse;
 import com.prgrms.himin.member.dto.response.MemberCreateResponse;
@@ -33,9 +33,12 @@ public class MemberService {
 
 	private final AddressRepository addressRepository;
 
+	private final PasswordEncoder passwordEncoder;
+
 	@Transactional
 	public MemberCreateResponse createMember(MemberCreateRequest request) {
 		Member member = request.toEntity();
+		member.encodePassword(passwordEncoder);
 		Address address = new Address(
 			request.addressAlias(),
 			request.address()
@@ -46,13 +49,11 @@ public class MemberService {
 		return MemberCreateResponse.from(savedMember);
 	}
 
-	public void login(MemberLoginRequest request) {
-		if (!memberRepository.existsMemberByLoginIdAndPassword(
-			request.loginId(),
-			request.password()
-		)) {
-			throw new BusinessException(ErrorCode.MEMBER_LOGIN_FAIL);
-		}
+	public Member login(String loginId, String password) {
+		Member member = memberRepository.findByLoginId(loginId)
+			.orElseThrow(() -> new InvalidValueException(ErrorCode.MEMBER_LOGIN_FAIL));
+		member.checkPassword(passwordEncoder, password);
+		return member;
 	}
 
 	public MemberResponse getMember(Long memberId) {
