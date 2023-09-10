@@ -248,7 +248,7 @@ public class OrderService {
 		int size
 	) {
 		if (orders.isEmpty()) {
-			Order lastOrder = orderRepository.findFirstByMember_IdOrderByOrderIdDesc(memberId);
+			Order lastOrder = orderRepository.findFirstByMemberIdOrderByOrderIdDesc(memberId);
 			if (lastOrder == null) {
 				return null;
 			}

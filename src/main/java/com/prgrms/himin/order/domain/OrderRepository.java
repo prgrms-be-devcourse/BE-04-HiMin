@@ -4,5 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface OrderRepository extends JpaRepository<Order, Long>, OrderRepositoryCustom {
 
-	Order findFirstByMember_IdOrderByOrderIdDesc(Long member_id);
+	Order findFirstByMemberIdOrderByOrderIdDesc(Long member_id);
 }
