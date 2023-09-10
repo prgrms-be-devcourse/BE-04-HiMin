@@ -142,7 +142,7 @@ public class DeliveryService {
 		return response;
 	}
 
-	public List<DeliveryHistoryResponse> getDeliveryHistories(Long deliveryId) {
+	public DeliveryHistoryResponse.Multiple getDeliveryHistories(Long deliveryId) {
 		Delivery delivery = deliveryRepository.findById(deliveryId)
 			.orElseThrow(
 				() -> new EntityNotFoundException(ErrorCode.DELIVERY_NOT_FOUND)
@@ -153,11 +153,10 @@ public class DeliveryService {
 		List<DeliveryHistory> deliveryHistories = deliveryHistoryRepository
 			.findDeliveryHistoriesByDeliveryId(deliveryId);
 
-		List<DeliveryHistoryResponse> responses = deliveryHistories.stream()
-			.map(deliveryHistory -> DeliveryHistoryResponse.of(
-				rider,
-				deliveryHistory
-			)).toList();
+		DeliveryHistoryResponse.Multiple responses = DeliveryHistoryResponse.Multiple.of(
+			rider,
+			deliveryHistories
+		);
 
 		return responses;
 	}
