@@ -1,6 +1,7 @@
 package com.prgrms.himin.delivery.api;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -63,5 +64,12 @@ public class DeliveryController {
 		);
 
 		return ResponseEntity.ok(response);
+	}
+
+	@GetMapping("/{deliveryId}")
+	public ResponseEntity<DeliveryHistoryResponse.Multiple> getDeliveryHistories(@PathVariable Long deliveryId) {
+		DeliveryHistoryResponse.Multiple responses = deliveryService.getDeliveryHistories(deliveryId);
+
+		return ResponseEntity.ok(responses);
 	}
 }
