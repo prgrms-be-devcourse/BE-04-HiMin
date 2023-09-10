@@ -1,5 +1,7 @@
 package com.prgrms.himin.delivery.application;
 
+import java.util.List;
+
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -138,6 +140,25 @@ public class DeliveryService {
 		publisher.publishEvent(new DeliveryFinishedEvent(delivery.getOrderId()));
 
 		return response;
+	}
+
+	public DeliveryHistoryResponse.Multiple getDeliveryHistories(Long deliveryId) {
+		Delivery delivery = deliveryRepository.findById(deliveryId)
+			.orElseThrow(
+				() -> new EntityNotFoundException(ErrorCode.DELIVERY_NOT_FOUND)
+			);
+
+		Rider rider = delivery.getRider();
+
+		List<DeliveryHistory> deliveryHistories = deliveryHistoryRepository
+			.findDeliveryHistoriesByDeliveryId(deliveryId);
+
+		DeliveryHistoryResponse.Multiple responses = DeliveryHistoryResponse.Multiple.of(
+			rider,
+			deliveryHistories
+		);
+
+		return responses;
 	}
 
 	private void validateRider(
