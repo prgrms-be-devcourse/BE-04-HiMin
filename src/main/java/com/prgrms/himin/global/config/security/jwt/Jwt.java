@@ -59,9 +59,13 @@ public final class Jwt {
 	@Getter
 	@ToString
 	public static class Claims {
+
 		private String username;
+
 		private String[] roles;
+
 		private Date issuedAt;
+
 		private Date expiresAt;
 
 		private Claims(DecodedJWT decodedJWT) {

@@ -34,7 +34,11 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 	private final Jwt jwt;
 
 	@Override
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws
+	public void doFilter(
+		ServletRequest request,
+		ServletResponse response,
+		FilterChain chain
+	) throws
 		IOException,
 		ServletException {
 
@@ -78,7 +82,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 		String token = request.getHeader(headerKey);
 		if (isNotEmpty(token)) {
 			log.debug("JWT 인증 API 감지: {}", token);
-			URLDecoder.decode(token, StandardCharsets.UTF_8);
+			return URLDecoder.decode(token, StandardCharsets.UTF_8);
 		}
 
 		return null;
