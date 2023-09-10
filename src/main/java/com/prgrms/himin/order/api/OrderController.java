@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.prgrms.himin.order.application.OrderService;
 import com.prgrms.himin.order.dto.request.OrderCreateRequest;
 import com.prgrms.himin.order.dto.request.OrderSearchCondition;
-import com.prgrms.himin.order.dto.response.OrderListResponse;
 import com.prgrms.himin.order.dto.response.OrderResponse;
+import com.prgrms.himin.order.dto.response.OrderResponses;
 
 import lombok.RequiredArgsConstructor;
 
@@ -43,13 +43,13 @@ public class OrderController {
 	}
 
 	@GetMapping("/list")
-	private ResponseEntity<OrderListResponse> getOrders(
+	private ResponseEntity<OrderResponses> getOrders(
 		@RequestHeader("member-id") Long memberId,
 		@ModelAttribute OrderSearchCondition orderSearchCondition,
 		@RequestParam(required = false, defaultValue = "10") int size,
 		@RequestParam(required = false) Long cursor
 	) {
-		OrderListResponse responses = orderService.getOrders(
+		OrderResponses responses = orderService.getOrders(
 			memberId,
 			orderSearchCondition,
 			size,

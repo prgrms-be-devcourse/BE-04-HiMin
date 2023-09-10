@@ -27,8 +27,8 @@ import com.prgrms.himin.order.dto.request.OrderCreateRequest;
 import com.prgrms.himin.order.dto.request.OrderSearchCondition;
 import com.prgrms.himin.order.dto.request.SelectedMenuOptionRequest;
 import com.prgrms.himin.order.dto.request.SelectedMenuRequest;
-import com.prgrms.himin.order.dto.response.OrderListResponse;
 import com.prgrms.himin.order.dto.response.OrderResponse;
+import com.prgrms.himin.order.dto.response.OrderResponses;
 import com.prgrms.himin.shop.domain.Shop;
 import com.prgrms.himin.shop.domain.ShopRepository;
 
@@ -217,7 +217,7 @@ public class OrderService {
 		return orders.size() <= size;
 	}
 
-	public OrderListResponse getOrders(
+	public OrderResponses getOrders(
 		Long memberId,
 		OrderSearchCondition orderSearchCondition,
 		int size,
@@ -230,7 +230,7 @@ public class OrderService {
 			cursor
 		);
 
-		return new OrderListResponse(
+		return new OrderResponses(
 			getOrderResponses(orders),
 			size,
 			getNextCursor(

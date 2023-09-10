@@ -2,7 +2,7 @@ package com.prgrms.himin.order.dto.response;
 
 import java.util.List;
 
-public record OrderListResponse(
+public record OrderResponses(
 
 	List<OrderResponse> orderResponses,
 
