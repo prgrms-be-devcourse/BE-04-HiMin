@@ -24,8 +24,10 @@ import com.prgrms.himin.order.domain.OrderItem;
 import com.prgrms.himin.order.domain.OrderRepository;
 import com.prgrms.himin.order.domain.SelectedOption;
 import com.prgrms.himin.order.dto.request.OrderCreateRequest;
+import com.prgrms.himin.order.dto.request.OrderSearchCondition;
 import com.prgrms.himin.order.dto.request.SelectedMenuOptionRequest;
 import com.prgrms.himin.order.dto.request.SelectedMenuRequest;
+import com.prgrms.himin.order.dto.response.OrderListResponse;
 import com.prgrms.himin.order.dto.response.OrderResponse;
 import com.prgrms.himin.shop.domain.Shop;
 import com.prgrms.himin.shop.domain.ShopRepository;
@@ -201,5 +203,36 @@ public class OrderService {
 		}
 
 		return menuOptions;
+	}
+
+	private boolean isLast(List<Order> orders, int size) {
+		return orders.size() <= size;
+	}
+
+	public OrderListResponse getOrders(
+		Long memberId,
+		OrderSearchCondition orderSearchCondition,
+		int size,
+		Long cursor
+	) {
+		List<Order> orders = orderRepository.searchOrders(
+			memberId,
+			orderSearchCondition,
+			size,
+			cursor
+		);
+
+		return new OrderListResponse(
+			getOrderResponses(orders),
+			size,
+			cursor,
+			isLast(orders, size)
+		);
+	}
+
+	private List<OrderResponse> getOrderResponses(List<Order> orders) {
+		return orders.stream()
+			.map(OrderResponse::from)
+			.toList();
 	}
 }
