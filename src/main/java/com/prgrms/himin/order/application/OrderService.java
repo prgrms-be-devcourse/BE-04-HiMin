@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.prgrms.himin.global.error.exception.BusinessException;
 import com.prgrms.himin.global.error.exception.EntityNotFoundException;
 import com.prgrms.himin.global.error.exception.ErrorCode;
 import com.prgrms.himin.member.domain.Member;
@@ -108,6 +109,44 @@ public class OrderService {
 		return OrderResponse.from(order);
 	}
 
+	@Transactional
+	public void startCooking(
+		Long shopId,
+		Long orderId
+	) {
+		Order order = orderRepository.findById(orderId)
+			.orElseThrow(
+				() -> new EntityNotFoundException(ErrorCode.ORDER_NOT_FOUND)
+			);
+
+		validateShopId(
+			shopId,
+			order
+		);
+
+		OrderHistory orderHistory = OrderHistory.createStartedCookingOrderHistory(order);
+		orderHistoryRepository.save(orderHistory);
+	}
+
+	@Transactional
+	public void finishCooking(
+		Long shopId,
+		Long orderId
+	) {
+		Order order = orderRepository.findById(orderId)
+			.orElseThrow(
+				() -> new EntityNotFoundException(ErrorCode.ORDER_NOT_FOUND)
+			);
+
+		validateShopId(
+			shopId,
+			order
+		);
+
+		OrderHistory orderHistory = OrderHistory.createCookingCompletedOrderHistory(order);
+		orderHistoryRepository.save(orderHistory);
+	}
+
 	private void attachOrderItems(
 		Order order,
 		List<OrderItem> orderItems
@@ -201,5 +240,14 @@ public class OrderService {
 		}
 
 		return menuOptions;
+	}
+
+	private void validateShopId(
+		Long shopId,
+		Order order
+	) {
+		if (!order.getShop().getShopId().equals(shopId)) {
+			throw new BusinessException(ErrorCode.ORDER_SHOP_NOT_MATCH);
+		}
 	}
 }

@@ -2,11 +2,14 @@ package com.prgrms.himin.shop.application;
 
 import java.util.List;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.prgrms.himin.global.error.exception.EntityNotFoundException;
 import com.prgrms.himin.global.error.exception.ErrorCode;
+import com.prgrms.himin.order.event.CookingFinishedEvent;
+import com.prgrms.himin.order.event.StartedCookingEvent;
 import com.prgrms.himin.shop.domain.Category;
 import com.prgrms.himin.shop.domain.Shop;
 import com.prgrms.himin.shop.domain.ShopRepository;
@@ -26,6 +29,8 @@ import lombok.RequiredArgsConstructor;
 public class ShopService {
 
 	private final ShopRepository shopRepository;
+
+	private final ApplicationEventPublisher publisher;
 
 	private static int getLastIndex(List<Shop> shops, int size) {
 		if (shops.size() <= size) {
@@ -145,5 +150,27 @@ public class ShopService {
 		}
 
 		shopRepository.deleteById(shopId);
+	}
+
+	@Transactional
+	public void startCooking(
+		Long shopId,
+		Long orderId
+	) {
+		publisher.publishEvent(new StartedCookingEvent(
+			shopId,
+			orderId
+		));
+	}
+
+	@Transactional
+	public void finishCooking(
+		Long shopId,
+		Long orderId
+	) {
+		publisher.publishEvent(new CookingFinishedEvent(
+			shopId,
+			orderId
+		));
 	}
 }

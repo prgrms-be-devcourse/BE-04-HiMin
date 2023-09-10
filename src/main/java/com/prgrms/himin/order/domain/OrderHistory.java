@@ -62,6 +62,20 @@ public class OrderHistory extends BaseEntity {
 		);
 	}
 
+	public static OrderHistory createStartedCookingOrderHistory(Order order) {
+		return new OrderHistory(
+			order,
+			OrderStatus.COOKING
+		);
+	}
+
+	public static OrderHistory createCookingCompletedOrderHistory(Order order) {
+		return new OrderHistory(
+			order,
+			OrderStatus.COOK_COMPLETE
+		);
+	}
+
 	private void validateOrder(Order order) {
 		if (order == null) {
 			throw new BusinessException(ErrorCode.ORDER_BAD_REQUEST);

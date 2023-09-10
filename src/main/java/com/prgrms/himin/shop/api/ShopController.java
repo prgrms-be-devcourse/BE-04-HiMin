@@ -89,4 +89,30 @@ public class ShopController {
 
 		return ResponseEntity.ok().build();
 	}
+
+	@PostMapping("/{shopId}/cook-beginning/{orderId}")
+	public ResponseEntity<Void> startCooking(
+		@PathVariable Long shopId,
+		@PathVariable Long orderId
+	) {
+		shopService.startCooking(
+			shopId,
+			orderId
+		);
+
+		return ResponseEntity.ok().build();
+	}
+
+	@PostMapping("/{shopId}/cook-completion/{orderId}")
+	public ResponseEntity<Void> finishCooking(
+		@PathVariable Long shopId,
+		@PathVariable Long orderId
+	) {
+		shopService.finishCooking(
+			shopId,
+			orderId
+		);
+
+		return ResponseEntity.ok().build();
+	}
 }
