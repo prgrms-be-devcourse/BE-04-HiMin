@@ -1,19 +1,27 @@
 package com.prgrms.himin.member.domain;
 
+import static java.util.stream.Collectors.*;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.prgrms.himin.global.error.exception.ErrorCode;
 import com.prgrms.himin.global.error.exception.InvalidValueException;
@@ -32,7 +40,7 @@ public class Member {
 
 	private static final int ID_MAX_LENGTH = 20;
 
-	private static final int PASSWORD_MAX_LENGTH = 20;
+	private static final int PASSWORD_MAX_LENGTH = 60;
 
 	private static final int NAME_MAX_LENGTH = 10;
 
@@ -65,6 +73,9 @@ public class Member {
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Address> addresses = new ArrayList<>();
 
+	@ElementCollection(fetch = FetchType.EAGER)
+	private List<String> roles = new ArrayList<>();
+
 	@Builder
 	public Member(
 		String loginId,
@@ -84,6 +95,7 @@ public class Member {
 		this.phone = phone;
 		this.birthday = birthday;
 		this.grade = Grade.NEW;
+		this.roles.add("USER_GROUP");
 	}
 
 	public void updateGrade(Grade grade) {
@@ -99,6 +111,24 @@ public class Member {
 
 	public boolean removeAddress(Address address) {
 		return addresses.remove(address);
+	}
+
+	public List<GrantedAuthority> getAuthorities() {
+		return this.roles.stream()
+			.map(SimpleGrantedAuthority::new)
+			.collect(toList());
+	}
+
+	public void checkPassword(
+		PasswordEncoder passwordEncoder,
+		String credentials
+	) {
+		if (!passwordEncoder.matches(
+			credentials,
+			this.password
+		)) {
+			throw new InvalidValueException(ErrorCode.MEMBER_LOGIN_FAIL);
+		}
 	}
 
 	public void updateInfo(
