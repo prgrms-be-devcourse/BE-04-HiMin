@@ -25,9 +25,11 @@ import com.prgrms.himin.order.domain.OrderItem;
 import com.prgrms.himin.order.domain.OrderRepository;
 import com.prgrms.himin.order.domain.SelectedOption;
 import com.prgrms.himin.order.dto.request.OrderCreateRequest;
+import com.prgrms.himin.order.dto.request.OrderSearchCondition;
 import com.prgrms.himin.order.dto.request.SelectedMenuOptionRequest;
 import com.prgrms.himin.order.dto.request.SelectedMenuRequest;
 import com.prgrms.himin.order.dto.response.OrderResponse;
+import com.prgrms.himin.order.dto.response.OrderResponses;
 import com.prgrms.himin.shop.domain.Shop;
 import com.prgrms.himin.shop.domain.ShopRepository;
 
@@ -53,6 +55,14 @@ public class OrderService {
 	private final ShopRepository shopRepository;
 
 	private final MenuValidator menuValidator;
+
+	private static int getLastIndex(List<Order> orders, int size) {
+		if (orders.size() <= size) {
+			return orders.size() - 1;
+		}
+
+		return orders.size() - 2;
+	}
 
 	@Transactional
 	public OrderResponse createOrder(OrderCreateRequest request) {
@@ -242,12 +252,64 @@ public class OrderService {
 		return menuOptions;
 	}
 
-	private void validateShopId(
-		Long shopId,
-		Order order
+	private boolean isLast(List<Order> orders, int size) {
+		return orders.size() <= size;
+	}
+
+	public OrderResponses getOrders(
+		Long memberId,
+		OrderSearchCondition orderSearchCondition,
+		int size,
+		Long cursor
+	) {
+		List<Order> orders = orderRepository.searchOrders(
+			memberId,
+			orderSearchCondition,
+			size,
+			cursor
+		);
+
+		return new OrderResponses(
+			getOrderResponses(orders),
+			size,
+			getNextCursor(
+				memberId,
+				orders,
+				size
+			),
+			isLast(orders, size)
+		);
+	}
+
+	private Long getNextCursor(
+		Long memberId,
+		List<Order> orders,
+		int size
+	) {
+		if (orders.isEmpty()) {
+			Order lastOrder = orderRepository.findFirstByMemberIdOrderByOrderIdDesc(memberId);
+			if (lastOrder == null) {
+				return null;
+			}
+
+			return lastOrder.getOrderId();
+		}
+
+		int lastIndex = getLastIndex(orders, size);
+		return orders.get(lastIndex).getOrderId();
+	}
+
+	private List<OrderResponse> getOrderResponses(List<Order> orders) {
+		return orders.stream()
+			.map(OrderResponse::from)
+			.toList();
+	}
+  
+  private void validateShopId(
+    Long shopId,
+    Order order
 	) {
 		if (!order.getShop().getShopId().equals(shopId)) {
 			throw new BusinessException(ErrorCode.ORDER_SHOP_NOT_MATCH);
-		}
-	}
+  }
 }
