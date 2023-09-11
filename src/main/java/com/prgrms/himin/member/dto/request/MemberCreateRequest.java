@@ -41,7 +41,7 @@ public record MemberCreateRequest(
 	String address
 ) {
 
-	public Member toEntity() {
+	public Member toEntity(String password) {
 		return Member.builder()
 			.loginId(loginId)
 			.password(password)

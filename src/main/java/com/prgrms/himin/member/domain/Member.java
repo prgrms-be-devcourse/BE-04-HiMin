@@ -119,13 +119,15 @@ public class Member {
 			.collect(toList());
 	}
 
-	public void encodePassword(PasswordEncoder passwordEncoder) {
-		this.password = passwordEncoder.encode(this.password);
-	}
-
-	public void checkPassword(PasswordEncoder passwordEncoder, String credentials) {
-		if (!passwordEncoder.matches(credentials, password)) {
-			throw new IllegalArgumentException("Bad Credential");
+	public void checkPassword(
+		PasswordEncoder passwordEncoder,
+		String credentials
+	) {
+		if (!passwordEncoder.matches(
+			credentials,
+			this.password
+		)) {
+			throw new InvalidValueException(ErrorCode.MEMBER_LOGIN_FAIL);
 		}
 	}
 

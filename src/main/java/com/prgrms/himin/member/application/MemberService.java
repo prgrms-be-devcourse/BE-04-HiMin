@@ -37,8 +37,8 @@ public class MemberService {
 
 	@Transactional
 	public MemberCreateResponse createMember(MemberCreateRequest request) {
-		Member member = request.toEntity();
-		member.encodePassword(passwordEncoder);
+		String encodedPassword = passwordEncoder.encode(request.password());
+		Member member = request.toEntity(encodedPassword);
 		Address address = new Address(
 			request.addressAlias(),
 			request.address()
@@ -49,10 +49,17 @@ public class MemberService {
 		return MemberCreateResponse.from(savedMember);
 	}
 
-	public Member login(String loginId, String password) {
+	public Member login(
+		String loginId,
+		String password
+	) {
 		Member member = memberRepository.findByLoginId(loginId)
 			.orElseThrow(() -> new InvalidValueException(ErrorCode.MEMBER_LOGIN_FAIL));
-		member.checkPassword(passwordEncoder, password);
+		member.checkPassword(
+			passwordEncoder,
+			password
+		);
+
 		return member;
 	}
 
@@ -66,13 +73,17 @@ public class MemberService {
 			.map(AddressResponse::from)
 			.toList();
 
-		return MemberResponse.of(member, addresses);
+		return MemberResponse.of(
+			member,
+			addresses
+		);
 	}
 
 	@Transactional
 	public void updateMember(
 		Long memberId,
-		MemberUpdateRequest.Info request) {
+		MemberUpdateRequest.Info request
+	) {
 		Member member = memberRepository.findById(memberId)
 			.orElseThrow(
 				() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND)
