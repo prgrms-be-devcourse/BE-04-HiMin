@@ -30,17 +30,27 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		JwtAuthenticationToken jwtAuthentication = (JwtAuthenticationToken)authentication;
+		
 		return processUserAuthentication(
 			String.valueOf(jwtAuthentication.getPrincipal()),
 			jwtAuthentication.getCredentials()
 		);
 	}
 
-	private Authentication processUserAuthentication(String principal, String credentials) {
+	private Authentication processUserAuthentication(
+		String principal,
+		String credentials
+	) {
 		try {
-			Member member = memberService.login(principal, credentials);
+			Member member = memberService.login(
+				principal,
+				credentials
+			);
 			List<GrantedAuthority> authorities = member.getAuthorities();
-			String token = getToken(member.getLoginId(), authorities);
+			String token = getToken(
+				member.getLoginId(),
+				authorities
+			);
 			JwtAuthenticationToken authentication = new JwtAuthenticationToken(
 				new JwtAuthentication(
 					token,
@@ -59,10 +69,17 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 		}
 	}
 
-	private String getToken(String username, List<GrantedAuthority> authorities) {
+	private String getToken(
+		String username,
+		List<GrantedAuthority> authorities
+	) {
 		String[] roles = authorities.stream()
 			.map(GrantedAuthority::getAuthority)
 			.toArray(String[]::new);
-		return jwt.sign(Jwt.Claims.of(username, roles));
+
+		return jwt.sign(Jwt.Claims.of(
+			username,
+			roles
+		));
 	}
 }

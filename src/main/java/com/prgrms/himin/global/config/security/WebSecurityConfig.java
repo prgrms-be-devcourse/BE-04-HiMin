@@ -39,7 +39,10 @@ public class WebSecurityConfig {
 	}
 
 	@Bean
-	public JwtAuthenticationProvider jwtAuthenticationProvider(Jwt jwt, MemberService memberService) {
+	public JwtAuthenticationProvider jwtAuthenticationProvider(
+		Jwt jwt,
+		MemberService memberService
+	) {
 		return new JwtAuthenticationProvider(jwt, memberService);
 	}
 
