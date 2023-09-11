@@ -24,9 +24,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.prgrms.himin.global.error.exception.BusinessException;
 import com.prgrms.himin.global.error.exception.EntityNotFoundException;
 import com.prgrms.himin.global.error.exception.ErrorCode;
+import com.prgrms.himin.global.error.exception.InvalidValueException;
 import com.prgrms.himin.member.domain.Grade;
 import com.prgrms.himin.member.domain.Member;
 import com.prgrms.himin.member.domain.MemberRepository;
@@ -170,7 +170,7 @@ class MemberControllerTest {
 			// then
 			resultActions.andExpect(status().isBadRequest())
 				.andExpect(result -> assertTrue(
-					result.getResolvedException().getClass().isAssignableFrom(BusinessException.class)
+					result.getResolvedException().getClass().isAssignableFrom(InvalidValueException.class)
 				))
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("error").value(ErrorCode.MEMBER_LOGIN_FAIL.toString()))
