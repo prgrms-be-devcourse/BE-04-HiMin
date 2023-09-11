@@ -45,6 +45,7 @@ public enum ErrorCode {
 	ORDER_REQUIREMENT_BAD_REQUEST("ORDER_005", "잘못된 주문 요청사항 입니다."),
 	ORDER_ITEM_PRICE_BAD_REQUEST("ORDER_006", "잘못된 주문 아이템 가격 입니다."),
 	ORDER_ITEM_QUANTITY_BAD_REQUEST("ORDER_007", "잘못된 주문 아이템 수량 입니다."),
+	ORDER_SHOP_NOT_MATCH("ORDER_008", "해당 주문과 가게ID가 일치하지 않습니다."),
 
 	// Shop
 	SHOP_NOT_FOUND("SHOP_001", "가게를 찾을 수 없습니다."),
