@@ -6,13 +6,14 @@ import java.util.List;
 import com.prgrms.himin.order.domain.OrderStatus;
 import com.prgrms.himin.shop.domain.Category;
 
-public class OrderSearchCondition {
+public record OrderSearchCondition(
 
-	List<Category> categories;
+	List<Category> categories,
 
-	List<OrderStatus> orderStatuses;
+	List<OrderStatus> orderStatuses,
 
-	LocalDateTime startTime;
+	LocalDateTime startTime,
 
-	LocalDateTime EndTime;
+	LocalDateTime endTime
+) {
 }
