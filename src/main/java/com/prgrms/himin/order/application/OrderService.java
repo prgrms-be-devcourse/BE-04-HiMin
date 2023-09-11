@@ -304,12 +304,13 @@ public class OrderService {
 			.map(OrderResponse::from)
 			.toList();
 	}
-  
-  private void validateShopId(
-    Long shopId,
-    Order order
+
+	private void validateShopId(
+		Long shopId,
+		Order order
 	) {
 		if (!order.getShop().getShopId().equals(shopId)) {
 			throw new BusinessException(ErrorCode.ORDER_SHOP_NOT_MATCH);
-  }
+		}
+	}
 }
