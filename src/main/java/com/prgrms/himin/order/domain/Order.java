@@ -34,9 +34,9 @@ public class Order {
 
 	private static final int MIN_ORDER_PRICE = 0;
 
-	private static final int MAX_ADDRESS_LENGTH = 50;
+	public static final int MAX_ADDRESS_LENGTH = 50;
 
-	private static final int MAX_REQUIREMENT_LENGTH = 30;
+	public static final int MAX_REQUIREMENT_LENGTH = 30;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

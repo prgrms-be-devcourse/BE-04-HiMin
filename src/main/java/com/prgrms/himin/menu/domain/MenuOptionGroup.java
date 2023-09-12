@@ -28,7 +28,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "menu_option_group")
 public class MenuOptionGroup {
 
-	private static final int MAX_NAME_LENGTH = 30;
+	public static final int MAX_NAME_LENGTH = 30;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

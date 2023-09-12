@@ -29,6 +29,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "order_items")
 public class OrderItem {
 
+	public static final int MIN_ORDER_QUANTITY = 1;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
