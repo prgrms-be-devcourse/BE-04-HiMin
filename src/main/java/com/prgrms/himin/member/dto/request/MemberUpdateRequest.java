@@ -1,5 +1,7 @@
 package com.prgrms.himin.member.dto.request;
 
+import static com.prgrms.himin.member.domain.Member.*;
+
 import java.time.LocalDate;
 
 import javax.validation.constraints.NotBlank;
@@ -12,19 +14,19 @@ public record MemberUpdateRequest() {
 
 	public record Info(
 
-		@Size(max = 20, message = "loginId은 최대 20글자 입니다.")
+		@Size(max = ID_MAX_LENGTH, message = "loginId은 최대 {max}글자 입니다.")
 		@NotBlank(message = "loginId가 비어있으면 안됩니다.")
 		String loginId,
 
-		@Size(max = 20, message = "비밀번호는 최대 20글자 입니다.")
+		@Size(max = PASSWORD_MAX_LENGTH, message = "비밀번호는 최대 {max}글자 입니다.")
 		@NotBlank(message = "비밀번호가 비어있으면 안됩니다.")
 		String password,
 
-		@Size(max = 10, message = "이름은 최대 10글자 입니다.")
+		@Size(max = NAME_MAX_LENGTH, message = "이름은 최대 {max}글자 입니다.")
 		@NotBlank(message = "이름이 비어있으면 안됩니다.")
 		String name,
 
-		@Size(max = 15, message = "핸드폰번호는 최대 15자리 입니다.")
+		@Size(max = PHONE_MAX_LENGTH, message = "핸드폰번호는 최대 {max}자리 입니다.")
 		@NotBlank(message = "핸드폰번호가 비어있으면 안됩니다.")
 		String phone,
 

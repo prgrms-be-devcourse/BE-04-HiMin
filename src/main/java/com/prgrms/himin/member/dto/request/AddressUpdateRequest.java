@@ -1,14 +1,16 @@
 package com.prgrms.himin.member.dto.request;
 
+import static com.prgrms.himin.member.domain.Address.*;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 public record AddressUpdateRequest(
-	@Size(max = 10, message = "주소별칭은 최대 10글자 입니다.")
+	@Size(max = MAX_ADDRESS_ALIAS_LENGTH, message = "주소별칭은 최대 {max}글자 입니다.")
 	@NotBlank(message = "주소별칭이 비어있으면 안됩니다.")
 	String addressAlias,
 
-	@Size(max = 50, message = "주소는 최대 50글자 입니다.")
+	@Size(max = MAX_ADDRESS_LENGTH, message = "주소는 최대 {max}글자 입니다.")
 	@NotBlank(message = "주소는 비어있으면 안됩니다.")
 	String address
 ) {
