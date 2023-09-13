@@ -1,0 +1,39 @@
+spring:
+
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USER_NAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+    hikari:
+      connectionTimeout: 30000
+      maximumPoolSize: 10
+      maxLifetime: 1800000
+      poolName: HikariCP
+      readOnly: false
+
+  jpa:
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+        format_sql: true
+    hibernate:
+      ddl-auto: validate
+
+# JWT
+jwt:
+  header: token
+  issuer: himin
+  client-secret: ${JWT_CLIENT_SECRET}
+  expiry-seconds: 60
+
+logging:
+  file:
+    path: ./logs
+    name: app-prod
+  logback:
+    rollingpolicy:
+      max-history: 60
+      total-size-cap: 3GB

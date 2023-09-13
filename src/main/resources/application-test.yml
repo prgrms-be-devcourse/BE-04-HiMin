@@ -1,0 +1,33 @@
+spring:
+
+  h2:
+    console:
+      enabled: true
+
+  datasource:
+    url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MYSQL
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+
+jwt:
+  header: token
+  issuer: himin
+  client-secret: EENY5W0eegTf1naQB2eDeyCLl5kRS2b8xa5c4qLdS0hmVjtbvo8tOyhPMcAmtPuQ
+  expiry-seconds: 60
+
+logging:
+  level:
+    org:
+      springframework:
+        orm:
+          jpa: trace
+        transaction: trace
+    p6spy: info
