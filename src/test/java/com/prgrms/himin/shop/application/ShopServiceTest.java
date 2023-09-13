@@ -15,9 +15,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.prgrms.himin.global.error.exception.EntityNotFoundException;
 import com.prgrms.himin.setup.request.ShopCreateRequestBuilder;
+import com.prgrms.himin.setup.request.ShopUpdateRequestBuilder;
 import com.prgrms.himin.shop.domain.Shop;
 import com.prgrms.himin.shop.domain.ShopRepository;
 import com.prgrms.himin.shop.dto.request.ShopCreateRequest;
+import com.prgrms.himin.shop.dto.request.ShopUpdateRequest;
 import com.prgrms.himin.shop.dto.response.ShopResponse;
 
 @ExtendWith(MockitoExtension.class)
@@ -77,7 +79,51 @@ class ShopServiceTest {
 			given(shopRepository.findById(anyLong())).willReturn(Optional.empty());
 
 			// when & then
-			assertThatThrownBy(() -> shopService.getShop(anyLong()))
+			assertThatThrownBy(
+				() -> shopService.getShop(anyLong())
+			)
+				.isInstanceOf(EntityNotFoundException.class);
+		}
+	}
+
+	@Nested
+	@DisplayName("가게 업데이트를 할 수 있다.")
+	class UpdateShop {
+
+		@DisplayName("성공한다.")
+		@Test
+		void success_test() {
+			// given
+			ShopCreateRequest request = ShopCreateRequestBuilder.successBuild();
+			Shop shop = request.toEntity();
+			given(shopRepository.findById(anyLong())).willReturn(Optional.of(shop));
+			ShopUpdateRequest.Info expected = ShopUpdateRequestBuilder.infoSuccessBuild();
+
+			// when
+			shopService.updateShop(anyLong(), expected);
+
+			// then
+			assertThat(shop.getAddress()).isEqualTo(expected.address());
+			assertThat(shop.getCategory().toString()).isEqualTo(expected.category());
+			assertThat(shop.getName()).isEqualTo(expected.name());
+			assertThat(shop.getPhone()).isEqualTo(expected.phone());
+			assertThat(shop.getContent()).isEqualTo(expected.content());
+			assertThat(shop.getDeliveryTip()).isEqualTo(expected.deliveryTip());
+			assertThat(shop.getOpeningTime()).isEqualTo(expected.openingTime());
+			assertThat(shop.getClosingTime()).isEqualTo(expected.closingTime());
+		}
+
+		@DisplayName("가게가 존재하지 않아서 실패한다.")
+		@Test
+		void wrong_request_id_fail_test() {
+			// given
+			ShopUpdateRequest.Info failRequest = ShopUpdateRequestBuilder.infoSuccessBuild();
+			given(shopRepository.findById(anyLong())).willReturn(Optional.empty());
+
+			// when & then
+			assertThatThrownBy(
+				() -> shopService.updateShop(anyLong(), failRequest)
+			)
 				.isInstanceOf(EntityNotFoundException.class);
 		}
 	}
