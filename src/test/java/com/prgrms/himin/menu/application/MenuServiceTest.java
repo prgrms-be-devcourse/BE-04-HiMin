@@ -118,4 +118,20 @@ class MenuServiceTest {
 			assertThat(actual).isEqualTo(expected);
 		}
 	}
+
+	@Test
+	@DisplayName("메뉴가 존재하지 않아서 실패한다.")
+	void not_exist_menu_fail_test() {
+		// given
+		Long wrongId = 0L;
+
+		given(menuRepository.findById(wrongId))
+			.willReturn(Optional.empty());
+
+		// when & then
+		assertThatThrownBy(
+			() -> menuService.getMenu(anyLong(), wrongId)
+		)
+			.isInstanceOf(EntityNotFoundException.class);
+	}
 }
