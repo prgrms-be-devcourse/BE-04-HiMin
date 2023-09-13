@@ -62,10 +62,10 @@ class ShopServiceTest {
 			// given
 			ShopCreateRequest request = ShopCreateRequestBuilder.successBuild();
 			Shop shop = request.toEntity();
-			given(shopRepository.findById(anyLong())).willReturn(Optional.of(shop));
+			given(shopRepository.findById(shop.getShopId())).willReturn(Optional.of(shop));
 
 			// when
-			ShopResponse actual = shopService.getShop(anyLong());
+			ShopResponse actual = shopService.getShop(shop.getShopId());
 
 			// then
 			ShopResponse expected = ShopResponse.from(shop);
@@ -75,12 +75,13 @@ class ShopServiceTest {
 		@DisplayName("가게가 존재하지 않아서 실패한다.")
 		@Test
 		void wrong_request_id_fail_test() {
+			Long wrongId = 0L;
 			// given
-			given(shopRepository.findById(anyLong())).willReturn(Optional.empty());
+			given(shopRepository.findById(wrongId)).willReturn(Optional.empty());
 
 			// when & then
 			assertThatThrownBy(
-				() -> shopService.getShop(anyLong())
+				() -> shopService.getShop(wrongId)
 			)
 				.isInstanceOf(EntityNotFoundException.class);
 		}
@@ -96,11 +97,11 @@ class ShopServiceTest {
 			// given
 			ShopCreateRequest request = ShopCreateRequestBuilder.successBuild();
 			Shop shop = request.toEntity();
-			given(shopRepository.findById(anyLong())).willReturn(Optional.of(shop));
+			given(shopRepository.findById(shop.getShopId())).willReturn(Optional.of(shop));
 			ShopUpdateRequest.Info expected = ShopUpdateRequestBuilder.infoSuccessBuild();
 
 			// when
-			shopService.updateShop(anyLong(), expected);
+			shopService.updateShop(shop.getShopId(), expected);
 
 			// then
 			assertThat(shop.getAddress()).isEqualTo(expected.address());
@@ -117,12 +118,49 @@ class ShopServiceTest {
 		@Test
 		void wrong_request_id_fail_test() {
 			// given
+			Long wrongId = 0L;
 			ShopUpdateRequest.Info failRequest = ShopUpdateRequestBuilder.infoSuccessBuild();
-			given(shopRepository.findById(anyLong())).willReturn(Optional.empty());
+			given(shopRepository.findById(wrongId)).willReturn(Optional.empty());
 
 			// when & then
 			assertThatThrownBy(
-				() -> shopService.updateShop(anyLong(), failRequest)
+				() -> shopService.updateShop(wrongId, failRequest)
+			)
+				.isInstanceOf(EntityNotFoundException.class);
+		}
+	}
+
+	@Nested
+	@DisplayName("가게를 삭제할 수 있다.")
+	class DeleteShop {
+
+		@DisplayName("성공한다.")
+		@Test
+		void success_test() {
+			// given
+			ShopCreateRequest request = ShopCreateRequestBuilder.successBuild();
+			Shop shop = request.toEntity();
+			given(shopRepository.existsById(shop.getShopId())).willReturn(true);
+			doNothing().when(shopRepository).deleteById(shop.getShopId());
+
+			// when
+			shopService.deleteShop(shop.getShopId());
+
+			// then
+			verify(shopRepository, times(1)).existsById(shop.getShopId());
+			verify(shopRepository, times(1)).deleteById(shop.getShopId());
+		}
+
+		@DisplayName("가게가 존재하지 않아서 실패한다.")
+		@Test
+		void wrong_request_id_fail_test() {
+			// given
+			Long wrongId = 0L;
+			given(shopRepository.existsById(wrongId)).willReturn(false);
+
+			// when & then
+			assertThatThrownBy(
+				() -> shopService.deleteShop(wrongId)
 			)
 				.isInstanceOf(EntityNotFoundException.class);
 		}
