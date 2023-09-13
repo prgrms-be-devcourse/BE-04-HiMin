@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.prgrms.himin.global.error.exception.EntityNotFoundException;
 import com.prgrms.himin.menu.domain.Menu;
 import com.prgrms.himin.menu.domain.MenuRepository;
+import com.prgrms.himin.menu.domain.MenuValidator;
 import com.prgrms.himin.menu.dto.request.MenuCreateRequest;
 import com.prgrms.himin.menu.dto.response.MenuCreateResponse;
 import com.prgrms.himin.menu.dto.response.MenuResponse;
@@ -38,10 +39,17 @@ class MenuServiceTest {
 	@Mock
 	ShopRepository shopRepository;
 
+	@Mock
+	MenuValidator menuValidator;
+
+	MenuCreateRequest request;
+
 	Shop shop;
 
 	@BeforeEach
 	void setUp() {
+		request = MenuCreateRequestBuilder.successBuild();
+
 		ShopCreateRequest shopCreateRequest = ShopCreateRequestBuilder.successBuild();
 		shop = shopCreateRequest.toEntity();
 	}
@@ -54,7 +62,6 @@ class MenuServiceTest {
 		@DisplayName("성공한다")
 		void success_test() {
 			// given
-			MenuCreateRequest request = MenuCreateRequestBuilder.successBuild();
 			Menu menu = request.toEntity();
 
 			given(shopRepository.findById(anyLong()))
@@ -75,8 +82,6 @@ class MenuServiceTest {
 		@DisplayName("가게가 존재하지 않아서 실패한다.")
 		void not_exist_shop_fail_test() {
 			// given
-			MenuCreateRequest request = MenuCreateRequestBuilder.successBuild();
-
 			given(shopRepository.findById(anyLong()))
 				.willReturn(Optional.empty());
 
@@ -90,5 +95,43 @@ class MenuServiceTest {
 			verify(shopRepository, times(1)).findById(anyLong());
 			verify(menuRepository, times(0)).save(any(Menu.class));
 		}
+	}
+
+	@Nested
+	@DisplayName("메뉴 조회를 할 수 있다")
+	class getMenu {
+
+		@Test
+		@DisplayName("성공한다")
+		void success_test() {
+			// given
+			Menu menu = request.toEntity();
+
+			given(menuRepository.findById(menu.getId()))
+				.willReturn(Optional.ofNullable(menu));
+
+			// when
+			MenuResponse actual = menuService.getMenu(anyLong(), menu.getId());
+
+			// then
+			MenuResponse expected = MenuResponse.from(menu);
+			assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+		}
+	}
+
+	@Test
+	@DisplayName("메뉴가 존재하지 않아서 실패한다.")
+	void not_exist_menu_fail_test() {
+		// given
+		Long wrongId = 0L;
+
+		given(menuRepository.findById(wrongId))
+			.willReturn(Optional.empty());
+
+		// when & then
+		assertThatThrownBy(
+			() -> menuService.getMenu(anyLong(), wrongId)
+		)
+			.isInstanceOf(EntityNotFoundException.class);
 	}
 }
