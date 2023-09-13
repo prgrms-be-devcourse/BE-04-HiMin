@@ -95,7 +95,7 @@ public class Member {
 		this.phone = phone;
 		this.birthday = birthday;
 		this.grade = Grade.NEW;
-		this.roles.add("ROLE_USER");
+		this.roles.add(Permission.ROLE_USER.name());
 	}
 
 	public void updateGrade(Grade grade) {
