@@ -5,6 +5,7 @@ import static org.mockito.BDDMockito.*;
 
 import java.util.Optional;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -31,6 +32,16 @@ class ShopServiceTest {
 	@InjectMocks
 	ShopService shopService;
 
+	ShopCreateRequest request;
+
+	Shop shop;
+
+	@BeforeEach
+	void setup() {
+		request = ShopCreateRequestBuilder.successBuild();
+		shop = request.toEntity();
+	}
+
 	@Nested
 	@DisplayName("가게 생성을 할 수 있다.")
 	class CreateShop {
@@ -39,8 +50,6 @@ class ShopServiceTest {
 		@Test
 		void success_test() {
 			// given
-			ShopCreateRequest request = ShopCreateRequestBuilder.successBuild();
-			Shop shop = request.toEntity();
 			given(shopRepository.save(any())).willReturn(shop);
 
 			// when
@@ -60,8 +69,6 @@ class ShopServiceTest {
 		@Test
 		void success_test() {
 			// given
-			ShopCreateRequest request = ShopCreateRequestBuilder.successBuild();
-			Shop shop = request.toEntity();
 			given(shopRepository.findById(shop.getShopId())).willReturn(Optional.of(shop));
 
 			// when
@@ -75,8 +82,8 @@ class ShopServiceTest {
 		@DisplayName("가게가 존재하지 않아서 실패한다.")
 		@Test
 		void wrong_request_id_fail_test() {
-			Long wrongId = 0L;
 			// given
+			Long wrongId = 0L;
 			given(shopRepository.findById(wrongId)).willReturn(Optional.empty());
 
 			// when & then
@@ -95,8 +102,6 @@ class ShopServiceTest {
 		@Test
 		void success_test() {
 			// given
-			ShopCreateRequest request = ShopCreateRequestBuilder.successBuild();
-			Shop shop = request.toEntity();
 			given(shopRepository.findById(shop.getShopId())).willReturn(Optional.of(shop));
 			ShopUpdateRequest.Info expected = ShopUpdateRequestBuilder.infoSuccessBuild();
 
@@ -138,8 +143,6 @@ class ShopServiceTest {
 		@Test
 		void success_test() {
 			// given
-			ShopCreateRequest request = ShopCreateRequestBuilder.successBuild();
-			Shop shop = request.toEntity();
 			given(shopRepository.existsById(shop.getShopId())).willReturn(true);
 			doNothing().when(shopRepository).deleteById(shop.getShopId());
 
