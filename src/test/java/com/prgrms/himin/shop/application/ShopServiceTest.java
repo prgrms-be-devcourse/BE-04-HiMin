@@ -103,16 +103,14 @@ class ShopServiceTest {
 			shopService.updateShop(anyLong(), expected);
 
 			// then
-			Shop actual = shopRepository.findById(anyLong()).get();
-
-			assertThat(actual.getAddress()).isEqualTo(expected.address());
-			assertThat(actual.getCategory().toString()).isEqualTo(expected.category());
-			assertThat(actual.getName()).isEqualTo(expected.name());
-			assertThat(actual.getPhone()).isEqualTo(expected.phone());
-			assertThat(actual.getContent()).isEqualTo(expected.content());
-			assertThat(actual.getDeliveryTip()).isEqualTo(expected.deliveryTip());
-			assertThat(actual.getOpeningTime()).isEqualTo(expected.openingTime());
-			assertThat(actual.getClosingTime()).isEqualTo(expected.closingTime());
+			assertThat(shop.getAddress()).isEqualTo(expected.address());
+			assertThat(shop.getCategory().toString()).isEqualTo(expected.category());
+			assertThat(shop.getName()).isEqualTo(expected.name());
+			assertThat(shop.getPhone()).isEqualTo(expected.phone());
+			assertThat(shop.getContent()).isEqualTo(expected.content());
+			assertThat(shop.getDeliveryTip()).isEqualTo(expected.deliveryTip());
+			assertThat(shop.getOpeningTime()).isEqualTo(expected.openingTime());
+			assertThat(shop.getClosingTime()).isEqualTo(expected.closingTime());
 		}
 
 		@DisplayName("가게가 존재하지 않아서 실패한다.")
