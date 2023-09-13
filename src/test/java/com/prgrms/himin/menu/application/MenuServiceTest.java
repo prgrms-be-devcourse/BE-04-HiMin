@@ -48,12 +48,16 @@ class MenuServiceTest {
 
 	Shop shop;
 
+	Menu menu;
+
 	@BeforeEach
 	void setUp() {
 		request = MenuCreateRequestBuilder.successBuild();
 
 		ShopCreateRequest shopCreateRequest = ShopCreateRequestBuilder.successBuild();
 		shop = shopCreateRequest.toEntity();
+
+		menu = request.toEntity();
 	}
 
 	@Nested
@@ -64,8 +68,6 @@ class MenuServiceTest {
 		@DisplayName("성공한다")
 		void success_test() {
 			// given
-			Menu menu = request.toEntity();
-
 			given(shopRepository.findById(shop.getShopId()))
 				.willReturn(Optional.of(shop));
 
@@ -109,8 +111,6 @@ class MenuServiceTest {
 		@DisplayName("성공한다")
 		void success_test() {
 			// given
-			Menu menu = request.toEntity();
-
 			given(menuRepository.findById(menu.getId()))
 				.willReturn(Optional.of(menu));
 
@@ -147,7 +147,6 @@ class MenuServiceTest {
 		@DisplayName("성공한다.")
 		void success_test() {
 			// given
-			Menu menu = request.toEntity();
 			MenuUpdateRequest.Info updateRequest = MenuUpdateRequestBuilder.infoSuccessBuild();
 
 			given(menuRepository.findById(menu.getId()))
@@ -187,7 +186,6 @@ class MenuServiceTest {
 		@DisplayName("성공한다.")
 		void success_test() {
 			// given
-			Menu menu = request.toEntity();
 			MenuUpdateRequest.Status updateStatusRequest = MenuUpdateRequestBuilder.statusSuccessBuild();
 
 			given(menuRepository.findById(menu.getId()))
@@ -226,8 +224,6 @@ class MenuServiceTest {
 		@DisplayName("성공한다.")
 		void success_test() {
 			// given
-			Menu menu = request.toEntity();
-
 			given(menuRepository.findById(menu.getId()))
 				.willReturn(Optional.of(menu));
 
