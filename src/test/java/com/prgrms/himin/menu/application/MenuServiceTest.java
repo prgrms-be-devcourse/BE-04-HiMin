@@ -203,14 +203,14 @@ class MenuServiceTest {
 		void not_exist_menu_fail_test() {
 			// given
 			Long wrongId = 0L;
-			MenuUpdateRequest.Info updateRequest = MenuUpdateRequestBuilder.infoSuccessBuild();
+			MenuUpdateRequest.Status updateStatusRequest = MenuUpdateRequestBuilder.statusSuccessBuild();
 
 			given(menuRepository.findById(wrongId))
 				.willReturn(Optional.empty());
 
 			// when & then
 			assertThatThrownBy(
-				() -> menuService.updateMenu(anyLong(), wrongId, updateRequest)
+				() -> menuService.changeMenuStatus(anyLong(), wrongId, updateStatusRequest)
 			)
 				.isInstanceOf(EntityNotFoundException.class);
 		}
