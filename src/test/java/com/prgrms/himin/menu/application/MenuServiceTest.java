@@ -14,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.prgrms.himin.global.error.exception.EntityNotFoundException;
 import com.prgrms.himin.menu.domain.Menu;
 import com.prgrms.himin.menu.domain.MenuRepository;
 import com.prgrms.himin.menu.dto.request.MenuCreateRequest;
@@ -68,6 +69,26 @@ class MenuServiceTest {
 			// then
 			MenuResponse menuResponse = MenuResponse.from(menu);
 			assertThat(result).usingRecursiveComparison().isEqualTo(menuResponse);
+		}
+
+		@Test
+		@DisplayName("가게가 존재하지 않아서 실패한다.")
+		void not_exist_shop_fail_test() {
+			// given
+			MenuCreateRequest request = MenuCreateRequestBuilder.successBuild();
+
+			given(shopRepository.findById(anyLong()))
+				.willReturn(Optional.empty());
+
+			// when & then
+			assertThatThrownBy(
+				() -> menuService.createMenu(anyLong(), request)
+			)
+				.isInstanceOf(EntityNotFoundException.class);
+
+			// verify
+			verify(shopRepository, times(1)).findById(anyLong());
+			verify(menuRepository, times(0)).save(any(Menu.class));
 		}
 	}
 }
