@@ -38,10 +38,14 @@ class MenuServiceTest {
 	@Mock
 	ShopRepository shopRepository;
 
+	MenuCreateRequest request;
+
 	Shop shop;
 
 	@BeforeEach
 	void setUp() {
+		request = MenuCreateRequestBuilder.successBuild();
+
 		ShopCreateRequest shopCreateRequest = ShopCreateRequestBuilder.successBuild();
 		shop = shopCreateRequest.toEntity();
 	}
@@ -54,7 +58,6 @@ class MenuServiceTest {
 		@DisplayName("성공한다")
 		void success_test() {
 			// given
-			MenuCreateRequest request = MenuCreateRequestBuilder.successBuild();
 			Menu menu = request.toEntity();
 
 			given(shopRepository.findById(anyLong()))
@@ -75,8 +78,6 @@ class MenuServiceTest {
 		@DisplayName("가게가 존재하지 않아서 실패한다.")
 		void not_exist_shop_fail_test() {
 			// given
-			MenuCreateRequest request = MenuCreateRequestBuilder.successBuild();
-
 			given(shopRepository.findById(anyLong()))
 				.willReturn(Optional.empty());
 
