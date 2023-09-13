@@ -368,4 +368,10 @@ class OrderControllerTest {
 				.andDo(print());
 		}
 	}
+
+	@Nested
+	@DisplayName("주문 목록 조회를 할 수 있다.")
+	class FindOrders {
+
+	}
 }

@@ -32,9 +32,9 @@ import lombok.NoArgsConstructor;
 @Table(name = "menus")
 public class Menu {
 
-	private static final int MIN_PRICE = 0;
+	public static final int MIN_PRICE = 0;
 
-	private static final int MAX_NAME_LENGTH = 30;
+	public static final int MAX_NAME_LENGTH = 30;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -32,13 +32,13 @@ import lombok.NoArgsConstructor;
 @Table(name = "shops")
 public class Shop {
 
-	private static final int MAX_NAME_LENGTH = 20;
+	public static final int MAX_NAME_LENGTH = 20;
 
-	private static final int MAX_ADDRESS_LENGTH = 50;
+	public static final int MAX_ADDRESS_LENGTH = 50;
 
-	private static final int MAX_PHONE_LENGTH = 15;
+	public static final int MAX_PHONE_LENGTH = 15;
 
-	private static final String TIME_FORMAT = "HH:mm";
+	public static final String TIME_FORMAT = "HH:mm";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

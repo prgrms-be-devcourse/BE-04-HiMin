@@ -23,9 +23,9 @@ import lombok.NoArgsConstructor;
 @Table(name = "addresses")
 public class Address {
 
-	private static final int MAX_ADDRESS_LENGTH = 50;
+	public static final int MAX_ADDRESS_LENGTH = 50;
 
-	private static final int MAX_ADDRESS_ALIAS_LENGTH = 10;
+	public static final int MAX_ADDRESS_ALIAS_LENGTH = 10;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

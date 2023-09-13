@@ -38,13 +38,13 @@ import lombok.NoArgsConstructor;
 @Table(name = "members")
 public class Member {
 
-	private static final int ID_MAX_LENGTH = 20;
+	public static final int ID_MAX_LENGTH = 20;
 
-	private static final int PASSWORD_MAX_LENGTH = 60;
+	public static final int PASSWORD_MAX_LENGTH = 60;
 
-	private static final int NAME_MAX_LENGTH = 10;
+	public static final int NAME_MAX_LENGTH = 10;
 
-	private static final int PHONE_MAX_LENGTH = 15;
+	public static final int PHONE_MAX_LENGTH = 15;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -95,7 +95,7 @@ public class Member {
 		this.phone = phone;
 		this.birthday = birthday;
 		this.grade = Grade.NEW;
-		this.roles.add("USER_GROUP");
+		this.roles.add(Permission.ROLE_USER.name());
 	}
 
 	public void updateGrade(Grade grade) {
