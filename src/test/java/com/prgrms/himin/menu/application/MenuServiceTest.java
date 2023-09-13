@@ -19,9 +19,11 @@ import com.prgrms.himin.menu.domain.Menu;
 import com.prgrms.himin.menu.domain.MenuRepository;
 import com.prgrms.himin.menu.domain.MenuValidator;
 import com.prgrms.himin.menu.dto.request.MenuCreateRequest;
+import com.prgrms.himin.menu.dto.request.MenuUpdateRequest;
 import com.prgrms.himin.menu.dto.response.MenuCreateResponse;
 import com.prgrms.himin.menu.dto.response.MenuResponse;
 import com.prgrms.himin.setup.request.MenuCreateRequestBuilder;
+import com.prgrms.himin.setup.request.MenuUpdateRequestBuilder;
 import com.prgrms.himin.setup.request.ShopCreateRequestBuilder;
 import com.prgrms.himin.shop.domain.Shop;
 import com.prgrms.himin.shop.domain.ShopRepository;
@@ -133,5 +135,28 @@ class MenuServiceTest {
 			() -> menuService.getMenu(anyLong(), wrongId)
 		)
 			.isInstanceOf(EntityNotFoundException.class);
+	}
+
+	@Nested
+	@DisplayName("메뉴 정보를 업데이트할 수 있다.")
+	class updateMenu {
+
+		@Test
+		@DisplayName("성공한다.")
+		void success_test() {
+			// given
+			Menu menu = request.toEntity();
+			MenuUpdateRequest.Info updateRequest = MenuUpdateRequestBuilder.infoSuccessBuild();
+
+			given(menuRepository.findById(menu.getId()))
+				.willReturn(Optional.ofNullable(menu));
+
+			// when
+			menuService.updateMenu(anyLong(), menu.getId(), updateRequest);
+
+			// then
+			assertThat(menu.getName()).isEqualTo(updateRequest.name());
+			assertThat(menu.getPrice()).isEqualTo(updateRequest.price());
+		}
 	}
 }
