@@ -66,14 +66,14 @@ class MenuServiceTest {
 			// given
 			Menu menu = request.toEntity();
 
-			given(shopRepository.findById(anyLong()))
+			given(shopRepository.findById(shop.getShopId()))
 				.willReturn(Optional.of(shop));
 
 			given(menuRepository.save(any(Menu.class)))
 				.willReturn(menu);
 
 			// when
-			MenuCreateResponse result = menuService.createMenu(anyLong(), request);
+			MenuCreateResponse result = menuService.createMenu(shop.getShopId(), request);
 
 			// then
 			MenuResponse menuResponse = MenuResponse.from(menu);
@@ -84,12 +84,14 @@ class MenuServiceTest {
 		@DisplayName("가게가 존재하지 않아서 실패한다.")
 		void not_exist_shop_fail_test() {
 			// given
+			Long wrongShopId = 0L;
+
 			given(shopRepository.findById(anyLong()))
 				.willReturn(Optional.empty());
 
 			// when & then
 			assertThatThrownBy(
-				() -> menuService.createMenu(anyLong(), request)
+				() -> menuService.createMenu(wrongShopId, request)
 			)
 				.isInstanceOf(EntityNotFoundException.class);
 
@@ -113,7 +115,7 @@ class MenuServiceTest {
 				.willReturn(Optional.of(menu));
 
 			// when
-			MenuResponse actual = menuService.getMenu(anyLong(), menu.getId());
+			MenuResponse actual = menuService.getMenu(shop.getShopId(), menu.getId());
 
 			// then
 			MenuResponse expected = MenuResponse.from(menu);
@@ -132,7 +134,7 @@ class MenuServiceTest {
 
 		// when & then
 		assertThatThrownBy(
-			() -> menuService.getMenu(anyLong(), wrongId)
+			() -> menuService.getMenu(shop.getShopId(), wrongId)
 		)
 			.isInstanceOf(EntityNotFoundException.class);
 	}
@@ -152,7 +154,7 @@ class MenuServiceTest {
 				.willReturn(Optional.of(menu));
 
 			// when
-			menuService.updateMenu(anyLong(), menu.getId(), updateRequest);
+			menuService.updateMenu(shop.getShopId(), menu.getId(), updateRequest);
 
 			// then
 			assertThat(menu.getName()).isEqualTo(updateRequest.name());
@@ -171,7 +173,7 @@ class MenuServiceTest {
 
 			// when & then
 			assertThatThrownBy(
-				() -> menuService.updateMenu(anyLong(), wrongId, updateRequest)
+				() -> menuService.updateMenu(shop.getShopId(), wrongId, updateRequest)
 			)
 				.isInstanceOf(EntityNotFoundException.class);
 		}
@@ -192,7 +194,7 @@ class MenuServiceTest {
 				.willReturn(Optional.of(menu));
 
 			// when
-			menuService.changeMenuStatus(anyLong(), menu.getId(), updateStatusRequest);
+			menuService.changeMenuStatus(shop.getShopId(), menu.getId(), updateStatusRequest);
 
 			// then
 			assertThat(menu.getStatus()).isEqualTo(updateStatusRequest.status());
@@ -210,7 +212,7 @@ class MenuServiceTest {
 
 			// when & then
 			assertThatThrownBy(
-				() -> menuService.changeMenuStatus(anyLong(), wrongId, updateStatusRequest)
+				() -> menuService.changeMenuStatus(shop.getShopId(), wrongId, updateStatusRequest)
 			)
 				.isInstanceOf(EntityNotFoundException.class);
 		}
