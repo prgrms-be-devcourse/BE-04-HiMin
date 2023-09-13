@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.prgrms.himin.global.error.exception.EntityNotFoundException;
 import com.prgrms.himin.menu.domain.Menu;
 import com.prgrms.himin.menu.domain.MenuRepository;
+import com.prgrms.himin.menu.domain.MenuValidator;
 import com.prgrms.himin.menu.dto.request.MenuCreateRequest;
 import com.prgrms.himin.menu.dto.response.MenuCreateResponse;
 import com.prgrms.himin.menu.dto.response.MenuResponse;
@@ -37,6 +38,9 @@ class MenuServiceTest {
 
 	@Mock
 	ShopRepository shopRepository;
+
+	@Mock
+	MenuValidator menuValidator;
 
 	MenuCreateRequest request;
 
@@ -90,6 +94,28 @@ class MenuServiceTest {
 			// verify
 			verify(shopRepository, times(1)).findById(anyLong());
 			verify(menuRepository, times(0)).save(any(Menu.class));
+		}
+	}
+
+	@Nested
+	@DisplayName("메뉴 조회를 할 수 있다")
+	class getMenu {
+
+		@Test
+		@DisplayName("성공한다")
+		void success_test() {
+			// given
+			Menu menu = request.toEntity();
+
+			given(menuRepository.findById(menu.getId()))
+				.willReturn(Optional.ofNullable(menu));
+
+			// when
+			MenuResponse actual = menuService.getMenu(anyLong(), menu.getId());
+
+			// then
+			MenuResponse expected = MenuResponse.from(menu);
+			assertThat(actual).isEqualTo(expected);
 		}
 	}
 }
