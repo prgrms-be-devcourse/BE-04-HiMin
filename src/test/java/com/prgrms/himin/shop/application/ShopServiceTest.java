@@ -5,6 +5,7 @@ import static org.mockito.BDDMockito.*;
 
 import java.util.Optional;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -31,6 +32,16 @@ class ShopServiceTest {
 	@InjectMocks
 	ShopService shopService;
 
+	ShopCreateRequest request;
+
+	Shop shop;
+
+	@BeforeEach
+	void setup() {
+		request = ShopCreateRequestBuilder.successBuild();
+		shop = request.toEntity();
+	}
+
 	@Nested
 	@DisplayName("가게 생성을 할 수 있다.")
 	class CreateShop {
@@ -39,8 +50,6 @@ class ShopServiceTest {
 		@Test
 		void success_test() {
 			// given
-			ShopCreateRequest request = ShopCreateRequestBuilder.successBuild();
-			Shop shop = request.toEntity();
 			given(shopRepository.save(any())).willReturn(shop);
 
 			// when
@@ -60,12 +69,10 @@ class ShopServiceTest {
 		@Test
 		void success_test() {
 			// given
-			ShopCreateRequest request = ShopCreateRequestBuilder.successBuild();
-			Shop shop = request.toEntity();
-			given(shopRepository.findById(anyLong())).willReturn(Optional.of(shop));
+			given(shopRepository.findById(shop.getShopId())).willReturn(Optional.of(shop));
 
 			// when
-			ShopResponse actual = shopService.getShop(anyLong());
+			ShopResponse actual = shopService.getShop(shop.getShopId());
 
 			// then
 			ShopResponse expected = ShopResponse.from(shop);
@@ -76,11 +83,12 @@ class ShopServiceTest {
 		@Test
 		void wrong_request_id_fail_test() {
 			// given
-			given(shopRepository.findById(anyLong())).willReturn(Optional.empty());
+			Long wrongId = 0L;
+			given(shopRepository.findById(wrongId)).willReturn(Optional.empty());
 
 			// when & then
 			assertThatThrownBy(
-				() -> shopService.getShop(anyLong())
+				() -> shopService.getShop(wrongId)
 			)
 				.isInstanceOf(EntityNotFoundException.class);
 		}
@@ -94,13 +102,11 @@ class ShopServiceTest {
 		@Test
 		void success_test() {
 			// given
-			ShopCreateRequest request = ShopCreateRequestBuilder.successBuild();
-			Shop shop = request.toEntity();
-			given(shopRepository.findById(anyLong())).willReturn(Optional.of(shop));
+			given(shopRepository.findById(shop.getShopId())).willReturn(Optional.of(shop));
 			ShopUpdateRequest.Info expected = ShopUpdateRequestBuilder.infoSuccessBuild();
 
 			// when
-			shopService.updateShop(anyLong(), expected);
+			shopService.updateShop(shop.getShopId(), expected);
 
 			// then
 			assertThat(shop.getAddress()).isEqualTo(expected.address());
@@ -117,14 +123,53 @@ class ShopServiceTest {
 		@Test
 		void wrong_request_id_fail_test() {
 			// given
+			Long wrongId = 0L;
 			ShopUpdateRequest.Info failRequest = ShopUpdateRequestBuilder.infoSuccessBuild();
-			given(shopRepository.findById(anyLong())).willReturn(Optional.empty());
+			given(shopRepository.findById(wrongId)).willReturn(Optional.empty());
 
 			// when & then
 			assertThatThrownBy(
-				() -> shopService.updateShop(anyLong(), failRequest)
+				() -> shopService.updateShop(wrongId, failRequest)
 			)
 				.isInstanceOf(EntityNotFoundException.class);
+		}
+	}
+
+	@Nested
+	@DisplayName("가게를 삭제할 수 있다.")
+	class DeleteShop {
+
+		@DisplayName("성공한다.")
+		@Test
+		void success_test() {
+			// given
+			given(shopRepository.existsById(shop.getShopId())).willReturn(true);
+			doNothing().when(shopRepository).deleteById(shop.getShopId());
+
+			// when
+			shopService.deleteShop(shop.getShopId());
+
+			// then
+			assertThatCode(
+				() -> shopService.deleteShop(shop.getShopId())
+			)
+				.doesNotThrowAnyException();
+		}
+
+		@DisplayName("가게가 존재하지 않아서 실패한다.")
+		@Test
+		void wrong_request_id_fail_test() {
+			// given
+			Long wrongId = 0L;
+			given(shopRepository.existsById(wrongId)).willReturn(false);
+
+			// when & then
+			assertThatThrownBy(
+				() -> shopService.deleteShop(wrongId)
+			)
+				.isInstanceOf(EntityNotFoundException.class);
+			verify(shopRepository, times(1)).existsById(wrongId);
+			verify(shopRepository, times(0)).deleteById(wrongId);
 		}
 	}
 }
