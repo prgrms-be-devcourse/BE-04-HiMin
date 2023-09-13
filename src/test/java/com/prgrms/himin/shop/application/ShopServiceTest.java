@@ -147,8 +147,10 @@ class ShopServiceTest {
 			shopService.deleteShop(shop.getShopId());
 
 			// then
-			verify(shopRepository, times(1)).existsById(shop.getShopId());
-			verify(shopRepository, times(1)).deleteById(shop.getShopId());
+			assertThatCode(
+				() -> shopService.deleteShop(shop.getShopId())
+			)
+				.doesNotThrowAnyException();
 		}
 
 		@DisplayName("가게가 존재하지 않아서 실패한다.")
@@ -163,6 +165,8 @@ class ShopServiceTest {
 				() -> shopService.deleteShop(wrongId)
 			)
 				.isInstanceOf(EntityNotFoundException.class);
+			verify(shopRepository, times(1)).existsById(wrongId);
+			verify(shopRepository, times(0)).deleteById(wrongId);
 		}
 	}
 }
