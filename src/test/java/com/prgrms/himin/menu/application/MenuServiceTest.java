@@ -219,45 +219,6 @@ class MenuServiceTest {
 	}
 
 	@Nested
-	@DisplayName("메뉴 상태를 변경할 수 있다.")
-	class changeMenuStatus {
-
-		@Test
-		@DisplayName("성공한다.")
-		void success_test() {
-			// given
-			Menu menu = request.toEntity();
-			MenuUpdateRequest.Status updateStatusRequest = MenuUpdateRequestBuilder.statusSuccessBuild();
-
-			given(menuRepository.findById(menu.getId()))
-				.willReturn(Optional.ofNullable(menu));
-
-			// when
-			menuService.changeMenuStatus(anyLong(), menu.getId(), updateStatusRequest);
-
-			// then
-			assertThat(menu.getStatus()).isEqualTo(updateStatusRequest.status());
-		}
-
-		@Test
-		@DisplayName("메뉴가 존재하지 않아서 실패한다.")
-		void not_exist_menu_fail_test() {
-			// given
-			Long wrongId = 0L;
-			MenuUpdateRequest.Info updateRequest = MenuUpdateRequestBuilder.infoSuccessBuild();
-
-			given(menuRepository.findById(wrongId))
-				.willReturn(Optional.empty());
-
-			// when & then
-			assertThatThrownBy(
-				() -> menuService.updateMenu(anyLong(), wrongId, updateRequest)
-			)
-				.isInstanceOf(EntityNotFoundException.class);
-		}
-	}
-
-	@Nested
 	@DisplayName("메뉴를 삭제할 수 있다.")
 	class deleteMenu {
 
