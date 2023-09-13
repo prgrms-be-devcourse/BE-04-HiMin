@@ -250,6 +250,10 @@ class MenuServiceTest {
 				() -> menuService.deleteMenu(shop.getShopId(), wrongId)
 			)
 				.isInstanceOf(EntityNotFoundException.class);
+
+			// verify
+			verify(menuRepository, times(1)).findById(anyLong());
+			verify(menuRepository, times(0)).delete(any(Menu.class));
 		}
 	}
 }
