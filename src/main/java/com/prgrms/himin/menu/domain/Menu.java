@@ -101,7 +101,7 @@ public class Menu {
 	}
 
 	private void validateName(String name) {
-		if (name == null || name.length() > MAX_NAME_LENGTH) {
+		if (name == null || name.isBlank() || name.length() > MAX_NAME_LENGTH) {
 			throw new InvalidValueException(ErrorCode.MENU_NAME_BAD_REQUEST);
 		}
 	}
