@@ -67,7 +67,7 @@ class MenuServiceTest {
 			Menu menu = request.toEntity();
 
 			given(shopRepository.findById(anyLong()))
-				.willReturn(Optional.ofNullable(shop));
+				.willReturn(Optional.of(shop));
 
 			given(menuRepository.save(any(Menu.class)))
 				.willReturn(menu);
@@ -110,7 +110,7 @@ class MenuServiceTest {
 			Menu menu = request.toEntity();
 
 			given(menuRepository.findById(menu.getId()))
-				.willReturn(Optional.ofNullable(menu));
+				.willReturn(Optional.of(menu));
 
 			// when
 			MenuResponse actual = menuService.getMenu(anyLong(), menu.getId());
@@ -149,7 +149,7 @@ class MenuServiceTest {
 			MenuUpdateRequest.Info updateRequest = MenuUpdateRequestBuilder.infoSuccessBuild();
 
 			given(menuRepository.findById(menu.getId()))
-				.willReturn(Optional.ofNullable(menu));
+				.willReturn(Optional.of(menu));
 
 			// when
 			menuService.updateMenu(anyLong(), menu.getId(), updateRequest);
@@ -189,7 +189,7 @@ class MenuServiceTest {
 			MenuUpdateRequest.Status updateStatusRequest = MenuUpdateRequestBuilder.statusSuccessBuild();
 
 			given(menuRepository.findById(menu.getId()))
-				.willReturn(Optional.ofNullable(menu));
+				.willReturn(Optional.of(menu));
 
 			// when
 			menuService.changeMenuStatus(anyLong(), menu.getId(), updateStatusRequest);
