@@ -176,4 +176,26 @@ class MenuServiceTest {
 				.isInstanceOf(EntityNotFoundException.class);
 		}
 	}
+
+	@Nested
+	@DisplayName("메뉴 상태를 변경할 수 있다.")
+	class changeMenuStatus {
+
+		@Test
+		@DisplayName("성공한다.")
+		void success_test() {
+			// given
+			Menu menu = request.toEntity();
+			MenuUpdateRequest.Status updateStatusRequest = MenuUpdateRequestBuilder.statusSuccessBuild();
+
+			given(menuRepository.findById(menu.getId()))
+				.willReturn(Optional.ofNullable(menu));
+
+			// when
+			menuService.changeMenuStatus(anyLong(), menu.getId(), updateStatusRequest);
+
+			// then
+			assertThat(menu.getStatus()).isEqualTo(updateStatusRequest.status());
+		}
+	}
 }
