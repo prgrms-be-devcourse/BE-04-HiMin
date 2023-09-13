@@ -115,7 +115,7 @@ class MenuServiceTest {
 
 			// then
 			MenuResponse expected = MenuResponse.from(menu);
-			assertThat(actual).isEqualTo(expected);
+			assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
 		}
 	}
 
