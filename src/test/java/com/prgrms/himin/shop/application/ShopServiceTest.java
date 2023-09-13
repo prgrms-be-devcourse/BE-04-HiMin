@@ -44,7 +44,7 @@ class ShopServiceTest {
 			// when
 			ShopResponse actual = shopService.createShop(request);
 			ShopResponse expected = ShopResponse.from(shop);
-			
+
 			// then
 			assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
 		}
@@ -64,9 +64,9 @@ class ShopServiceTest {
 
 			// when
 			ShopResponse actual = shopService.getShop(anyLong());
-			ShopResponse expected = ShopResponse.from(shop);
 
 			// then
+			ShopResponse expected = ShopResponse.from(shop);
 			assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
 		}
 
