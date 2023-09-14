@@ -3,6 +3,8 @@ package com.prgrms.himin.shop.application;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
+import java.time.LocalTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -17,11 +19,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.prgrms.himin.global.error.exception.EntityNotFoundException;
 import com.prgrms.himin.setup.request.ShopCreateRequestBuilder;
 import com.prgrms.himin.setup.request.ShopUpdateRequestBuilder;
+import com.prgrms.himin.shop.domain.Category;
 import com.prgrms.himin.shop.domain.Shop;
 import com.prgrms.himin.shop.domain.ShopRepository;
+import com.prgrms.himin.shop.domain.ShopSort;
 import com.prgrms.himin.shop.dto.request.ShopCreateRequest;
+import com.prgrms.himin.shop.dto.request.ShopSearchCondition;
 import com.prgrms.himin.shop.dto.request.ShopUpdateRequest;
 import com.prgrms.himin.shop.dto.response.ShopResponse;
+import com.prgrms.himin.shop.dto.response.ShopsReponse;
 
 @ExtendWith(MockitoExtension.class)
 class ShopServiceTest {
@@ -62,7 +68,7 @@ class ShopServiceTest {
 	}
 
 	@Nested
-	@DisplayName("가게 조회를 할 수 있다.")
+	@DisplayName("가게 단건 조회를 할 수 있다.")
 	class GetShop {
 
 		@DisplayName("성공한다.")
@@ -170,6 +176,81 @@ class ShopServiceTest {
 				.isInstanceOf(EntityNotFoundException.class);
 			verify(shopRepository, times(1)).existsById(wrongId);
 			verify(shopRepository, times(0)).deleteById(wrongId);
+		}
+	}
+
+	@Nested
+	@DisplayName("가게 다건 조회를 할 수 있다.")
+	class GetShops {
+
+		@DisplayName("성공한다.")
+		@Test
+		void success_test() {
+			// given
+			Shop shop1 = Shop.builder()
+				.name("아시안집1")
+				.category(Category.ASIAN)
+				.address("서울시 어딘가1")
+				.phone("02-1111-1111")
+				.content("안녕하세요")
+				.deliveryTip(1000)
+				.openingTime(LocalTime.of(9, 0))
+				.closingTime(LocalTime.of(21, 0))
+				.build();
+
+			Shop shop2 = Shop.builder()
+				.name("아시안집2")
+				.category(Category.ASIAN)
+				.address("서울시 어딘가2")
+				.phone("02-1111-1112")
+				.content("안녕하세요")
+				.deliveryTip(1500)
+				.openingTime(LocalTime.of(9, 0))
+				.closingTime(LocalTime.of(21, 0))
+				.build();
+
+			Shop shop3 = Shop.builder()
+				.name("아시안집3")
+				.category(Category.ASIAN)
+				.address("서울시 어딘가3")
+				.phone("02-1111-1113")
+				.content("안녕하세요")
+				.deliveryTip(2000)
+				.openingTime(LocalTime.of(9, 0))
+				.closingTime(LocalTime.of(21, 0))
+				.build();
+
+			List<Shop> shops = List.of(shop1, shop2, shop3);
+			List<ShopResponse> shopResponses = shops.stream()
+				.map(ShopResponse::from)
+				.toList();
+
+			given(shopRepository.searchShops(any(ShopSearchCondition.class), anyInt(), isNull(), any(ShopSort.class)))
+				.willReturn(shops);
+
+			// when
+			ShopsReponse shopsReponse = shopService.getShops(
+				new ShopSearchCondition(
+					"집",
+					Category.ASIAN,
+					"서울시",
+					1000,
+					"빈 메뉴"
+				),
+				10,
+				null,
+				ShopSort.DELIVERY_TIP_ASC
+			);
+
+			// then
+			for (int i = 0; i < shopsReponse.shopsReponses().size(); i++) {
+				assertThat(shopResponses.get(i)).usingRecursiveComparison()
+					.isEqualTo(shopsReponse.shopsReponses().get(i));
+			}
+			assertThat(shopsReponse.size()).isEqualTo(10);
+			assertThat(shopsReponse.nextCursor()).isNull();
+			assertThat(shopsReponse.sort()).isEqualTo(ShopSort.DELIVERY_TIP_ASC);
+			assertThat(shopsReponse.isLast()).isTrue();
 		}
 	}
 }
