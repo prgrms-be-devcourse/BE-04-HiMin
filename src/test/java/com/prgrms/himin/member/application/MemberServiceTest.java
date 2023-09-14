@@ -38,12 +38,6 @@ class MemberServiceTest {
 	@BeforeEach
 	void setup() {
 		request = MemberCreateRequestBuilder.successBuild();
-
-		given(passwordEncoder.encode(request.password()))
-			.willReturn(request.password());
-
-		String password = passwordEncoder.encode(request.password());
-		member = request.toEntity(password);
 	}
 
 	@DisplayName("회원 생성을 할 수 있다.")
@@ -54,6 +48,10 @@ class MemberServiceTest {
 		@Test
 		void success_test() {
 			// given
+			String password = "$2a$12$5JSVlqKP/gghOclI/Y053OX9rJDzNDBwUBI6RcWXG5/xRGfbflIW6";
+			given(passwordEncoder.encode(anyString())).willReturn(password);
+
+			member = request.toEntity(password);
 			given(memberRepository.save(any(Member.class))).willReturn(member);
 
 			// when
