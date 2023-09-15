@@ -1,37 +1,37 @@
 package com.prgrms.himin.member.application;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.BDDMockito.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.prgrms.himin.member.domain.Address;
 import com.prgrms.himin.member.domain.Member;
 import com.prgrms.himin.member.domain.MemberRepository;
 import com.prgrms.himin.member.dto.request.MemberCreateRequest;
 import com.prgrms.himin.member.dto.response.MemberCreateResponse;
 import com.prgrms.himin.setup.request.MemberCreateRequestBuilder;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 class MemberServiceTest {
 
-	@Mock
+	@Autowired
 	MemberRepository memberRepository;
 
-	@InjectMocks
+	@Autowired
 	MemberService memberService;
 
-	@Mock
+	@Autowired
 	PasswordEncoder passwordEncoder;
 
 	Member member;
+
+	Address address;
 
 	MemberCreateRequest request;
 
@@ -48,18 +48,25 @@ class MemberServiceTest {
 		@Test
 		void success_test() {
 			// given
-			String password = "$2a$12$5JSVlqKP/gghOclI/Y053OX9rJDzNDBwUBI6RcWXG5/xRGfbflIW6";
-			given(passwordEncoder.encode(anyString())).willReturn(password);
+			String password = request.password();
 
 			member = request.toEntity(password);
-			given(memberRepository.save(any(Member.class))).willReturn(member);
+
+			address = new Address(request.addressAlias(), request.address());
+
+			address.attachTo(member);
 
 			// when
 			MemberCreateResponse actual = memberService.createMember(request);
 
 			// then
 			MemberCreateResponse expected = MemberCreateResponse.from(member);
-			assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+			assertThat(actual).usingRecursiveComparison()
+				.ignoringFields("id", "addresses")
+				.isEqualTo(expected);
+
+			assertThat(actual.addresses()).usingRecursiveFieldByFieldElementComparatorIgnoringFields("addressId")
+				.isEqualTo(expected.addresses());
 		}
 	}
 }
