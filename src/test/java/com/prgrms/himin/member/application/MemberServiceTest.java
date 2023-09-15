@@ -48,7 +48,7 @@ class MemberServiceTest {
 		@Test
 		void success_test() {
 			// given
-			String password = "$2a$12$5JSVlqKP/gghOclI/Y053OX9rJDzNDBwUBI6RcWXG5/xRGfbflIW6";
+			String password = request.password();
 
 			member = request.toEntity(password);
 
