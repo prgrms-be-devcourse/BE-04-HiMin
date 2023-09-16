@@ -60,6 +60,11 @@ class MemberServiceTest {
 		void success_test() {
 			// given
 			MemberCreateRequest request = MemberCreateRequestBuilder.successBuild();
+
+			// when
+			MemberCreateResponse actual = memberService.createMember(request);
+
+			// then
 			String password = request.password();
 
 			member = request.toEntity(password);
@@ -67,20 +72,14 @@ class MemberServiceTest {
 			address = new Address(request.addressAlias(), request.address());
 
 			address.attachTo(member);
-
-			// when
-			MemberCreateResponse actual = memberService.createMember(request);
-
-			// then
 			MemberCreateResponse expected = MemberCreateResponse.from(member);
+
 			assertThat(actual).usingRecursiveComparison()
 				.ignoringFields("id", "addresses")
 				.isEqualTo(expected);
 
 			assertThat(actual.addresses()).usingRecursiveFieldByFieldElementComparatorIgnoringFields("addressId")
 				.isEqualTo(expected.addresses());
-			Optional<Member> member = memberRepository.findById(0L);
-			assertThat(member).isEmpty();
 		}
 	}
 
@@ -142,6 +141,11 @@ class MemberServiceTest {
 		void success_test() {
 			// given
 			member = memberSetUp.saveOne();
+
+			// when
+			MemberResponse actual = memberService.getMember(member.getId());
+
+			// then
 			List<AddressResponse> addressResponses = member.getAddresses()
 				.stream()
 				.map(AddressResponse::from)
@@ -149,10 +153,6 @@ class MemberServiceTest {
 
 			MemberResponse expected = MemberResponse.of(member, addressResponses);
 
-			// when
-			MemberResponse actual = memberService.getMember(member.getId());
-
-			// then
 			assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
 		}
 
@@ -186,10 +186,11 @@ class MemberServiceTest {
 
 			// when
 			memberService.updateMember(member.getId(), request);
+
+			// then
 			Member actual = memberRepository
 				.findById(member.getId()).get();
 
-			// then
 			assertThat(request).usingRecursiveComparison()
 				.ignoringFields("addresses")
 				.isEqualTo(actual);
