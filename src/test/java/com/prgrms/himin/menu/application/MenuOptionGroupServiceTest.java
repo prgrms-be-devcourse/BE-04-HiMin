@@ -211,7 +211,7 @@ class MenuOptionGroupServiceTest {
 
 			// then
 			Optional<MenuOptionGroup> actual = menuOptionGroupRepository.findById(menuOptionGroup.getId());
-			assertThat(actual).isEqualTo(Optional.empty());
+			assertThat(actual).isEmpty();
 		}
 
 		@Test
