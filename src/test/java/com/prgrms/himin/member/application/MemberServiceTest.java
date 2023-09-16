@@ -6,13 +6,14 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.prgrms.himin.global.error.exception.EntityNotFoundException;
 import com.prgrms.himin.global.error.exception.InvalidValueException;
@@ -21,12 +22,14 @@ import com.prgrms.himin.member.domain.Member;
 import com.prgrms.himin.member.domain.MemberRepository;
 import com.prgrms.himin.member.dto.request.MemberCreateRequest;
 import com.prgrms.himin.member.dto.request.MemberLoginRequest;
+import com.prgrms.himin.member.dto.request.MemberUpdateRequest;
 import com.prgrms.himin.member.dto.response.AddressResponse;
 import com.prgrms.himin.member.dto.response.MemberCreateResponse;
 import com.prgrms.himin.member.dto.response.MemberResponse;
 import com.prgrms.himin.setup.domain.MemberSetUp;
 import com.prgrms.himin.setup.request.MemberCreateRequestBuilder;
 import com.prgrms.himin.setup.request.MemberLoginRequestBuilder;
+import com.prgrms.himin.setup.request.MemberUpdateRequestBuilder;
 
 @Transactional
 @SpringBootTest
@@ -153,7 +156,7 @@ class MemberServiceTest {
 			assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
 		}
 
-		@DisplayName("멤버id가 잘못되어 실패한다.")
+		@DisplayName("회원id가 잘못되어 실패한다.")
 		@Test
 		void wrong_id_fail_test() {
 			// given
@@ -163,6 +166,46 @@ class MemberServiceTest {
 			// when & then
 			assertThatThrownBy(
 				() -> memberService.getMember(wrongId)
+			)
+				.isInstanceOf(EntityNotFoundException.class);
+		}
+	}
+
+	@DisplayName("회원을 업데이트 할 수 있다.")
+	@Nested
+	class UpdateMember {
+
+		MemberUpdateRequest.Info request;
+
+		@DisplayName("성공한다.")
+		@Test
+		void success_test() {
+			// given
+			member = memberSetUp.saveOne();
+			request = MemberUpdateRequestBuilder.infoSuccessBuild();
+
+			// when
+			memberService.updateMember(member.getId(), request);
+			Member actual = memberRepository
+				.findById(member.getId()).get();
+
+			// then
+			assertThat(request).usingRecursiveComparison()
+				.ignoringFields("addresses")
+				.isEqualTo(actual);
+		}
+
+		@DisplayName("회원id가 잘못되어 실패한다.")
+		@Test
+		void wrong_id_fail_test() {
+			// given
+			Long wrongId = 0L;
+			member = memberSetUp.saveOne();
+			request = MemberUpdateRequestBuilder.infoSuccessBuild();
+
+			// when & then
+			assertThatThrownBy(
+				() -> memberService.updateMember(wrongId, request)
 			)
 				.isInstanceOf(EntityNotFoundException.class);
 		}
