@@ -2,6 +2,8 @@ package com.prgrms.himin.menu.application;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -269,6 +271,102 @@ class MenuOptionServiceTest {
 			assertThatThrownBy(
 				() -> menuService.updateMenuOption(shop.getShopId(), menu.getId(), menuOptionGroup.getId(),
 					menuOption.getId(), request)
+			)
+				.isInstanceOf(InvalidValueException.class);
+		}
+	}
+
+	@Nested
+	@DisplayName("메뉴옵션그룹 삭제할 수 있다.")
+	class deleteMenuOption {
+
+		@Test
+		@DisplayName("성공한다.")
+		void success_test() {
+			// given
+			MenuOption menuOption = menuOptionSetUp.saveOne(menuOptionGroup);
+
+			// when
+			menuService.deleteMenuOption(shop.getShopId(), menu.getId(), menuOptionGroup.getId(), menuOption.getId());
+
+			// then
+			Optional<MenuOption> actual = menuOptionRepository.findById(menuOption.getId());
+			assertThat(actual).isEmpty();
+		}
+
+		@Test
+		@DisplayName("메뉴가 존재하지 않아서 실패한다.")
+		void not_exist_menu_fail_test() {
+			// given
+			MenuOption menuOption = menuOptionSetUp.saveOne(menuOptionGroup);
+
+			Long wrongId = 0L;
+
+			// when & then
+			assertThatThrownBy(
+				() -> menuService.deleteMenuOption(shop.getShopId(), wrongId, menuOptionGroup.getId(),
+					menuOption.getId())
+			)
+				.isInstanceOf(EntityNotFoundException.class);
+		}
+
+		@Test
+		@DisplayName("메뉴옵션그룹이 존재하지 않아서 실패한다.")
+		void not_exist_menu_option_group_fail_test() {
+			// given
+			MenuOption menuOption = menuOptionSetUp.saveOne(menuOptionGroup);
+			Long wrongId = 0L;
+
+			// when & then
+			assertThatThrownBy(
+				() -> menuService.deleteMenuOption(shop.getShopId(), menu.getId(), wrongId, menuOption.getId())
+			)
+				.isInstanceOf(EntityNotFoundException.class);
+		}
+
+		@Test
+		@DisplayName("가게와 메뉴가 맞지 않아서 실패한다.")
+		void not_match_shop_and_menu_fail_test() {
+			// given
+			Shop anotherShop = shopSetUp.saveOne();
+			MenuOptionGroup menuOptionGroup = menuOptionGroupSetUp.saveOne(menu);
+			MenuOption menuOption = menuOptionSetUp.saveOne(menuOptionGroup);
+
+			// when & then
+			assertThatThrownBy(
+				() -> menuService.deleteMenuOption(anotherShop.getShopId(), menu.getId(), menuOptionGroup.getId(),
+					menuOption.getId())
+			)
+				.isInstanceOf(InvalidValueException.class);
+		}
+
+		@Test
+		@DisplayName("메뉴와 메뉴옵션그룹이 맞지 않아서 실패한다.")
+		void not_match_menu_and_menu_option_group_fail_test() {
+			// given
+			Menu anotherMenu = menuSetUp.saveOne(shop);
+			MenuOptionGroup menuOptionGroup = menuOptionGroupSetUp.saveOne(anotherMenu);
+			MenuOption menuOption = menuOptionSetUp.saveOne(menuOptionGroup);
+
+			// when & then
+			assertThatThrownBy(
+				() -> menuService.deleteMenuOption(shop.getShopId(), menu.getId(), menuOptionGroup.getId(),
+					menuOption.getId())
+			)
+				.isInstanceOf(InvalidValueException.class);
+		}
+
+		@Test
+		@DisplayName("메뉴옵션그룹과 메뉴옵션이 맞지 않아서 실패한다.")
+		void not_match_menu_option_group_and_menu_fail_test() {
+			// given
+			MenuOptionGroup anotherMenuOptionGroup = menuOptionGroupSetUp.saveOne(menu);
+			MenuOption menuOption = menuOptionSetUp.saveOne(anotherMenuOptionGroup);
+
+			// when & then
+			assertThatThrownBy(
+				() -> menuService.deleteMenuOption(shop.getShopId(), menu.getId(), menuOptionGroup.getId(),
+					menuOption.getId())
 			)
 				.isInstanceOf(InvalidValueException.class);
 		}
