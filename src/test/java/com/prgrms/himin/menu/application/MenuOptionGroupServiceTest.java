@@ -16,11 +16,13 @@ import com.prgrms.himin.menu.domain.MenuOptionGroup;
 import com.prgrms.himin.menu.domain.MenuOptionGroupRepository;
 import com.prgrms.himin.menu.domain.MenuValidator;
 import com.prgrms.himin.menu.dto.request.MenuOptionGroupCreateRequest;
+import com.prgrms.himin.menu.dto.request.MenuOptionGroupUpdateRequest;
 import com.prgrms.himin.menu.dto.response.MenuOptionGroupCreateResponse;
 import com.prgrms.himin.setup.domain.MenuOptionGroupSetUp;
 import com.prgrms.himin.setup.domain.MenuSetUp;
 import com.prgrms.himin.setup.domain.ShopSetUp;
 import com.prgrms.himin.setup.request.MenuOptionGroupRequestBuilder;
+import com.prgrms.himin.setup.request.MenuOptionGroupUpdateRequestBuilder;
 import com.prgrms.himin.shop.domain.Shop;
 import com.prgrms.himin.shop.domain.ShopRepository;
 
@@ -104,6 +106,89 @@ class MenuOptionGroupServiceTest {
 			// when & then
 			assertThatThrownBy(
 				() -> menuService.createMenuOptionGroup(anotherShop.getShopId(), menu.getId(), request)
+			)
+				.isInstanceOf(InvalidValueException.class);
+		}
+	}
+
+	@Nested
+	@DisplayName("메뉴옵셥그룹 업데이트할 수 있다.")
+	class updateMenuOptionGroup {
+
+		@Test
+		@DisplayName("성공한다.")
+		void success_test() {
+			// given
+			MenuOptionGroup menuOptionGroup = menuOptionGroupSetUp.saveOne(menu);
+			MenuOptionGroupUpdateRequest request = MenuOptionGroupUpdateRequestBuilder.successBuild();
+
+			// when
+			menuService.updateMenuOptionGroup(shop.getShopId(), menu.getId(), menuOptionGroup.getId(), request);
+
+			// then
+			MenuOptionGroup expected = menuOptionGroupRepository.findById(menuOptionGroup.getId()).get();
+			assertThat(expected.getName()).isEqualTo(request.name());
+		}
+
+		@Test
+		@DisplayName("메뉴가 존재하지 않아서 실패한다.")
+		void not_exist_menu_fail_test() {
+			// given
+			MenuOptionGroup menuOptionGroup = menuOptionGroupSetUp.saveOne(menu);
+			MenuOptionGroupUpdateRequest request = MenuOptionGroupUpdateRequestBuilder.successBuild();
+
+			Long wrongId = 0L;
+
+			// when & then
+			assertThatThrownBy(
+				() -> menuService.updateMenuOptionGroup(shop.getShopId(), wrongId, menuOptionGroup.getId(), request)
+			)
+				.isInstanceOf(EntityNotFoundException.class);
+		}
+
+		@Test
+		@DisplayName("메뉴옵션그룹이 존재하지 않아서 실패한다.")
+		void not_exist_menu_option_group_fail_test() {
+			// given
+			MenuOptionGroupUpdateRequest request = MenuOptionGroupUpdateRequestBuilder.successBuild();
+
+			Long wrongId = 0L;
+
+			// when & then
+			assertThatThrownBy(
+				() -> menuService.updateMenuOptionGroup(shop.getShopId(), menu.getId(), wrongId, request)
+			)
+				.isInstanceOf(EntityNotFoundException.class);
+		}
+
+		@Test
+		@DisplayName("가게와 메뉴가 맞지 않아서 실패한다.")
+		void not_match_shop_and_menu_fail_test() {
+			// given
+			Shop anotherShop = shopSetUp.saveOne();
+			MenuOptionGroup menuOptionGroup = menuOptionGroupSetUp.saveOne(menu);
+			MenuOptionGroupUpdateRequest request = MenuOptionGroupUpdateRequestBuilder.successBuild();
+
+			// when & then
+			assertThatThrownBy(
+				() -> menuService.updateMenuOptionGroup(anotherShop.getShopId(), menu.getId(), menuOptionGroup.getId(),
+					request)
+			)
+				.isInstanceOf(InvalidValueException.class);
+		}
+
+		@Test
+		@DisplayName("메뉴와 메뉴옵션그룹이 맞지 않아서 실패한다.")
+		void not_match_menu_and_menu_option_group_fail_test() {
+			// given
+			Menu anotherMenu = menuSetUp.saveOne(shop);
+			MenuOptionGroup menuOptionGroup = menuOptionGroupSetUp.saveOne(anotherMenu);
+			MenuOptionGroupUpdateRequest request = MenuOptionGroupUpdateRequestBuilder.successBuild();
+
+			// when & then
+			assertThatThrownBy(
+				() -> menuService.updateMenuOptionGroup(shop.getShopId(), menu.getId(), menuOptionGroup.getId(),
+					request)
 			)
 				.isInstanceOf(InvalidValueException.class);
 		}
