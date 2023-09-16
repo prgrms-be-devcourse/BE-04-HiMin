@@ -210,4 +210,37 @@ class MemberServiceTest {
 				.isInstanceOf(EntityNotFoundException.class);
 		}
 	}
+
+	@DisplayName("회원을 삭제할 수 있다.")
+	@Nested
+	class DeleteMember {
+
+		@DisplayName("성공한다.")
+		@Test
+		void success_test() {
+			// given
+			member = memberSetUp.saveOne();
+
+			// when
+			memberService.deleteMember(member.getId());
+
+			// then
+			Optional<Member> actual = memberRepository.findById(member.getId());
+			assertThat(actual).isEmpty();
+		}
+
+		@DisplayName("회원id가 잘못되어 실패한다.")
+		@Test
+		void wrong_id_fail_test() {
+			// given
+			Long wrongId = 0L;
+			member = memberSetUp.saveOne();
+
+			// when & then
+			assertThatThrownBy(
+				() -> memberService.deleteMember(wrongId)
+			)
+				.isInstanceOf(EntityNotFoundException.class);
+		}
+	}
 }
