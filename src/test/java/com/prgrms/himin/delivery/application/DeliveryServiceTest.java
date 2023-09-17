@@ -99,7 +99,7 @@ class DeliveryServiceTest {
 				delivery.getDeliveryId());
 			assertThat(deliveryHistories).hasSize(2);
 			assertThat(delivery.getRider().getRiderId()).isEqualTo(rider.getRiderId());
-			assertThat(deliveryHistoryResponse.historyInfo().deliveryStatus()).isEqualTo(DeliveryStatus.ALLOCATED);
+			assertThat(deliveryHistoryResponse.deliveryStatus()).isEqualTo(DeliveryStatus.ALLOCATED);
 		}
 
 		@Test
@@ -149,7 +149,7 @@ class DeliveryServiceTest {
 			List<DeliveryHistory> deliveryHistories = deliveryHistoryRepository.findDeliveryHistoriesByDeliveryId(
 				delivery.getDeliveryId());
 			assertThat(deliveryHistories).hasSize(3);
-			assertThat(deliveryHistoryResponse.historyInfo().deliveryStatus()).isEqualTo(DeliveryStatus.DELIVERING);
+			assertThat(deliveryHistoryResponse.deliveryStatus()).isEqualTo(DeliveryStatus.DELIVERING);
 		}
 
 		@Test
@@ -213,7 +213,7 @@ class DeliveryServiceTest {
 			List<DeliveryHistory> deliveryHistories = deliveryHistoryRepository.findDeliveryHistoriesByDeliveryId(
 				delivery.getDeliveryId());
 			assertThat(deliveryHistories).hasSize(4);
-			assertThat(deliveryHistoryResponse.historyInfo().deliveryStatus()).isEqualTo(DeliveryStatus.ARRIVED);
+			assertThat(deliveryHistoryResponse.deliveryStatus()).isEqualTo(DeliveryStatus.ARRIVED);
 		}
 
 		@Test
