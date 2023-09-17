@@ -17,6 +17,7 @@ import com.prgrms.himin.delivery.domain.Delivery;
 import com.prgrms.himin.delivery.domain.DeliveryHistory;
 import com.prgrms.himin.delivery.domain.DeliveryHistoryRepository;
 import com.prgrms.himin.delivery.domain.DeliveryRepository;
+import com.prgrms.himin.delivery.domain.DeliveryStatus;
 import com.prgrms.himin.delivery.domain.Rider;
 import com.prgrms.himin.delivery.domain.RiderRepository;
 import com.prgrms.himin.delivery.dto.response.DeliveryHistoryResponse;
@@ -68,6 +69,7 @@ class DeliveryServiceTest {
 			boolean result = deliveryRepository.existsById(deliveryId);
 			assertThat(deliveryHistories).hasSize(1);
 			assertThat(result).isTrue();
+			assertThat(deliveryResponse.deliveryStatus()).isEqualTo(DeliveryStatus.BEFORE_DELIVERY);
 		}
 	}
 
@@ -91,6 +93,7 @@ class DeliveryServiceTest {
 				delivery.getDeliveryId());
 			assertThat(deliveryHistories).hasSize(2);
 			assertThat(delivery.getRider().getRiderId()).isEqualTo(rider.getRiderId());
+			assertThat(deliveryHistoryResponse.historyInfo().deliveryStatus()).isEqualTo(DeliveryStatus.ALLOCATED);
 		}
 
 		@Test
@@ -150,6 +153,7 @@ class DeliveryServiceTest {
 			List<DeliveryHistory> deliveryHistories = deliveryHistoryRepository.findDeliveryHistoriesByDeliveryId(
 				delivery.getDeliveryId());
 			assertThat(deliveryHistories).hasSize(3);
+			assertThat(deliveryHistoryResponse.historyInfo().deliveryStatus()).isEqualTo(DeliveryStatus.DELIVERING);
 		}
 
 		@Test

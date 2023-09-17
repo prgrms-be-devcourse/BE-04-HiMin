@@ -50,7 +50,7 @@ public record DeliveryHistoryResponse(
 		}
 	}
 
-	private record HistoryInfo(
+	public record HistoryInfo(
 		DeliveryStatus deliveryStatus,
 		LocalDateTime createdAt
 	) {
