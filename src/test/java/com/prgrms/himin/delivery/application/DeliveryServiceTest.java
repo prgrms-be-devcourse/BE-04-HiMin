@@ -52,6 +52,16 @@ class DeliveryServiceTest {
 	@Autowired
 	RiderSetUp riderSetUp;
 
+	Delivery delivery;
+
+	Rider rider;
+
+	@BeforeEach
+	void setUp() {
+		delivery = deliverySetUp.saveOne(1L);
+		rider = riderSetUp.saveOne();
+	}
+
 	@Nested
 	@DisplayName("배달을 생성할 수 있다.")
 	class createDelivery {
@@ -80,10 +90,6 @@ class DeliveryServiceTest {
 		@Test
 		@DisplayName("성공한다.")
 		void success_test() {
-			// given
-			Delivery delivery = deliverySetUp.saveOne(1L);
-			Rider rider = riderSetUp.saveOne();
-
 			// when
 			DeliveryHistoryResponse deliveryHistoryResponse = deliveryService.allocateRider(delivery.getDeliveryId(),
 				rider.getRiderId());
@@ -100,8 +106,6 @@ class DeliveryServiceTest {
 		@DisplayName("배달이 존재하지 않아서 실패한다.")
 		void not_exist_delivery_fail_test() {
 			// given
-			Rider rider = riderSetUp.saveOne();
-
 			Long wrongId = 0L;
 
 			// when & then
@@ -115,8 +119,6 @@ class DeliveryServiceTest {
 		@DisplayName("배달기사가 존재하지 않아서 실패한다.")
 		void not_exist_rider_fail_test() {
 			// given
-			Delivery delivery = deliverySetUp.saveOne(1L);
-
 			Long wrongId = 0L;
 
 			// when & then
@@ -131,14 +133,8 @@ class DeliveryServiceTest {
 	@DisplayName("배달을 시작할 수 있다.")
 	class startDelivery {
 
-		Delivery delivery;
-		Rider rider;
-
 		@BeforeEach
 		void allocateRider() {
-			delivery = deliverySetUp.saveOne(1L);
-			rider = riderSetUp.saveOne();
-
 			deliveryService.allocateRider(delivery.getDeliveryId(), rider.getRiderId());
 		}
 
@@ -200,14 +196,8 @@ class DeliveryServiceTest {
 	@DisplayName("배달을 완료할 수 있다.")
 	class finishDelivery {
 
-		Delivery delivery;
-		Rider rider;
-
 		@BeforeEach
-		void allocateRider() {
-			delivery = deliverySetUp.saveOne(1L);
-			rider = riderSetUp.saveOne();
-
+		void setDeliveryHistory() {
 			deliveryService.allocateRider(delivery.getDeliveryId(), rider.getRiderId());
 			deliveryService.startDelivery(delivery.getDeliveryId(), rider.getRiderId());
 		}
