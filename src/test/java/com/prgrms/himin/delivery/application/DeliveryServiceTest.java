@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,7 @@ import com.prgrms.himin.delivery.domain.Rider;
 import com.prgrms.himin.delivery.domain.RiderRepository;
 import com.prgrms.himin.delivery.dto.response.DeliveryHistoryResponse;
 import com.prgrms.himin.delivery.dto.response.DeliveryResponse;
+import com.prgrms.himin.global.error.exception.BusinessException;
 import com.prgrms.himin.global.error.exception.EntityNotFoundException;
 import com.prgrms.himin.setup.domain.DeliverySetUp;
 import com.prgrms.himin.setup.domain.RiderSetUp;
@@ -126,23 +128,67 @@ class DeliveryServiceTest {
 	@DisplayName("배달을 시작할 수 있다.")
 	class startDelivery {
 
+		Delivery delivery;
+		Rider rider;
+
+		@BeforeEach
+		void allocateRider() {
+			delivery = deliverySetUp.saveOne(1L);
+			rider = riderSetUp.saveOne();
+
+			deliveryService.allocateRider(delivery.getDeliveryId(), rider.getRiderId());
+		}
+
 		@Test
 		@DisplayName("성공한다.")
 		void success_test() {
-			// given
-			Delivery delivery = deliverySetUp.saveOne(1L);
-			Rider rider = riderSetUp.saveOne();
-
-			deliveryService.allocateRider(delivery.getDeliveryId(), rider.getRiderId());
-
 			// when
 			DeliveryHistoryResponse deliveryHistoryResponse = deliveryService.startDelivery(delivery.getDeliveryId(),
 				rider.getRiderId());
 
 			// then
 			List<DeliveryHistory> deliveryHistories = deliveryHistoryRepository.findDeliveryHistoriesByDeliveryId(
-				deliveryHistoryResponse.riderId());
+				delivery.getDeliveryId());
 			assertThat(deliveryHistories).hasSize(3);
+		}
+
+		@Test
+		@DisplayName("배달이 존재하지 않아서 실패한다.")
+		void not_exist_delivery_fail_test() {
+			// given
+			Long wrongId = 0L;
+
+			// when & then
+			assertThatThrownBy(
+				() -> deliveryService.startDelivery(wrongId, rider.getRiderId())
+			)
+				.isInstanceOf(EntityNotFoundException.class);
+		}
+
+		@Test
+		@DisplayName("배달기사가 존재하지 않아서 실패한다.")
+		void not_exist_rider_fail_test() {
+			// given
+			Long wrongId = 0L;
+
+			// when & then
+			assertThatThrownBy(
+				() -> deliveryService.startDelivery(delivery.getDeliveryId(), wrongId)
+			)
+				.isInstanceOf(EntityNotFoundException.class);
+		}
+
+		@Test
+		@DisplayName("배달과 배달기사가 맞지 않아서 실패한다.")
+		void not_match_delivery_and_rider_fail_test() {
+			// given
+			Rider anotherRider = riderSetUp.saveOne();
+
+			// when & then
+			assertThatThrownBy(
+				() -> deliveryService.startDelivery(delivery.getDeliveryId(), anotherRider.getRiderId())
+			)
+				.isInstanceOf(BusinessException.class);
 		}
 	}
 }
