@@ -255,4 +255,40 @@ class DeliveryServiceTest {
 				.isInstanceOf(BusinessException.class);
 		}
 	}
+
+	@Nested
+	@DisplayName("배달 내역을 조회할 수 있다.")
+	class getDeliveryHistories {
+
+		@BeforeEach
+		void setDeliveryHistory() {
+			deliveryService.allocateRider(delivery.getDeliveryId(), rider.getRiderId());
+			deliveryService.startDelivery(delivery.getDeliveryId(), rider.getRiderId());
+			deliveryService.finishDelivery(delivery.getDeliveryId(), rider.getRiderId());
+		}
+
+		@Test
+		@DisplayName("성공한다.")
+		void success_test() {
+			// when
+			DeliveryHistoryResponse.Multiple deliveryHistories = deliveryService.getDeliveryHistories(
+				delivery.getDeliveryId());
+
+			// then
+			assertThat(deliveryHistories.historyInfos()).hasSize(4);
+		}
+
+		@Test
+		@DisplayName("배달이 존재하지 않아서 실패한다.")
+		void not_exist_delivery_fail_test() {
+			// given
+			Long wrongId = 0L;
+
+			// when & then
+			assertThatThrownBy(
+				() -> deliveryService.getDeliveryHistories(wrongId)
+			)
+				.isInstanceOf(EntityNotFoundException.class);
+		}
+	}
 }
