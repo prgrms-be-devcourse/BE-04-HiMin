@@ -86,7 +86,7 @@ class DeliveryServiceTest {
 
 			// then
 			List<DeliveryHistory> deliveryHistories = deliveryHistoryRepository.findDeliveryHistoriesByDeliveryId(
-				deliveryHistoryResponse.riderId());
+				delivery.getDeliveryId());
 			assertThat(deliveryHistories).hasSize(2);
 			assertThat(delivery.getRider().getRiderId()).isEqualTo(rider.getRiderId());
 		}
