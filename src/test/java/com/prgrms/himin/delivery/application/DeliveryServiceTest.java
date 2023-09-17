@@ -195,4 +195,74 @@ class DeliveryServiceTest {
 				.isInstanceOf(BusinessException.class);
 		}
 	}
+
+	@Nested
+	@DisplayName("배달을 완료할 수 있다.")
+	class finishDelivery {
+
+		Delivery delivery;
+		Rider rider;
+
+		@BeforeEach
+		void allocateRider() {
+			delivery = deliverySetUp.saveOne(1L);
+			rider = riderSetUp.saveOne();
+
+			deliveryService.allocateRider(delivery.getDeliveryId(), rider.getRiderId());
+			deliveryService.startDelivery(delivery.getDeliveryId(), rider.getRiderId());
+		}
+
+		@Test
+		@DisplayName("성공한다.")
+		void success_test() {
+			// when
+			DeliveryHistoryResponse deliveryHistoryResponse = deliveryService.finishDelivery(delivery.getDeliveryId(),
+				rider.getRiderId());
+
+			// then
+			List<DeliveryHistory> deliveryHistories = deliveryHistoryRepository.findDeliveryHistoriesByDeliveryId(
+				delivery.getDeliveryId());
+			assertThat(deliveryHistories).hasSize(4);
+			assertThat(deliveryHistoryResponse.historyInfo().deliveryStatus()).isEqualTo(DeliveryStatus.ARRIVED);
+		}
+
+		@Test
+		@DisplayName("배달이 존재하지 않아서 실패한다.")
+		void not_exist_delivery_fail_test() {
+			// given
+			Long wrongId = 0L;
+
+			// when & then
+			assertThatThrownBy(
+				() -> deliveryService.finishDelivery(wrongId, rider.getRiderId())
+			)
+				.isInstanceOf(EntityNotFoundException.class);
+		}
+
+		@Test
+		@DisplayName("배달기사가 존재하지 않아서 실패한다.")
+		void not_exist_rider_fail_test() {
+			// given
+			Long wrongId = 0L;
+
+			// when & then
+			assertThatThrownBy(
+				() -> deliveryService.finishDelivery(delivery.getDeliveryId(), wrongId)
+			)
+				.isInstanceOf(EntityNotFoundException.class);
+		}
+
+		@Test
+		@DisplayName("배달과 배달기사가 맞지 않아서 실패한다.")
+		void not_match_delivery_and_rider_fail_test() {
+			// given
+			Rider anotherRider = riderSetUp.saveOne();
+
+			// when & then
+			assertThatThrownBy(
+				() -> deliveryService.finishDelivery(delivery.getDeliveryId(), anotherRider.getRiderId())
+			)
+				.isInstanceOf(BusinessException.class);
+		}
+	}
 }
