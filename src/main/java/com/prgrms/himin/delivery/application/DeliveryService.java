@@ -42,10 +42,7 @@ public class DeliveryService {
 		DeliveryHistory deliveryHistory = DeliveryHistory.createBeforeDeliveryHistory(savedDelivery);
 		DeliveryHistory savedDeliveryHistory = deliveryHistoryRepository.save(deliveryHistory);
 
-		DeliveryResponse response = DeliveryResponse.of(
-			savedDelivery,
-			savedDeliveryHistory
-		);
+		DeliveryResponse response = DeliveryResponse.from(savedDeliveryHistory);
 
 		return response;
 	}
@@ -88,15 +85,15 @@ public class DeliveryService {
 				() -> new EntityNotFoundException(ErrorCode.DELIVERY_NOT_FOUND)
 			);
 
-		validateRider(
-			riderId,
-			delivery
-		);
-
 		Rider rider = riderRepository.findById(riderId)
 			.orElseThrow(
 				() -> new EntityNotFoundException(ErrorCode.DELIVERY_NOT_FOUND)
 			);
+
+		validateRider(
+			riderId,
+			delivery
+		);
 
 		DeliveryHistory deliveryHistory = DeliveryHistory.createStartDeliveryHistory(delivery);
 		DeliveryHistory savedDeliveryHistory = deliveryHistoryRepository.save(deliveryHistory);
@@ -119,15 +116,15 @@ public class DeliveryService {
 				() -> new EntityNotFoundException(ErrorCode.DELIVERY_NOT_FOUND)
 			);
 
-		validateRider(
-			riderId,
-			delivery
-		);
-
 		Rider rider = riderRepository.findById(riderId)
 			.orElseThrow(
 				() -> new EntityNotFoundException(ErrorCode.DELIVERY_NOT_FOUND)
 			);
+
+		validateRider(
+			riderId,
+			delivery
+		);
 
 		DeliveryHistory deliveryHistory = DeliveryHistory.createArrivedDeliveryHistory(delivery);
 		DeliveryHistory savedDeliveryHistory = deliveryHistoryRepository.save(deliveryHistory);

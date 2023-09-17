@@ -55,4 +55,8 @@ public record DeliveryHistoryResponse(
 		LocalDateTime createdAt
 	) {
 	}
+
+	public DeliveryStatus deliveryStatus() {
+		return this.historyInfo.deliveryStatus();
+	}
 }
