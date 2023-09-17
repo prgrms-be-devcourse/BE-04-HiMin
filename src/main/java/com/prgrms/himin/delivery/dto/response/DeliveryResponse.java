@@ -8,7 +8,7 @@ public record DeliveryResponse(
 	DeliveryStatus deliveryStatus
 ) {
 
-	public static DeliveryResponse of(DeliveryHistory deliveryHistory) {
+	public static DeliveryResponse from(DeliveryHistory deliveryHistory) {
 		return new DeliveryResponse(
 			deliveryHistory.getDelivery().getDeliveryId(),
 			deliveryHistory.getDeliveryStatus()

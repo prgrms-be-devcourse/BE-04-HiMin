@@ -42,7 +42,7 @@ public class DeliveryService {
 		DeliveryHistory deliveryHistory = DeliveryHistory.createBeforeDeliveryHistory(savedDelivery);
 		DeliveryHistory savedDeliveryHistory = deliveryHistoryRepository.save(deliveryHistory);
 
-		DeliveryResponse response = DeliveryResponse.of(savedDeliveryHistory);
+		DeliveryResponse response = DeliveryResponse.from(savedDeliveryHistory);
 
 		return response;
 	}
