@@ -20,6 +20,7 @@ import com.prgrms.himin.delivery.domain.Rider;
 import com.prgrms.himin.delivery.domain.RiderRepository;
 import com.prgrms.himin.delivery.dto.response.DeliveryHistoryResponse;
 import com.prgrms.himin.delivery.dto.response.DeliveryResponse;
+import com.prgrms.himin.global.error.exception.EntityNotFoundException;
 import com.prgrms.himin.setup.domain.DeliverySetUp;
 import com.prgrms.himin.setup.domain.RiderSetUp;
 
@@ -88,6 +89,36 @@ class DeliveryServiceTest {
 				deliveryHistoryResponse.riderId());
 			assertThat(deliveryHistories).hasSize(2);
 			assertThat(delivery.getRider().getRiderId()).isEqualTo(rider.getRiderId());
+		}
+
+		@Test
+		@DisplayName("배달이 존재하지 않아서 실패한다.")
+		void not_exist_delivery_fail_test() {
+			// given
+			Rider rider = riderSetUp.saveOne();
+
+			Long wrongId = 0L;
+
+			// when & then
+			assertThatThrownBy(
+				() -> deliveryService.allocateRider(wrongId, rider.getRiderId())
+			)
+				.isInstanceOf(EntityNotFoundException.class);
+		}
+
+		@Test
+		@DisplayName("배달기사가 존재하지 않아서 실패한다.")
+		void not_exist_rider_fail_test() {
+			// given
+			Delivery delivery = deliverySetUp.saveOne(1L);
+
+			Long wrongId = 0L;
+
+			// when & then
+			assertThatThrownBy(
+				() -> deliveryService.allocateRider(delivery.getDeliveryId(), wrongId)
+			)
+				.isInstanceOf(EntityNotFoundException.class);
 		}
 	}
 }
