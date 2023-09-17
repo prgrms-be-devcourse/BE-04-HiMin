@@ -121,4 +121,28 @@ class DeliveryServiceTest {
 				.isInstanceOf(EntityNotFoundException.class);
 		}
 	}
+
+	@Nested
+	@DisplayName("배달을 시작할 수 있다.")
+	class startDelivery {
+
+		@Test
+		@DisplayName("성공한다.")
+		void success_test() {
+			// given
+			Delivery delivery = deliverySetUp.saveOne(1L);
+			Rider rider = riderSetUp.saveOne();
+
+			deliveryService.allocateRider(delivery.getDeliveryId(), rider.getRiderId());
+
+			// when
+			DeliveryHistoryResponse deliveryHistoryResponse = deliveryService.startDelivery(delivery.getDeliveryId(),
+				rider.getRiderId());
+
+			// then
+			List<DeliveryHistory> deliveryHistories = deliveryHistoryRepository.findDeliveryHistoriesByDeliveryId(
+				deliveryHistoryResponse.riderId());
+			assertThat(deliveryHistories).hasSize(3);
+		}
+	}
 }
