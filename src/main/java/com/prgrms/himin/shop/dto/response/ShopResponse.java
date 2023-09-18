@@ -1,6 +1,7 @@
 package com.prgrms.himin.shop.dto.response;
 
 import java.time.LocalTime;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.prgrms.himin.shop.domain.Category;
@@ -42,5 +43,11 @@ public record ShopResponse(
 			.openingTime(shop.getOpeningTime())
 			.closingTime(shop.getClosingTime())
 			.build();
+	}
+
+	public static List<ShopResponse> from(List<Shop> shops) {
+		return shops.stream()
+			.map(ShopResponse::from)
+			.toList();
 	}
 }
