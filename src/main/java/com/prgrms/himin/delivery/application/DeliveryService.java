@@ -17,6 +17,7 @@ import com.prgrms.himin.delivery.dto.response.DeliveryResponse;
 import com.prgrms.himin.global.error.exception.BusinessException;
 import com.prgrms.himin.global.error.exception.EntityNotFoundException;
 import com.prgrms.himin.global.error.exception.ErrorCode;
+import com.prgrms.himin.order.domain.OrderValidator;
 import com.prgrms.himin.order.event.DeliveryFinishedEvent;
 
 import lombok.RequiredArgsConstructor;
@@ -34,8 +35,12 @@ public class DeliveryService {
 
 	private final ApplicationEventPublisher publisher;
 
+	private final OrderValidator orderValidator;
+
 	@Transactional
 	public DeliveryResponse createDelivery(Long orderId) {
+		orderValidator.validateOrderId(orderId);
+
 		Delivery delivery = new Delivery(orderId);
 		Delivery savedDelivery = deliveryRepository.save(delivery);
 
