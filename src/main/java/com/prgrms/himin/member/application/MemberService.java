@@ -89,9 +89,11 @@ public class MemberService {
 				() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND)
 			);
 
+		String encodedPassword = passwordEncoder.encode(request.password());
+
 		member.updateInfo(
 			request.loginId(),
-			request.password(),
+			Member.password(request.password(), encodedPassword),
 			request.name(),
 			request.phone(),
 			request.birthday()

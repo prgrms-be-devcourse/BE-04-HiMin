@@ -192,8 +192,10 @@ class MemberServiceTest {
 				.findById(member.getId()).get();
 
 			assertThat(request).usingRecursiveComparison()
-				.ignoringFields("addresses")
+				.ignoringFields("password", "addresses")
 				.isEqualTo(actual);
+			boolean result = passwordEncoder.matches(request.password(), actual.getPassword());
+			assertThat(result).isTrue();
 		}
 
 		@DisplayName("회원id가 잘못되어 실패한다.")

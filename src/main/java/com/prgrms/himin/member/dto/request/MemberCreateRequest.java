@@ -43,10 +43,10 @@ public record MemberCreateRequest(
 	String address
 ) {
 
-	public Member toEntity(String password) {
+	public Member toEntity(String encodedPassword) {
 		return Member.builder()
 			.loginId(loginId)
-			.password(password)
+			.password(Member.password(password, encodedPassword))
 			.name(name)
 			.phone(phone)
 			.birthday(birthday)

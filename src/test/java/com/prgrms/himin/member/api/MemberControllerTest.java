@@ -268,7 +268,6 @@ class MemberControllerTest {
 				.andDo(print());
 
 			assertThat(updatedMember.getLoginId()).isEqualTo(request.loginId());
-			assertThat(updatedMember.getPassword()).isEqualTo(request.password());
 			assertThat(updatedMember.getName()).isEqualTo(request.name());
 			assertThat(updatedMember.getPhone()).isEqualTo(request.phone());
 			assertThat(updatedMember.getBirthday()).isEqualTo(request.birthday());
