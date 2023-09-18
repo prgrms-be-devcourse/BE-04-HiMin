@@ -1,6 +1,7 @@
 package com.prgrms.himin.delivery.application;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import java.util.List;
 
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +26,7 @@ import com.prgrms.himin.delivery.dto.response.DeliveryHistoryResponse;
 import com.prgrms.himin.delivery.dto.response.DeliveryResponse;
 import com.prgrms.himin.global.error.exception.BusinessException;
 import com.prgrms.himin.global.error.exception.EntityNotFoundException;
+import com.prgrms.himin.order.domain.OrderValidator;
 import com.prgrms.himin.setup.domain.DeliverySetUp;
 import com.prgrms.himin.setup.domain.RiderSetUp;
 
@@ -56,6 +59,9 @@ class DeliveryServiceTest {
 
 	Rider rider;
 
+	@SpyBean
+	OrderValidator orderValidator;
+
 	@BeforeEach
 	void setUp() {
 		delivery = deliverySetUp.saveOne(1L);
@@ -69,8 +75,11 @@ class DeliveryServiceTest {
 		@Test
 		@DisplayName("성공한다.")
 		void success_test() {
+			// given
+			doNothing().when(orderValidator).validateOrderId(anyLong());
+
 			// when
-			DeliveryResponse deliveryResponse = deliveryService.createDelivery(1L); // orderId값에 아무 값이나 넣어도 통과됨
+			DeliveryResponse deliveryResponse = deliveryService.createDelivery(0L);
 
 			// then
 			Long deliveryId = deliveryResponse.deliveryId();
@@ -80,6 +89,19 @@ class DeliveryServiceTest {
 			assertThat(deliveryHistories).hasSize(1);
 			assertThat(result).isTrue();
 			assertThat(deliveryResponse.deliveryStatus()).isEqualTo(DeliveryStatus.BEFORE_DELIVERY);
+		}
+
+		@DisplayName("주문id가 존재하지 않아 실패한다.")
+		@Test
+		void not_exist_order_id_fail_test() {
+			// given
+			Long wrongId = 0L;
+
+			// when & then
+			assertThatThrownBy(
+				() -> deliveryService.createDelivery(wrongId)
+			)
+				.isInstanceOf(EntityNotFoundException.class);
 		}
 	}
 
