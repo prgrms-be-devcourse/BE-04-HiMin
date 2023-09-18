@@ -32,20 +32,6 @@ public class ShopService {
 
 	private final ApplicationEventPublisher publisher;
 
-	private static int getLastIndex(List<Shop> shops, int size) {
-		if (shops.size() <= size) {
-			return shops.size() - 1;
-		}
-
-		return shops.size() - 2;
-	}
-
-	private static List<ShopResponse> getShopResponses(List<Shop> shops) {
-		return shops.stream()
-			.map(ShopResponse::from)
-			.toList();
-	}
-
 	@Transactional
 	public ShopResponse createShop(ShopCreateRequest request) {
 		Shop shop = request.toEntity();
@@ -77,27 +63,26 @@ public class ShopService {
 		);
 
 		return new ShopsReponse(
-			getShopResponses(shops),
+			ShopResponse.from(shops),
 			size,
-			getNextCursor(shops, size),
+			getNextCursor(shops),
 			sort,
 			isLast(shops, size)
 		);
 	}
 
-	private Long getNextCursor(List<Shop> shops, int size) {
+	private Long getNextCursor(List<Shop> shops) {
 		if (shops.isEmpty()) {
-			Shop lastShop = shopRepository.findFirstByOrderByShopIdDesc();
-			if (lastShop == null) {
-				return null;
-			}
-
-			return lastShop.getShopId();
+			return null;
 		}
 
-		int lastIndex = getLastIndex(shops, size);
+		int lastIndex = getLastIndex(shops);
 
 		return shops.get(lastIndex).getShopId();
+	}
+
+	private int getLastIndex(List<Shop> shops) {
+		return shops.size() - 1;
 	}
 
 	private boolean isLast(List<Shop> shops, int size) {
