@@ -40,7 +40,7 @@ public class Member {
 
 	public static final int ID_MAX_LENGTH = 20;
 
-	public static final int PASSWORD_MAX_LENGTH = 60;
+	public static final int PASSWORD_MAX_LENGTH = 20;
 
 	public static final int NAME_MAX_LENGTH = 10;
 
@@ -85,7 +85,6 @@ public class Member {
 		LocalDate birthday
 	) {
 		validateLoginId(loginId);
-		validatePassword(password);
 		validateName(name);
 		validatePhone(phone);
 		validateBirthDay(birthday);
@@ -96,6 +95,11 @@ public class Member {
 		this.birthday = birthday;
 		this.grade = Grade.NEW;
 		this.roles.add(Permission.ROLE_USER.name());
+	}
+
+	public static String password(String password, String encodedPassword) {
+		validatePassword(password);
+		return encodedPassword;
 	}
 
 	public void updateGrade(Grade grade) {
@@ -139,7 +143,6 @@ public class Member {
 		LocalDate birthday
 	) {
 		validateLoginId(loginId);
-		validatePassword(password);
 		validateName(name);
 		validatePhone(phone);
 		validateBirthDay(birthday);
@@ -156,7 +159,7 @@ public class Member {
 		}
 	}
 
-	private void validatePassword(String password) {
+	private static void validatePassword(String password) {
 		if (password == null || password.length() > PASSWORD_MAX_LENGTH) {
 			throw new InvalidValueException(ErrorCode.MEMBER_PASSWORD_BAD_REQUEST);
 		}
