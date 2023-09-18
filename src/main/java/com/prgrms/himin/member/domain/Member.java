@@ -42,6 +42,8 @@ public class Member {
 
 	public static final int PASSWORD_MAX_LENGTH = 20;
 
+	private static final int ENCODED_PASSWORD_LENGTH = 60;
+
 	public static final int NAME_MAX_LENGTH = 10;
 
 	public static final int PHONE_MAX_LENGTH = 15;
@@ -54,7 +56,7 @@ public class Member {
 	@Column(name = "login_id", nullable = false, length = ID_MAX_LENGTH)
 	private String loginId;
 
-	@Column(name = "password", nullable = false, length = PASSWORD_MAX_LENGTH)
+	@Column(name = "password", nullable = false, length = ENCODED_PASSWORD_LENGTH)
 	private String password;
 
 	@Column(name = "name", nullable = false, length = NAME_MAX_LENGTH)
