@@ -10,25 +10,22 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
 
 import com.prgrms.himin.global.error.exception.EntityNotFoundException;
 import com.prgrms.himin.member.domain.Member;
-import com.prgrms.himin.menu.domain.Menu;
-import com.prgrms.himin.menu.domain.MenuOption;
-import com.prgrms.himin.menu.domain.MenuOptionGroup;
 import com.prgrms.himin.order.dto.request.OrderCreateRequest;
+import com.prgrms.himin.order.dto.request.OrderSearchCondition;
 import com.prgrms.himin.order.dto.request.SelectedMenuOptionRequest;
 import com.prgrms.himin.order.dto.request.SelectedMenuRequest;
 import com.prgrms.himin.order.dto.response.OrderResponse;
+import com.prgrms.himin.order.dto.response.OrderResponses;
 import com.prgrms.himin.order.dto.response.SelectedMenuResponse;
 import com.prgrms.himin.setup.domain.MemberSetUp;
-import com.prgrms.himin.setup.domain.MenuOptionGroupSetUp;
-import com.prgrms.himin.setup.domain.MenuOptionSetUp;
-import com.prgrms.himin.setup.domain.MenuSetUp;
 import com.prgrms.himin.setup.domain.ShopSetUp;
+import com.prgrms.himin.setup.factory.SelectedMenuRequestFactory;
 import com.prgrms.himin.setup.request.OrderCreateRequestBuilder;
-import com.prgrms.himin.setup.request.SelectedMenuOptionRequestBuilder;
-import com.prgrms.himin.setup.request.SelectedMenuRequestBuilder;
+import com.prgrms.himin.shop.domain.Category;
 import com.prgrms.himin.shop.domain.Shop;
 
 @SpringBootTest
@@ -41,19 +38,14 @@ class OrderServiceTest {
 	ShopSetUp shopSetUp;
 
 	@Autowired
-	MenuSetUp menuSetUp;
-
-	@Autowired
-	MenuOptionGroupSetUp menuOptionGroupSetUp;
-
-	@Autowired
-	MenuOptionSetUp menuOptionSetUp;
-
-	@Autowired
 	OrderService orderService;
+
+	@Autowired
+	SelectedMenuRequestFactory selectedMenuRequestFactory;
 
 	@Nested
 	@DisplayName("주문 생성을 할 수 있다.")
+	@Sql("/truncate.sql")
 	class CreateOrder {
 
 		@DisplayName("성공한다.")
@@ -63,26 +55,8 @@ class OrderServiceTest {
 			Member member = memberSetUp.saveOne();
 			Shop shop = shopSetUp.saveOne();
 
-			List<SelectedMenuRequest> selectedMenuRequests = new ArrayList<>();
-			for (int i = 0; i < 3; i++) {
-				Menu menu = menuSetUp.saveOne(shop);
-				List<MenuOptionGroup> menuOptionGroups = menuOptionGroupSetUp.saveMany(menu);
-
-				List<SelectedMenuOptionRequest> selectedMenuOptionRequests = new ArrayList<>();
-				for (MenuOptionGroup menuOptionGroup : menuOptionGroups) {
-					List<MenuOption> menuOptions = menuOptionSetUp.saveMany(menuOptionGroup);
-					SelectedMenuOptionRequest selectedMenuOptionRequest = SelectedMenuOptionRequestBuilder
-						.successBuild(menuOptions);
-					selectedMenuOptionRequests.add(selectedMenuOptionRequest);
-				}
-
-				SelectedMenuRequest selectedMenuRequest = SelectedMenuRequestBuilder.successBuild(
-					menu.getId(),
-					selectedMenuOptionRequests
-				);
-
-				selectedMenuRequests.add(selectedMenuRequest);
-			}
+			selectedMenuRequestFactory.initSelectedMenuFactory(shop);
+			List<SelectedMenuRequest> selectedMenuRequests = selectedMenuRequestFactory.getSelectedMenuRequests();
 
 			OrderCreateRequest orderCreateRequest = OrderCreateRequestBuilder.successBuild(
 				member.getId(),
