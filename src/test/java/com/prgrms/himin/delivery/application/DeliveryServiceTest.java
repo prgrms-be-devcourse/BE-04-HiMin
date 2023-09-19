@@ -5,6 +5,8 @@ import static org.mockito.Mockito.*;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -13,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.prgrms.himin.delivery.domain.Delivery;
 import com.prgrms.himin.delivery.domain.DeliveryHistory;
@@ -26,6 +27,7 @@ import com.prgrms.himin.delivery.dto.response.DeliveryHistoryResponse;
 import com.prgrms.himin.delivery.dto.response.DeliveryResponse;
 import com.prgrms.himin.global.error.exception.BusinessException;
 import com.prgrms.himin.global.error.exception.EntityNotFoundException;
+import com.prgrms.himin.order.application.OrderService;
 import com.prgrms.himin.order.domain.OrderValidator;
 import com.prgrms.himin.setup.domain.DeliverySetUp;
 import com.prgrms.himin.setup.domain.RiderSetUp;
@@ -61,6 +63,9 @@ class DeliveryServiceTest {
 
 	@SpyBean
 	OrderValidator orderValidator;
+
+	@SpyBean
+	OrderService orderService;
 
 	@BeforeEach
 	void setUp() {
@@ -227,6 +232,9 @@ class DeliveryServiceTest {
 		@Test
 		@DisplayName("성공한다.")
 		void success_test() {
+			// given
+			doNothing().when(orderService).finishOrder(anyLong());
+
 			// when
 			DeliveryHistoryResponse deliveryHistoryResponse = deliveryService.finishDelivery(delivery.getDeliveryId(),
 				rider.getRiderId());
@@ -284,6 +292,7 @@ class DeliveryServiceTest {
 
 		@BeforeEach
 		void setDeliveryHistory() {
+			doNothing().when(orderService).finishOrder(anyLong());
 			deliveryService.allocateRider(delivery.getDeliveryId(), rider.getRiderId());
 			deliveryService.startDelivery(delivery.getDeliveryId(), rider.getRiderId());
 			deliveryService.finishDelivery(delivery.getDeliveryId(), rider.getRiderId());
