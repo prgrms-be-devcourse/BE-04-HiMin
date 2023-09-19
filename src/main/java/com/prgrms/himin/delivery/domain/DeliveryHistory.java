@@ -45,27 +45,18 @@ public class DeliveryHistory extends BaseEntity {
 	}
 
 	public static DeliveryHistory createBeforeDeliveryHistory(Delivery delivery) {
-		return new DeliveryHistory(
-			delivery,
-			DeliveryStatus.BEFORE_DELIVERY);
+		return new DeliveryHistory(delivery, DeliveryStatus.BEFORE_DELIVERY);
 	}
 
 	public static DeliveryHistory createStartDeliveryHistory(Delivery delivery) {
-		return new DeliveryHistory(
-			delivery,
-			DeliveryStatus.DELIVERING);
+		return new DeliveryHistory(delivery, DeliveryStatus.DELIVERING);
 	}
 
 	public static DeliveryHistory createAllocatedDeliveryHistory(Delivery delivery) {
-		return new DeliveryHistory(
-			delivery,
-			DeliveryStatus.ALLOCATED
-		);
+		return new DeliveryHistory(delivery, DeliveryStatus.ALLOCATED);
 	}
 
 	public static DeliveryHistory createArrivedDeliveryHistory(Delivery delivery) {
-		return new DeliveryHistory(
-			delivery,
-			DeliveryStatus.ARRIVED);
+		return new DeliveryHistory(delivery, DeliveryStatus.ARRIVED);
 	}
 }

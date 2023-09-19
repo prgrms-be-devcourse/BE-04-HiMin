@@ -9,10 +9,6 @@ public record RiderResponse(
 ) {
 
 	public static RiderResponse from(Rider rider) {
-		return new RiderResponse(
-			rider.getRiderId(),
-			rider.getName(),
-			rider.getPhone()
-		);
+		return new RiderResponse(rider.getRiderId(), rider.getName(), rider.getPhone());
 	}
 }

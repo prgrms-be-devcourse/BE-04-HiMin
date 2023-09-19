@@ -9,9 +9,6 @@ public record DeliveryResponse(
 ) {
 
 	public static DeliveryResponse from(DeliveryHistory deliveryHistory) {
-		return new DeliveryResponse(
-			deliveryHistory.getDelivery().getDeliveryId(),
-			deliveryHistory.getDeliveryStatus()
-		);
+		return new DeliveryResponse(deliveryHistory.getDelivery().getDeliveryId(), deliveryHistory.getDeliveryStatus());
 	}
 }

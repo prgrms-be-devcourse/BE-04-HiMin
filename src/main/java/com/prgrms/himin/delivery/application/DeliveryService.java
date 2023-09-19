@@ -72,10 +72,7 @@ public class DeliveryService {
 		DeliveryHistory deliveryHistory = DeliveryHistory.createAllocatedDeliveryHistory(delivery);
 		DeliveryHistory savedDeliveryHistory = deliveryHistoryRepository.save(deliveryHistory);
 
-		DeliveryHistoryResponse response = DeliveryHistoryResponse.of(
-			rider,
-			savedDeliveryHistory
-		);
+		DeliveryHistoryResponse response = DeliveryHistoryResponse.of(rider, savedDeliveryHistory);
 
 		return response;
 	}
@@ -95,18 +92,12 @@ public class DeliveryService {
 				() -> new EntityNotFoundException(ErrorCode.DELIVERY_NOT_FOUND)
 			);
 
-		validateRider(
-			riderId,
-			delivery
-		);
+		validateRider(riderId, delivery);
 
 		DeliveryHistory deliveryHistory = DeliveryHistory.createStartDeliveryHistory(delivery);
 		DeliveryHistory savedDeliveryHistory = deliveryHistoryRepository.save(deliveryHistory);
 
-		DeliveryHistoryResponse response = DeliveryHistoryResponse.of(
-			rider,
-			savedDeliveryHistory
-		);
+		DeliveryHistoryResponse response = DeliveryHistoryResponse.of(rider, savedDeliveryHistory);
 
 		return response;
 	}
@@ -126,18 +117,12 @@ public class DeliveryService {
 				() -> new EntityNotFoundException(ErrorCode.DELIVERY_NOT_FOUND)
 			);
 
-		validateRider(
-			riderId,
-			delivery
-		);
+		validateRider(riderId, delivery);
 
 		DeliveryHistory deliveryHistory = DeliveryHistory.createArrivedDeliveryHistory(delivery);
 		DeliveryHistory savedDeliveryHistory = deliveryHistoryRepository.save(deliveryHistory);
 
-		DeliveryHistoryResponse response = DeliveryHistoryResponse.of(
-			rider,
-			savedDeliveryHistory
-		);
+		DeliveryHistoryResponse response = DeliveryHistoryResponse.of(rider, savedDeliveryHistory);
 
 		publisher.publishEvent(new DeliveryFinishedEvent(delivery.getOrderId()));
 
@@ -155,10 +140,7 @@ public class DeliveryService {
 		List<DeliveryHistory> deliveryHistories = deliveryHistoryRepository
 			.findDeliveryHistoriesByDeliveryId(deliveryId);
 
-		DeliveryHistoryResponse.Multiple responses = DeliveryHistoryResponse.Multiple.of(
-			rider,
-			deliveryHistories
-		);
+		DeliveryHistoryResponse.Multiple responses = DeliveryHistoryResponse.Multiple.of(rider, deliveryHistories);
 
 		return responses;
 	}
