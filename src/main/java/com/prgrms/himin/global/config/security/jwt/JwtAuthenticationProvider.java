@@ -30,7 +30,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		JwtAuthenticationToken jwtAuthentication = (JwtAuthenticationToken)authentication;
-		
+
 		return processUserAuthentication(
 			String.valueOf(jwtAuthentication.getPrincipal()),
 			jwtAuthentication.getCredentials()
@@ -42,20 +42,11 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 		String credentials
 	) {
 		try {
-			Member member = memberService.login(
-				principal,
-				credentials
-			);
+			Member member = memberService.login(principal, credentials);
 			List<GrantedAuthority> authorities = member.getAuthorities();
-			String token = getToken(
-				member.getLoginId(),
-				authorities
-			);
+			String token = getToken(member.getLoginId(), authorities);
 			JwtAuthenticationToken authentication = new JwtAuthenticationToken(
-				new JwtAuthentication(
-					token,
-					member.getLoginId()
-				),
+				new JwtAuthentication(token, member.getLoginId()),
 				null,
 				authorities);
 			authentication.setDetails(member);
@@ -77,9 +68,6 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 			.map(GrantedAuthority::getAuthority)
 			.toArray(String[]::new);
 
-		return jwt.sign(Jwt.Claims.of(
-			username,
-			roles
-		));
+		return jwt.sign(Jwt.Claims.of(username, roles));
 	}
 }

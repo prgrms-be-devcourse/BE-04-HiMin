@@ -87,10 +87,7 @@ public final class Jwt {
 		}
 
 		public static Claims of(String username, String[] roles) {
-			return new Claims(
-				username,
-				roles
-			);
+			return new Claims(username, roles);
 		}
 	}
 }
