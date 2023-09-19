@@ -87,8 +87,9 @@ class DeliveryServiceTest {
 
 			// then
 			Long deliveryId = deliveryResponse.deliveryId();
-			List<DeliveryHistory> deliveryHistories = deliveryHistoryRepository.findDeliveryHistoriesByDeliveryId(
-				deliveryId);
+			List<DeliveryHistory> deliveryHistories = deliveryHistoryRepository
+				.findDeliveryHistoriesByDeliveryId(deliveryId);
+
 			boolean result = deliveryRepository.existsById(deliveryId);
 			assertThat(deliveryHistories).hasSize(1);
 			assertThat(result).isTrue();
@@ -117,13 +118,13 @@ class DeliveryServiceTest {
 		@DisplayName("성공한다.")
 		void success_test() {
 			// when
-			DeliveryHistoryResponse deliveryHistoryResponse = deliveryService.allocateRider(delivery.getDeliveryId(),
-				rider.getRiderId());
+			DeliveryHistoryResponse deliveryHistoryResponse = deliveryService
+				.allocateRider(delivery.getDeliveryId(), rider.getRiderId());
 
 			// then
 			Delivery savedDelivery = deliveryRepository.findById(delivery.getDeliveryId()).get();
-			List<DeliveryHistory> deliveryHistories = deliveryHistoryRepository.findDeliveryHistoriesByDeliveryId(
-				delivery.getDeliveryId());
+			List<DeliveryHistory> deliveryHistories = deliveryHistoryRepository
+				.findDeliveryHistoriesByDeliveryId(delivery.getDeliveryId());
 			assertThat(deliveryHistories).hasSize(2);
 			assertThat(savedDelivery.getRider().getRiderId()).isEqualTo(rider.getRiderId());
 			assertThat(deliveryHistoryResponse.deliveryStatus()).isEqualTo(DeliveryStatus.ALLOCATED);
@@ -169,12 +170,12 @@ class DeliveryServiceTest {
 		@DisplayName("성공한다.")
 		void success_test() {
 			// when
-			DeliveryHistoryResponse deliveryHistoryResponse = deliveryService.startDelivery(delivery.getDeliveryId(),
-				rider.getRiderId());
+			DeliveryHistoryResponse deliveryHistoryResponse = deliveryService
+				.startDelivery(delivery.getDeliveryId(), rider.getRiderId());
 
 			// then
-			List<DeliveryHistory> deliveryHistories = deliveryHistoryRepository.findDeliveryHistoriesByDeliveryId(
-				delivery.getDeliveryId());
+			List<DeliveryHistory> deliveryHistories = deliveryHistoryRepository
+				.findDeliveryHistoriesByDeliveryId(delivery.getDeliveryId());
 			assertThat(deliveryHistories).hasSize(3);
 			assertThat(deliveryHistoryResponse.deliveryStatus()).isEqualTo(DeliveryStatus.DELIVERING);
 		}
@@ -236,12 +237,12 @@ class DeliveryServiceTest {
 			doNothing().when(orderService).finishOrder(anyLong());
 
 			// when
-			DeliveryHistoryResponse deliveryHistoryResponse = deliveryService.finishDelivery(delivery.getDeliveryId(),
-				rider.getRiderId());
+			DeliveryHistoryResponse deliveryHistoryResponse = deliveryService
+				.finishDelivery(delivery.getDeliveryId(), rider.getRiderId());
 
 			// then
-			List<DeliveryHistory> deliveryHistories = deliveryHistoryRepository.findDeliveryHistoriesByDeliveryId(
-				delivery.getDeliveryId());
+			List<DeliveryHistory> deliveryHistories = deliveryHistoryRepository
+				.findDeliveryHistoriesByDeliveryId(delivery.getDeliveryId());
 			assertThat(deliveryHistories).hasSize(4);
 			assertThat(deliveryHistoryResponse.deliveryStatus()).isEqualTo(DeliveryStatus.ARRIVED);
 		}
@@ -302,8 +303,8 @@ class DeliveryServiceTest {
 		@DisplayName("성공한다.")
 		void success_test() {
 			// when
-			DeliveryHistoryResponse.Multiple deliveryHistories = deliveryService.getDeliveryHistories(
-				delivery.getDeliveryId());
+			DeliveryHistoryResponse.Multiple deliveryHistories = deliveryService
+				.getDeliveryHistories(delivery.getDeliveryId());
 
 			// then
 			assertThat(deliveryHistories.historyInfos()).hasSize(4);

@@ -12,18 +12,12 @@ public class OrderItemSetUp {
 		Menu menu,
 		int quantity
 	) {
-		return new OrderItem(
-			menu,
-			quantity
-		);
+		return new OrderItem(menu, quantity);
 	}
 
 	public OrderItem makeOne(
 		Menu menu
 	) {
-		return new OrderItem(
-			menu,
-			5
-		);
+		return new OrderItem(menu, 5);
 	}
 }

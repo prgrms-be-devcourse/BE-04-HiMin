@@ -41,10 +41,7 @@ public class ShopSetUp {
 			2000
 		);
 
-		return List.of(
-			shop1,
-			shop2
-		);
+		return List.of(shop1, shop2);
 	}
 
 	private Shop buildShop(

@@ -95,10 +95,7 @@ public class ShopController {
 		@PathVariable Long shopId,
 		@PathVariable Long orderId
 	) {
-		shopService.startCooking(
-			shopId,
-			orderId
-		);
+		shopService.startCooking(shopId, orderId);
 
 		return ResponseEntity.ok().build();
 	}
@@ -108,10 +105,7 @@ public class ShopController {
 		@PathVariable Long shopId,
 		@PathVariable Long orderId
 	) {
-		shopService.finishCooking(
-			shopId,
-			orderId
-		);
+		shopService.finishCooking(shopId, orderId);
 
 		return ResponseEntity.ok().build();
 	}

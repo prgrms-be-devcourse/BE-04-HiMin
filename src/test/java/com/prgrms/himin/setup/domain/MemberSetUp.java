@@ -24,10 +24,7 @@ public class MemberSetUp {
 		String encodedPassword = passwordEncoder.encode(request.password());
 		Member member = request.toEntity(encodedPassword);
 
-		Address address = new Address(
-			request.addressAlias(),
-			request.address()
-		);
+		Address address = new Address(request.addressAlias(), request.address());
 		address.attachTo(member);
 
 		Member savedMember = memberRepository.save(member);

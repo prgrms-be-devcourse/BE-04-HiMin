@@ -68,11 +68,9 @@ class MenuServiceTest {
 		@DisplayName("성공한다")
 		void success_test() {
 			// given
-			given(shopRepository.findById(shop.getShopId()))
-				.willReturn(Optional.of(shop));
+			given(shopRepository.findById(shop.getShopId())).willReturn(Optional.of(shop));
 
-			given(menuRepository.save(any(Menu.class)))
-				.willReturn(menu);
+			given(menuRepository.save(any(Menu.class))).willReturn(menu);
 
 			// when
 			MenuCreateResponse result = menuService.createMenu(shop.getShopId(), request);

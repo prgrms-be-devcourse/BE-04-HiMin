@@ -17,10 +17,7 @@ public class MenuSetUp {
 	private final MenuRepository menuRepository;
 
 	public Menu saveOne(Shop shop) {
-		final Menu menu = buildMenu(
-			"짜장면",
-			5000
-		);
+		final Menu menu = buildMenu("짜장면", 5000);
 		menu.attachShop(shop);
 
 		return menuRepository.save(menu);
@@ -33,20 +30,11 @@ public class MenuSetUp {
 	}
 
 	public List<Menu> getMenus(Shop shop) {
-		final Menu menu1 = buildMenu(
-			"짜장면",
-			5000
-		);
+		final Menu menu1 = buildMenu("짜장면", 5000);
 		menu1.attachShop(shop);
-		final Menu menu2 = buildMenu(
-			"짬뽕",
-			6000
-		);
+		final Menu menu2 = buildMenu("짬뽕", 6000);
 		menu2.attachShop(shop);
-		final Menu menu3 = buildMenu(
-			"탕수육",
-			15000
-		);
+		final Menu menu3 = buildMenu("탕수육", 15000);
 		menu3.attachShop(shop);
 
 		return List.of(

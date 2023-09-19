@@ -32,8 +32,7 @@ public class OrderSetUp {
 			.address("서울시 사근동")
 			.build();
 
-		selectedOptions
-			.forEach(selectedOption -> selectedOption.attachTo(orderItem));
+		selectedOptions.forEach(selectedOption -> selectedOption.attachTo(orderItem));
 		orderItem.attachTo(order);
 
 		order.calculateOrderPrice();
