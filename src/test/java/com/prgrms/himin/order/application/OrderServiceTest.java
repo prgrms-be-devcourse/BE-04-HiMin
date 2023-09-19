@@ -122,6 +122,72 @@ class OrderServiceTest {
 				EntityNotFoundException.class
 			);
 		}
+	}
 
+	@Nested
+	@DisplayName("주문 검색에 성공 한다.")
+	@Sql("/truncate.sql")
+	class SearchOrder {
+		@DisplayName("성공한다.")
+		@Test
+		void success_test() {
+			// given
+			Member member = memberSetUp.saveOne();
+			Shop shop = shopSetUp.saveOne();
+
+			selectedMenuRequestFactory.initSelectedMenuFactory(shop);
+			List<SelectedMenuRequest> selectedMenuRequests = selectedMenuRequestFactory.getSelectedMenuRequests();
+
+			OrderCreateRequest orderCreateRequest = OrderCreateRequestBuilder.successBuild(
+				member.getId(),
+				shop.getShopId(),
+				selectedMenuRequests
+			);
+
+			List<OrderResponse> expectedOrderResponses = new ArrayList<>();
+			for (int i = 0; i < 10; i++) {
+				OrderResponse orderResponse = orderService.createOrder(orderCreateRequest);
+				expectedOrderResponses.add(orderResponse);
+			}
+
+			List<Category> categories = List.of(
+				shop.getCategory()
+			);
+
+			OrderSearchCondition orderSearchCondition = new OrderSearchCondition(
+				categories,
+				null,
+				null,
+				null
+			);
+
+			int pageSize = 5;
+
+			// when
+			OrderResponses orderResponses = orderService.getOrders(
+				member.getId(),
+				orderSearchCondition,
+				pageSize,
+				null
+			);
+
+			// then
+			assertThat(orderResponses.size()).isEqualTo(pageSize);
+			assertThat(orderResponses.isLast()).isFalse();
+
+			OrderResponse expectedCursorResponse = expectedOrderResponses.get(pageSize - 1);
+			assertThat(orderResponses.nextCursor()).isEqualTo(expectedCursorResponse.orderId());
+
+			int expectedOrderResponsesIdx = 0;
+			for (OrderResponse actualOrderResponse : orderResponses.orderResponses()) {
+				OrderResponse expectedOrderResponse = expectedOrderResponses.get(expectedOrderResponsesIdx);
+
+				assertThat(actualOrderResponse)
+					.usingRecursiveComparison()
+					.isEqualTo(expectedOrderResponse);
+
+				expectedOrderResponsesIdx += 1;
+			}
+		}
 	}
 }
