@@ -39,10 +39,7 @@ public class MenuController {
 		@PathVariable Long shopId,
 		@Valid @RequestBody MenuCreateRequest request
 	) {
-		MenuCreateResponse response = menuService.createMenu(
-			shopId,
-			request
-		);
+		MenuCreateResponse response = menuService.createMenu(shopId, request);
 
 		return ResponseEntity.ok(response);
 	}
@@ -84,10 +81,7 @@ public class MenuController {
 		@PathVariable Long shopId,
 		@PathVariable Long menuId
 	) {
-		MenuResponse menuResponse = menuService.getMenu(
-			shopId,
-			menuId
-		);
+		MenuResponse menuResponse = menuService.getMenu(shopId, menuId);
 
 		return ResponseEntity.ok(menuResponse);
 	}
@@ -163,10 +157,7 @@ public class MenuController {
 		@PathVariable Long shopId,
 		@PathVariable Long menuId
 	) {
-		menuService.deleteMenu(
-			shopId,
-			menuId
-		);
+		menuService.deleteMenu(shopId, menuId);
 
 		return ResponseEntity.ok().build();
 	}
