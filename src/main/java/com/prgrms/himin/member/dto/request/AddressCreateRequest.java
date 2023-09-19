@@ -18,9 +18,6 @@ public record AddressCreateRequest(
 ) {
 
 	public Address toEntity() {
-		return new Address(
-			addressAlias,
-			address
-		);
+		return new Address(addressAlias, address);
 	}
 }
