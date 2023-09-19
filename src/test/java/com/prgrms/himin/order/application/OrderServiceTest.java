@@ -71,9 +71,7 @@ class OrderServiceTest {
 				for (MenuOptionGroup menuOptionGroup : menuOptionGroups) {
 					List<MenuOption> menuOptions = menuOptionSetUp.saveMany(menuOptionGroup);
 					SelectedMenuOptionRequest selectedMenuOptionRequest = SelectedMenuOptionRequestBuilder
-						.successBuild(
-							menuOptions
-						);
+						.successBuild(menuOptions);
 					selectedMenuOptionRequests.add(selectedMenuOptionRequest);
 				}
 
