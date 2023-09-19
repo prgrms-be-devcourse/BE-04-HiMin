@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.prgrms.himin.global.error.exception.EntityNotFoundException;
 import com.prgrms.himin.member.domain.Member;
 import com.prgrms.himin.menu.domain.Menu;
 import com.prgrms.himin.menu.domain.MenuOption;
@@ -66,8 +67,8 @@ class OrderServiceTest {
 			for (int i = 0; i < 3; i++) {
 				Menu menu = menuSetUp.saveOne(shop);
 				List<MenuOptionGroup> menuOptionGroups = menuOptionGroupSetUp.saveMany(menu);
-				List<SelectedMenuOptionRequest> selectedMenuOptionRequests = new ArrayList<>();
 
+				List<SelectedMenuOptionRequest> selectedMenuOptionRequests = new ArrayList<>();
 				for (MenuOptionGroup menuOptionGroup : menuOptionGroups) {
 					List<MenuOption> menuOptions = menuOptionSetUp.saveMany(menuOptionGroup);
 					SelectedMenuOptionRequest selectedMenuOptionRequest = SelectedMenuOptionRequestBuilder
@@ -121,5 +122,51 @@ class OrderServiceTest {
 				selectedMenuIdx += 1;
 			}
 		}
+
+		@DisplayName("존재하지 않은 메뉴 id로 주문 생성에 실패한다.")
+		@Test
+		void not_found_menu_id_fail_test() {
+			// given
+			Member member = memberSetUp.saveOne();
+			Shop shop = shopSetUp.saveOne();
+
+			Long wrongMenuId = 0L;
+			List<SelectedMenuRequest> wrongSelectedMenuRequests = new ArrayList<>();
+			for (int i = 0; i < 3; i++) {
+				Menu menu = menuSetUp.saveOne(shop);
+				List<MenuOptionGroup> menuOptionGroups = menuOptionGroupSetUp.saveMany(menu);
+				List<SelectedMenuOptionRequest> selectedMenuOptionRequests = new ArrayList<>();
+
+				for (MenuOptionGroup menuOptionGroup : menuOptionGroups) {
+					List<MenuOption> menuOptions = menuOptionSetUp.saveMany(menuOptionGroup);
+					SelectedMenuOptionRequest selectedMenuOptionRequest = SelectedMenuOptionRequestBuilder
+						.successBuild(
+							menuOptions
+						);
+					selectedMenuOptionRequests.add(selectedMenuOptionRequest);
+				}
+
+				SelectedMenuRequest selectedMenuRequest = SelectedMenuRequestBuilder.successBuild(
+					wrongMenuId,
+					selectedMenuOptionRequests
+				);
+
+				wrongSelectedMenuRequests.add(selectedMenuRequest);
+			}
+
+			OrderCreateRequest orderCreateRequest = OrderCreateRequestBuilder.successBuild(
+				member.getId(),
+				shop.getShopId(),
+				wrongSelectedMenuRequests
+			);
+
+			// when && then
+			assertThatThrownBy(
+				() -> orderService.createOrder(orderCreateRequest)
+			).isInstanceOf(
+				EntityNotFoundException.class
+			);
+		}
+
 	}
 }
