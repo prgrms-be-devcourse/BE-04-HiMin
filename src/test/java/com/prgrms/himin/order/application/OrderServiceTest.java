@@ -1,128 +1,125 @@
 package com.prgrms.himin.order.application;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.AdditionalAnswers.*;
-import static org.mockito.BDDMockito.*;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import com.prgrms.himin.member.domain.Member;
-import com.prgrms.himin.member.domain.MemberRepository;
-import com.prgrms.himin.menu.domain.MenuValidator;
-import com.prgrms.himin.order.domain.Order;
-import com.prgrms.himin.order.domain.OrderHistoryRepository;
-import com.prgrms.himin.order.domain.OrderRepository;
+import com.prgrms.himin.menu.domain.Menu;
+import com.prgrms.himin.menu.domain.MenuOption;
+import com.prgrms.himin.menu.domain.MenuOptionGroup;
 import com.prgrms.himin.order.dto.request.OrderCreateRequest;
+import com.prgrms.himin.order.dto.request.SelectedMenuOptionRequest;
 import com.prgrms.himin.order.dto.request.SelectedMenuRequest;
 import com.prgrms.himin.order.dto.response.OrderResponse;
-import com.prgrms.himin.setup.factory.OrderDomainTestDependencyFactory;
-import com.prgrms.himin.setup.factory.SelectedMenuFactory;
+import com.prgrms.himin.order.dto.response.SelectedMenuResponse;
+import com.prgrms.himin.setup.domain.MemberSetUp;
+import com.prgrms.himin.setup.domain.MenuOptionGroupSetUp;
+import com.prgrms.himin.setup.domain.MenuOptionSetUp;
+import com.prgrms.himin.setup.domain.MenuSetUp;
+import com.prgrms.himin.setup.domain.ShopSetUp;
 import com.prgrms.himin.setup.request.OrderCreateRequestBuilder;
+import com.prgrms.himin.setup.request.SelectedMenuOptionRequestBuilder;
+import com.prgrms.himin.setup.request.SelectedMenuRequestBuilder;
 import com.prgrms.himin.shop.domain.Shop;
-import com.prgrms.himin.shop.domain.ShopRepository;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 class OrderServiceTest {
 
-	@Mock
-	OrderRepository orderRepository;
+	@Autowired
+	MemberSetUp memberSetUp;
 
-	@Mock
-	MemberRepository memberRepository;
+	@Autowired
+	ShopSetUp shopSetUp;
 
-	@Mock
-	ShopRepository shopRepository;
+	@Autowired
+	MenuSetUp menuSetUp;
 
-	@Mock
-	MenuValidator menuValidator;
+	@Autowired
+	MenuOptionGroupSetUp menuOptionGroupSetUp;
 
-	@Mock
-	OrderHistoryRepository orderHistoryRepository;
+	@Autowired
+	MenuOptionSetUp menuOptionSetUp;
 
-	@InjectMocks
+	@Autowired
 	OrderService orderService;
-
-	OrderDomainTestDependencyFactory orderDomainTestDependencyFactory;
-
-	SelectedMenuFactory selectedMenuFactory;
-
-	@BeforeEach
-	void each() {
-		orderDomainTestDependencyFactory = new OrderDomainTestDependencyFactory();
-		orderDomainTestDependencyFactory.initByOrder();
-		selectedMenuFactory = new SelectedMenuFactory(orderDomainTestDependencyFactory);
-		selectedMenuFactory.initSelectedMenuFactory();
-	}
 
 	@Nested
 	@DisplayName("주문 생성을 할 수 있다.")
 	class CreateOrder {
 
-		void initMockRepository() {
-			Member member = orderDomainTestDependencyFactory.getMember();
-			Shop shop = orderDomainTestDependencyFactory.getShop();
-
-			given(memberRepository.findById(member.getId()))
-				.willReturn(Optional.of(member));
-
-			given(shopRepository.findById(shop.getShopId()))
-				.willReturn(Optional.of(shop));
-
-			when(orderRepository.save(any(Order.class)))
-				.then(returnsFirstArg());
-		}
-
-		OrderResponse getExpectedOrderResponse(OrderCreateRequest orderCreateRequest) {
-			Member member = orderDomainTestDependencyFactory.getMember();
-			Shop shop = orderDomainTestDependencyFactory.getShop();
-
-			Order order = Order.builder()
-				.address(orderCreateRequest.address())
-				.requirement(orderCreateRequest.requirement())
-				.member(member)
-				.shop(shop)
-				.build();
-
-			return OrderResponse.from(order);
-		}
-
 		@DisplayName("성공한다.")
 		@Test
 		void success_test() {
 			// given
-			Member member = orderDomainTestDependencyFactory.getMember();
-			Shop shop = orderDomainTestDependencyFactory.getShop();
+			Member member = memberSetUp.saveOne();
+			Shop shop = shopSetUp.saveOne();
 
-			initMockRepository();
+			List<SelectedMenuRequest> selectedMenuRequests = new ArrayList<>();
+			for (int i = 0; i < 3; i++) {
+				Menu menu = menuSetUp.saveOne(shop);
+				List<MenuOptionGroup> menuOptionGroups = menuOptionGroupSetUp.saveMany(menu);
+				List<SelectedMenuOptionRequest> selectedMenuOptionRequests = new ArrayList<>();
 
-			List<SelectedMenuRequest> selectedMenuRequests =
-				selectedMenuFactory.getSelectedMenuRequests();
+				for (MenuOptionGroup menuOptionGroup : menuOptionGroups) {
+					List<MenuOption> menuOptions = menuOptionSetUp.saveMany(menuOptionGroup);
+					SelectedMenuOptionRequest selectedMenuOptionRequest = SelectedMenuOptionRequestBuilder
+						.successBuild(menuOptions);
+					selectedMenuOptionRequests.add(selectedMenuOptionRequest);
+				}
+
+				SelectedMenuRequest selectedMenuRequest = SelectedMenuRequestBuilder.successBuild(
+					menu.getId(),
+					selectedMenuOptionRequests
+				);
+
+				selectedMenuRequests.add(selectedMenuRequest);
+			}
 
 			OrderCreateRequest orderCreateRequest = OrderCreateRequestBuilder.successBuild(
 				member.getId(),
 				shop.getShopId(),
 				selectedMenuRequests
 			);
-			OrderResponse expectedOrderResponse = getExpectedOrderResponse(orderCreateRequest);
 
 			// when
-			OrderResponse actualOrderResponse = orderService.createOrder(orderCreateRequest);
+			OrderResponse orderResponse = orderService.createOrder(orderCreateRequest);
 
 			// then
-			assertThat(actualOrderResponse)
-				.usingRecursiveComparison()
-				.ignoringFields("price")
-				.isEqualTo(expectedOrderResponse);
+			assertThat(orderResponse.memberId()).isEqualTo(member.getId());
+			assertThat(orderResponse.shopId()).isEqualTo(shop.getShopId());
+			assertThat(orderResponse.address()).isEqualTo(orderCreateRequest.address());
+			assertThat(orderResponse.requirement()).isEqualTo(orderCreateRequest.requirement());
+
+			List<SelectedMenuResponse> selectedMenuResponses = orderResponse.selectedMenus();
+			int selectedMenuIdx = 0;
+			for (SelectedMenuRequest selectedMenuRequest : selectedMenuRequests) {
+				Long menuId = selectedMenuRequest.menuId();
+				List<SelectedMenuOptionRequest> selectedMenuOptionRequests =
+					selectedMenuRequest.selectedMenuOptions();
+				int quantity = selectedMenuRequest.quantity();
+
+				SelectedMenuResponse selectedMenuResponse = selectedMenuResponses.get(selectedMenuIdx);
+
+				List<Long> allMenuOptionIds = new ArrayList<>();
+				for (SelectedMenuOptionRequest selectedMenuOptionRequest : selectedMenuOptionRequests) {
+					List<Long> menuOptions = selectedMenuOptionRequest.selectedMenuOptions();
+					allMenuOptionIds.addAll(menuOptions);
+				}
+
+				assertThat(selectedMenuResponse.menuId()).isEqualTo(menuId);
+				assertThat(selectedMenuResponse.quantity()).isEqualTo(quantity);
+				assertThat(selectedMenuResponse.selectedOptionIds()).isEqualTo(allMenuOptionIds);
+
+				selectedMenuIdx += 1;
+			}
 		}
 	}
 }
