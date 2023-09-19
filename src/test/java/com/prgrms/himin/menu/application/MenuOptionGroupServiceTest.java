@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.context.jdbc.Sql;
 
 import com.prgrms.himin.global.error.exception.EntityNotFoundException;
 import com.prgrms.himin.global.error.exception.InvalidValueException;
@@ -29,7 +29,7 @@ import com.prgrms.himin.setup.request.MenuOptionGroupUpdateRequestBuilder;
 import com.prgrms.himin.shop.domain.Shop;
 import com.prgrms.himin.shop.domain.ShopRepository;
 
-@Transactional
+@Sql("/truncate.sql")
 @SpringBootTest
 class MenuOptionGroupServiceTest {
 
