@@ -6,14 +6,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.jdbc.Sql;
 
 import com.prgrms.himin.global.error.exception.EntityNotFoundException;
 import com.prgrms.himin.global.error.exception.InvalidValueException;
@@ -31,7 +30,7 @@ import com.prgrms.himin.setup.request.MemberCreateRequestBuilder;
 import com.prgrms.himin.setup.request.MemberLoginRequestBuilder;
 import com.prgrms.himin.setup.request.MemberUpdateRequestBuilder;
 
-@Transactional
+@Sql("/truncate.sql")
 @SpringBootTest
 class MemberServiceTest {
 

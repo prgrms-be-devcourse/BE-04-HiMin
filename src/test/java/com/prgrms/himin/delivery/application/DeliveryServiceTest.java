@@ -5,8 +5,6 @@ import static org.mockito.Mockito.*;
 
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -15,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.test.context.jdbc.Sql;
 
 import com.prgrms.himin.delivery.domain.Delivery;
 import com.prgrms.himin.delivery.domain.DeliveryHistory;
@@ -32,8 +31,8 @@ import com.prgrms.himin.order.domain.OrderValidator;
 import com.prgrms.himin.setup.domain.DeliverySetUp;
 import com.prgrms.himin.setup.domain.RiderSetUp;
 
-@Transactional
 @SpringBootTest
+@Sql("/truncate.sql")
 class DeliveryServiceTest {
 
 	@Autowired
@@ -122,10 +121,11 @@ class DeliveryServiceTest {
 				rider.getRiderId());
 
 			// then
+			Delivery savedDelivery = deliveryRepository.findById(delivery.getDeliveryId()).get();
 			List<DeliveryHistory> deliveryHistories = deliveryHistoryRepository.findDeliveryHistoriesByDeliveryId(
 				delivery.getDeliveryId());
 			assertThat(deliveryHistories).hasSize(2);
-			assertThat(delivery.getRider().getRiderId()).isEqualTo(rider.getRiderId());
+			assertThat(savedDelivery.getRider().getRiderId()).isEqualTo(rider.getRiderId());
 			assertThat(deliveryHistoryResponse.deliveryStatus()).isEqualTo(DeliveryStatus.ALLOCATED);
 		}
 

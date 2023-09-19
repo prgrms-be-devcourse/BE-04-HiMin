@@ -1,0 +1,16 @@
+SET foreign_key_checks = 0;
+TRUNCATE TABLE addresses;
+TRUNCATE TABLE deliveries;
+TRUNCATE TABLE delivery_histories;
+TRUNCATE TABLE members;
+TRUNCATE TABLE menu_option_group;
+TRUNCATE TABLE menu_options;
+TRUNCATE TABLE menus;
+TRUNCATE TABLE order_histories;
+TRUNCATE TABLE order_items;
+TRUNCATE TABLE orders;
+TRUNCATE TABLE riders;
+TRUNCATE TABLE selected_options;
+TRUNCATE TABLE shops;
+-- TRUNCATE TABLE members_roles;
+SET foreign_key_checks = 1;
