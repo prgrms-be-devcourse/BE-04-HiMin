@@ -38,14 +38,13 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 		ServletRequest request,
 		ServletResponse response,
 		FilterChain chain
-	) throws
-		IOException,
-		ServletException {
+	) throws IOException, ServletException {
 
 		HttpServletRequest httpServletRequest = (HttpServletRequest)request;
 		HttpServletResponse httpServletResponse = (HttpServletResponse)response;
 
-		if (SecurityContextHolder.getContext().getAuthentication() == null) {
+		if (SecurityContextHolder.getContext()
+			.getAuthentication() == null) {
 			String token = getToken(httpServletRequest);
 			if (token != null) {
 				try {
@@ -57,14 +56,12 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
 					if (isNotEmpty(username) && authorities.size() > 0) {
 						JwtAuthenticationToken authentication = new JwtAuthenticationToken(
-							new JwtAuthentication(
-								token,
-								username
-							),
+							new JwtAuthentication(token, username),
 							null,
 							authorities
 						);
-						SecurityContextHolder.getContext().setAuthentication(authentication);
+						SecurityContextHolder.getContext()
+							.setAuthentication(authentication);
 					}
 				} catch (Exception e) {
 					log.warn("JWT 처리 실패: {}", e.getMessage());
@@ -72,7 +69,8 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 			}
 		} else {
 			log.debug("SecurityContextHolder에 이미 Authentication가 설정되어 있습니다. '{}'",
-				SecurityContextHolder.getContext().getAuthentication());
+				SecurityContextHolder.getContext()
+					.getAuthentication());
 		}
 
 		chain.doFilter(httpServletRequest, httpServletResponse);

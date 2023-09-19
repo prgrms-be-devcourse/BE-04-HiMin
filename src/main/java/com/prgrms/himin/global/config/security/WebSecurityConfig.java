@@ -26,11 +26,7 @@ public class WebSecurityConfig {
 
 	@Bean
 	public Jwt jwt() {
-		return new Jwt(
-			jwtConfig.issuer(),
-			jwtConfig.clientSecret(),
-			jwtConfig.expirySeconds()
-		);
+		return new Jwt(jwtConfig.issuer(), jwtConfig.clientSecret(), jwtConfig.expirySeconds());
 	}
 
 	@Bean

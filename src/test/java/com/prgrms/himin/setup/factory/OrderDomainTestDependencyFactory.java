@@ -73,8 +73,7 @@ public class OrderDomainTestDependencyFactory {
 			menuIdx < menus.size() &&
 				menuOptionIdx < menuCreateRequests.size()
 		) {
-			MenuCreateRequest menuCreateRequest =
-				menuCreateRequests.get(menuIdx++);
+			MenuCreateRequest menuCreateRequest = menuCreateRequests.get(menuIdx++);
 			Menu menu = menuCreateRequest.toEntity();
 
 			menu.addMenuOptionGroup(menuOptionGroups.get(menuOptionIdx++));

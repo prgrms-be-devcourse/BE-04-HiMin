@@ -88,10 +88,7 @@ class MenuControllerTest {
 			String body = objectMapper.writeValueAsString(request);
 
 			// when
-			ResultActions resultActions = mvc.perform(post(
-					BASE_URL,
-					shop.getShopId()
-				)
+			ResultActions resultActions = mvc.perform(post(BASE_URL, shop.getShopId())
 					.content(body)
 					.contentType(MediaType.APPLICATION_JSON))
 				.andDo(print());
@@ -114,10 +111,7 @@ class MenuControllerTest {
 			String body = objectMapper.writeValueAsString(request);
 
 			// when
-			ResultActions resultActions = mvc.perform(post(
-					BASE_URL,
-					shop.getShopId()
-				)
+			ResultActions resultActions = mvc.perform(post(BASE_URL, shop.getShopId())
 					.content(body)
 					.contentType(MediaType.APPLICATION_JSON))
 				.andDo(print());

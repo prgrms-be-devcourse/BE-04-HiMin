@@ -75,8 +75,11 @@ class MenuOptionGroupServiceTest {
 			MenuOptionGroupCreateRequest request = MenuOptionGroupRequestBuilder.successBuild();
 
 			// when
-			MenuOptionGroupCreateResponse actual = menuService.createMenuOptionGroup(shop.getShopId(),
-				menu.getId(), request);
+			MenuOptionGroupCreateResponse actual = menuService.createMenuOptionGroup(
+				shop.getShopId(),
+				menu.getId(),
+				request
+			);
 
 			// then
 			MenuOptionGroup findMenuOptionGroup = menuOptionGroupRepository.findById(actual.menuOptionGroupId())
@@ -109,7 +112,11 @@ class MenuOptionGroupServiceTest {
 
 			// when & then
 			assertThatThrownBy(
-				() -> menuService.createMenuOptionGroup(anotherShop.getShopId(), menu.getId(), request)
+				() -> menuService.createMenuOptionGroup(
+					anotherShop.getShopId(),
+					menu.getId(),
+					request
+				)
 			)
 				.isInstanceOf(InvalidValueException.class);
 		}
@@ -127,10 +134,16 @@ class MenuOptionGroupServiceTest {
 			MenuOptionGroupUpdateRequest request = MenuOptionGroupUpdateRequestBuilder.successBuild();
 
 			// when
-			menuService.updateMenuOptionGroup(shop.getShopId(), menu.getId(), menuOptionGroup.getId(), request);
+			menuService.updateMenuOptionGroup(
+				shop.getShopId(),
+				menu.getId(),
+				menuOptionGroup.getId(),
+				request
+			);
 
 			// then
-			MenuOptionGroup expected = menuOptionGroupRepository.findById(menuOptionGroup.getId()).get();
+			MenuOptionGroup expected = menuOptionGroupRepository.findById(menuOptionGroup.getId())
+				.get();
 			assertThat(expected.getName()).isEqualTo(request.name());
 		}
 
@@ -145,7 +158,12 @@ class MenuOptionGroupServiceTest {
 
 			// when & then
 			assertThatThrownBy(
-				() -> menuService.updateMenuOptionGroup(shop.getShopId(), wrongId, menuOptionGroup.getId(), request)
+				() -> menuService.updateMenuOptionGroup(
+					shop.getShopId(),
+					wrongId,
+					menuOptionGroup.getId(),
+					request
+				)
 			)
 				.isInstanceOf(EntityNotFoundException.class);
 		}
@@ -160,7 +178,12 @@ class MenuOptionGroupServiceTest {
 
 			// when & then
 			assertThatThrownBy(
-				() -> menuService.updateMenuOptionGroup(shop.getShopId(), menu.getId(), wrongId, request)
+				() -> menuService.updateMenuOptionGroup(
+					shop.getShopId(),
+					menu.getId(),
+					wrongId,
+					request
+				)
 			)
 				.isInstanceOf(EntityNotFoundException.class);
 		}
@@ -175,8 +198,12 @@ class MenuOptionGroupServiceTest {
 
 			// when & then
 			assertThatThrownBy(
-				() -> menuService.updateMenuOptionGroup(anotherShop.getShopId(), menu.getId(), menuOptionGroup.getId(),
-					request)
+				() -> menuService.updateMenuOptionGroup(
+					anotherShop.getShopId(),
+					menu.getId(),
+					menuOptionGroup.getId(),
+					request
+				)
 			)
 				.isInstanceOf(InvalidValueException.class);
 		}
@@ -191,8 +218,12 @@ class MenuOptionGroupServiceTest {
 
 			// when & then
 			assertThatThrownBy(
-				() -> menuService.updateMenuOptionGroup(shop.getShopId(), menu.getId(), menuOptionGroup.getId(),
-					request)
+				() -> menuService.updateMenuOptionGroup(
+					shop.getShopId(),
+					menu.getId(),
+					menuOptionGroup.getId(),
+					request
+				)
 			)
 				.isInstanceOf(InvalidValueException.class);
 		}
@@ -209,7 +240,11 @@ class MenuOptionGroupServiceTest {
 			MenuOptionGroup menuOptionGroup = menuOptionGroupSetUp.saveOne(menu);
 
 			// when
-			menuService.deleteMenuOptionGroup(shop.getShopId(), menu.getId(), menuOptionGroup.getId());
+			menuService.deleteMenuOptionGroup(
+				shop.getShopId(),
+				menu.getId(),
+				menuOptionGroup.getId()
+			);
 
 			// then
 			Optional<MenuOptionGroup> actual = menuOptionGroupRepository.findById(menuOptionGroup.getId());
@@ -226,7 +261,11 @@ class MenuOptionGroupServiceTest {
 
 			// when & then
 			assertThatThrownBy(
-				() -> menuService.deleteMenuOptionGroup(shop.getShopId(), wrongId, menuOptionGroup.getId())
+				() -> menuService.deleteMenuOptionGroup(
+					shop.getShopId(),
+					wrongId,
+					menuOptionGroup.getId()
+				)
 			)
 				.isInstanceOf(EntityNotFoundException.class);
 		}
@@ -239,7 +278,11 @@ class MenuOptionGroupServiceTest {
 
 			// when & then
 			assertThatThrownBy(
-				() -> menuService.deleteMenuOptionGroup(shop.getShopId(), menu.getId(), wrongId)
+				() -> menuService.deleteMenuOptionGroup(
+					shop.getShopId(),
+					menu.getId(),
+					wrongId
+				)
 			)
 				.isInstanceOf(EntityNotFoundException.class);
 		}
@@ -253,7 +296,11 @@ class MenuOptionGroupServiceTest {
 
 			// when & then
 			assertThatThrownBy(
-				() -> menuService.deleteMenuOptionGroup(anotherShop.getShopId(), menu.getId(), menuOptionGroup.getId())
+				() -> menuService.deleteMenuOptionGroup(
+					anotherShop.getShopId(),
+					menu.getId(),
+					menuOptionGroup.getId()
+				)
 			)
 				.isInstanceOf(InvalidValueException.class);
 		}
@@ -267,7 +314,11 @@ class MenuOptionGroupServiceTest {
 
 			// when & then
 			assertThatThrownBy(
-				() -> menuService.deleteMenuOptionGroup(shop.getShopId(), menu.getId(), menuOptionGroup.getId())
+				() -> menuService.deleteMenuOptionGroup(
+					shop.getShopId(),
+					menu.getId(),
+					menuOptionGroup.getId()
+				)
 			)
 				.isInstanceOf(InvalidValueException.class);
 		}

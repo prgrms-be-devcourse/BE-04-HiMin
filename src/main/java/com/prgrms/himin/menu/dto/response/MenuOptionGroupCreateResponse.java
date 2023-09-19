@@ -8,9 +8,6 @@ public record MenuOptionGroupCreateResponse(
 ) {
 
 	public static MenuOptionGroupCreateResponse from(MenuOptionGroup menuOptionGroupEntity) {
-		return new MenuOptionGroupCreateResponse(
-			menuOptionGroupEntity.getId(),
-			menuOptionGroupEntity.getName()
-		);
+		return new MenuOptionGroupCreateResponse(menuOptionGroupEntity.getId(), menuOptionGroupEntity.getName());
 	}
 }

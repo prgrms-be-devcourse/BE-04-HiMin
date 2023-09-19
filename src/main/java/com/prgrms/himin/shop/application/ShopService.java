@@ -142,10 +142,7 @@ public class ShopService {
 		Long shopId,
 		Long orderId
 	) {
-		publisher.publishEvent(new StartedCookingEvent(
-			shopId,
-			orderId
-		));
+		publisher.publishEvent(new StartedCookingEvent(shopId, orderId));
 	}
 
 	@Transactional
@@ -153,9 +150,6 @@ public class ShopService {
 		Long shopId,
 		Long orderId
 	) {
-		publisher.publishEvent(new CookingFinishedEvent(
-			shopId,
-			orderId
-		));
+		publisher.publishEvent(new CookingFinishedEvent(shopId, orderId));
 	}
 }

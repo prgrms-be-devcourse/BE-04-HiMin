@@ -16,15 +16,9 @@ public record DeliveryHistoryResponse(
 		Rider rider,
 		DeliveryHistory deliveryHistory
 	) {
-		HistoryInfo historyInfo = new HistoryInfo(
-			deliveryHistory.getDeliveryStatus(),
-			deliveryHistory.getCreatedAt()
-		);
+		HistoryInfo historyInfo = new HistoryInfo(deliveryHistory.getDeliveryStatus(), deliveryHistory.getCreatedAt());
 
-		return new DeliveryHistoryResponse(
-			rider.getRiderId(),
-			historyInfo
-		);
+		return new DeliveryHistoryResponse(rider.getRiderId(), historyInfo);
 	}
 
 	public record Multiple(

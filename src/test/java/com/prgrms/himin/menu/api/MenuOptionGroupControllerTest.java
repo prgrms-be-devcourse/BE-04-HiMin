@@ -189,8 +189,8 @@ public class MenuOptionGroupControllerTest {
 
 			// then
 			resultActions.andExpect(status().isNoContent());
-			Optional<MenuOptionGroup> maySavedMenuOptionGroup = menuOptionGroupRepository.findById(
-				savedMenuOptionGroup.getId());
+			Optional<MenuOptionGroup> maySavedMenuOptionGroup = menuOptionGroupRepository
+				.findById(savedMenuOptionGroup.getId());
 			assertThat(maySavedMenuOptionGroup.isPresent()).isTrue();
 			savedMenuOptionGroup = maySavedMenuOptionGroup.get();
 			assertThat(savedMenuOptionGroup.getName()).isEqualTo(request.name());
@@ -254,8 +254,8 @@ public class MenuOptionGroupControllerTest {
 
 			// then
 			resultActions.andExpect(status().isOk());
-			Optional<MenuOptionGroup> menuOptionGroup = menuOptionGroupRepository.findById(
-				savedMenuOptionGroup.getId());
+			Optional<MenuOptionGroup> menuOptionGroup = menuOptionGroupRepository
+				.findById(savedMenuOptionGroup.getId());
 			assertThat(menuOptionGroup).isEmpty();
 		}
 

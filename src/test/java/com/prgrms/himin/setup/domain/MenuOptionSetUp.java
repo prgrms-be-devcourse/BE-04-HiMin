@@ -62,10 +62,7 @@ public class MenuOptionSetUp {
 		String name,
 		int price
 	) {
-		return new MenuOption(
-			name,
-			price
-		);
+		return new MenuOption(name, price);
 	}
 
 }

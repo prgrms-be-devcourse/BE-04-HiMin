@@ -11,18 +11,9 @@ public class MenuCreateRequestBuilder {
 	}
 
 	public static List<MenuCreateRequest> successesBuild() {
-		final MenuCreateRequest menu1 = buildMenuCreateRequest(
-			"짜장면",
-			5000
-		);
-		final MenuCreateRequest menu2 = buildMenuCreateRequest(
-			"짬뽕",
-			6000
-		);
-		final MenuCreateRequest menu3 = buildMenuCreateRequest(
-			"탕수육",
-			15000
-		);
+		final MenuCreateRequest menu1 = buildMenuCreateRequest("짜장면", 5000);
+		final MenuCreateRequest menu2 = buildMenuCreateRequest("짬뽕", 6000);
+		final MenuCreateRequest menu3 = buildMenuCreateRequest("탕수육", 15000);
 
 		return List.of(
 			menu1,

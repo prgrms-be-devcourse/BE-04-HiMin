@@ -110,10 +110,7 @@ class ShopControllerTest {
 		@MethodSource("provideRequestForErrorValue")
 		void not_valid_request_fail_test(String input, String expected) throws Exception {
 			// given
-			ShopCreateRequest request = ShopCreateRequestBuilder.failBuild(
-				input,
-				Category.FAST_FOOD
-			);
+			ShopCreateRequest request = ShopCreateRequestBuilder.failBuild(input, Category.FAST_FOOD);
 
 			String body = objectMapper.writeValueAsString(request);
 
@@ -149,10 +146,7 @@ class ShopControllerTest {
 			Shop shop = shopSetUp.saveOne();
 
 			// when
-			ResultActions resultAction = mvc.perform(get(
-					GET_URL,
-					shop.getShopId()
-				))
+			ResultActions resultAction = mvc.perform(get(GET_URL, shop.getShopId()))
 				.andDo(print());
 
 			// then
@@ -178,10 +172,7 @@ class ShopControllerTest {
 			Long shopId = 0L;
 
 			// when
-			ResultActions resultAction = mvc.perform(get(
-					GET_URL,
-					shopId
-				))
+			ResultActions resultAction = mvc.perform(get(GET_URL, shopId))
 				.andDo(print());
 
 			// then
@@ -250,8 +241,7 @@ class ShopControllerTest {
 
 			// when
 			ResultActions resultAction = mvc.perform(get(BASE_URL)
-					.queryParam("name", searchOption)
-				)
+					.queryParam("name", searchOption))
 				.andDo(print());
 
 			// then
@@ -287,8 +277,7 @@ class ShopControllerTest {
 
 			// when
 			ResultActions resultAction = mvc.perform(get(BASE_URL)
-					.queryParam("menuName", menuNameForOption)
-				)
+					.queryParam("menuName", menuNameForOption))
 				.andDo(print());
 
 			// then
@@ -415,10 +404,7 @@ class ShopControllerTest {
 			String body = objectMapper.writeValueAsString(request);
 
 			// when
-			ResultActions resultAction = mvc.perform(put(
-					PUT_URL,
-					shop.getShopId()
-				)
+			ResultActions resultAction = mvc.perform(put(PUT_URL, shop.getShopId())
 					.content(body)
 					.contentType(MediaType.APPLICATION_JSON))
 				.andDo(print());
@@ -448,10 +434,7 @@ class ShopControllerTest {
 			String body = objectMapper.writeValueAsString(request);
 
 			// when
-			ResultActions resultAction = mvc.perform(put(
-					PUT_URL,
-					shopId
-				)
+			ResultActions resultAction = mvc.perform(put(PUT_URL, shopId)
 					.content(body)
 					.contentType(MediaType.APPLICATION_JSON))
 				.andDo(print());
@@ -477,10 +460,7 @@ class ShopControllerTest {
 			String body = objectMapper.writeValueAsString(request);
 
 			// when
-			ResultActions resultAction = mvc.perform(put(
-					PUT_URL,
-					shop.getShopId()
-				)
+			ResultActions resultAction = mvc.perform(put(PUT_URL, shop.getShopId())
 					.content(body)
 					.contentType(MediaType.APPLICATION_JSON))
 				.andDo(print());
@@ -515,10 +495,7 @@ class ShopControllerTest {
 			String body = objectMapper.writeValueAsString(request);
 
 			// when
-			ResultActions resultAction = mvc.perform(patch(
-					PATCH_URL,
-					shop.getShopId()
-				)
+			ResultActions resultAction = mvc.perform(patch(PATCH_URL, shop.getShopId())
 					.content(body)
 					.contentType(MediaType.APPLICATION_JSON))
 				.andDo(print());
@@ -542,10 +519,7 @@ class ShopControllerTest {
 			String body = objectMapper.writeValueAsString(request);
 
 			// when
-			ResultActions resultAction = mvc.perform(patch(
-					PATCH_URL,
-					shopId
-				)
+			ResultActions resultAction = mvc.perform(patch(PATCH_URL, shopId)
 					.content(body)
 					.contentType(MediaType.APPLICATION_JSON))
 				.andDo(print());
@@ -570,10 +544,7 @@ class ShopControllerTest {
 			String body = objectMapper.writeValueAsString(request);
 
 			// when
-			ResultActions resultAction = mvc.perform(patch(
-					PATCH_URL,
-					shop.getShopId()
-				)
+			ResultActions resultAction = mvc.perform(patch(PATCH_URL, shop.getShopId())
 					.content(body)
 					.contentType(MediaType.APPLICATION_JSON))
 				.andDo(print());
@@ -604,10 +575,7 @@ class ShopControllerTest {
 			Shop shop = shopSetUp.saveOne();
 
 			// when
-			ResultActions resultAction = mvc.perform(delete(
-					DELETE_URL,
-					shop.getShopId()
-				))
+			ResultActions resultAction = mvc.perform(delete(DELETE_URL, shop.getShopId()))
 				.andDo(print());
 
 			// then
@@ -624,10 +592,7 @@ class ShopControllerTest {
 			Long shopId = 0L;
 
 			// when
-			ResultActions resultAction = mvc.perform(delete(
-					DELETE_URL,
-					shopId)
-				)
+			ResultActions resultAction = mvc.perform(delete(DELETE_URL, shopId))
 				.andDo(print());
 
 			// then

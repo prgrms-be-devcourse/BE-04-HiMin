@@ -32,10 +32,7 @@ public class DeliveryController {
 		@PathVariable Long deliveryId,
 		@PathVariable Long riderId
 	) {
-		DeliveryHistoryResponse response = deliveryService.allocateRider(
-			deliveryId,
-			riderId
-		);
+		DeliveryHistoryResponse response = deliveryService.allocateRider(deliveryId, riderId);
 
 		return ResponseEntity.ok(response);
 	}
@@ -45,10 +42,7 @@ public class DeliveryController {
 		@PathVariable Long deliveryId,
 		@PathVariable Long riderId
 	) {
-		DeliveryHistoryResponse response = deliveryService.startDelivery(
-			deliveryId,
-			riderId
-		);
+		DeliveryHistoryResponse response = deliveryService.startDelivery(deliveryId, riderId);
 
 		return ResponseEntity.ok(response);
 	}
@@ -58,10 +52,7 @@ public class DeliveryController {
 		@PathVariable Long deliveryId,
 		@PathVariable Long riderId
 	) {
-		DeliveryHistoryResponse response = deliveryService.finishDelivery(
-			deliveryId,
-			riderId
-		);
+		DeliveryHistoryResponse response = deliveryService.finishDelivery(deliveryId, riderId);
 
 		return ResponseEntity.ok(response);
 	}

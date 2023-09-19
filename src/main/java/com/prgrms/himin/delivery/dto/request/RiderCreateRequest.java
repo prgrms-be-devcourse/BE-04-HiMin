@@ -19,9 +19,6 @@ public record RiderCreateRequest(
 ) {
 
 	public Rider toEntity() {
-		return new Rider(
-			name,
-			phone
-		);
+		return new Rider(name, phone);
 	}
 }

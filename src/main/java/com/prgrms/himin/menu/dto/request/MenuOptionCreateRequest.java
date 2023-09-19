@@ -18,9 +18,6 @@ public record MenuOptionCreateRequest(
 ) {
 
 	public MenuOption toEntity() {
-		return new MenuOption(
-			name,
-			price
-		);
+		return new MenuOption(name, price);
 	}
 }
