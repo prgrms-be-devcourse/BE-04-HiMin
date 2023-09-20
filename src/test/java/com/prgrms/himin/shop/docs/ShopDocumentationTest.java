@@ -2,6 +2,7 @@ package com.prgrms.himin.shop.docs;
 
 import static org.mockito.BDDMockito.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -177,5 +178,19 @@ class ShopDocumentationTest {
 				requestFields(
 					fieldWithPath("status").type(JsonFieldType.STRING).description("상태")
 				)));
+	}
+
+	@Test
+	@DisplayName("가게를 삭제할 수 있다.")
+	void deleteShop() throws Exception {
+		// given
+		willDoNothing().given(shopService).deleteShop(anyLong());
+
+		// when
+		ResultActions resultAction = mvc.perform(delete("/api/shops/{shopId}", 1L));
+
+		// then
+		resultAction.andExpect(status().isOk())
+			.andDo(document("delete-shop"));
 	}
 }
