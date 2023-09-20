@@ -7,6 +7,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -152,6 +153,29 @@ class ShopDocumentationTest {
 					fieldWithPath("deliveryTip").type(JsonFieldType.NUMBER).description("배달팁"),
 					fieldWithPath("openingTime").type(JsonFieldType.STRING).description("오픈 시간"),
 					fieldWithPath("closingTime").type(JsonFieldType.STRING).description("폐점 시간")
+				)));
+	}
+
+	@DisplayName("가게 상태를 변경할 수 있다.")
+	@Test
+	void changeShopStatus() throws Exception {
+		// given
+		ShopUpdateRequest.Status request = ShopUpdateRequestBuilder.statusSuccessBuild();
+
+		willDoNothing().given(shopService).changeShopStatus(anyLong(), any(ShopUpdateRequest.Status.class));
+
+		// when
+		ResultActions resultAction = mvc.perform(patch("/api/shops/{shopId}", 1L)
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(objectMapper.writeValueAsString(request))
+		);
+
+		// then
+		resultAction.andExpect(status().isNoContent())
+			.andDo(document("change-shop-status",
+				preprocessRequest(prettyPrint()),
+				requestFields(
+					fieldWithPath("status").type(JsonFieldType.STRING).description("상태")
 				)));
 	}
 }
