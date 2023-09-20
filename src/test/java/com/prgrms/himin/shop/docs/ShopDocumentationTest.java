@@ -44,7 +44,7 @@ class ShopDocumentationTest {
 
 	@DisplayName("가게를 생성할 수 있다.")
 	@Test
-	void CreateShop() throws Exception {
+	void createShop() throws Exception {
 		// given
 		ShopCreateRequest request = ShopCreateRequestBuilder.successBuild();
 		ShopResponse response = ShopResponseBuilder.successBuild();
@@ -90,7 +90,7 @@ class ShopDocumentationTest {
 
 	@Test
 	@DisplayName("가게를 조회할 수 있다.")
-	void GetShop() throws Exception {
+	void getShop() throws Exception {
 		// given
 		ShopResponse response = ShopResponseBuilder.successBuild();
 
