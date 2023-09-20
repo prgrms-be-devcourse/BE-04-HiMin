@@ -48,8 +48,8 @@ class ShopDocumentationTest {
 	@MockBean
 	private ShopService shopService;
 
-	@DisplayName("가게를 생성할 수 있다.")
 	@Test
+	@DisplayName("가게를 생성할 수 있다.")
 	void createShop() throws Exception {
 		// given
 		ShopCreateRequest request = ShopCreateRequestBuilder.successBuild();
@@ -127,8 +127,8 @@ class ShopDocumentationTest {
 				)));
 	}
 
-	@DisplayName("가게 정보를 수정할 수 있다.")
 	@Test
+	@DisplayName("가게 정보를 수정할 수 있다.")
 	void updateShop() throws Exception {
 		// given
 		ShopUpdateRequest.Info request = ShopUpdateRequestBuilder.infoSuccessBuild();
@@ -157,8 +157,8 @@ class ShopDocumentationTest {
 				)));
 	}
 
-	@DisplayName("가게 상태를 변경할 수 있다.")
 	@Test
+	@DisplayName("가게 상태를 변경할 수 있다.")
 	void changeShopStatus() throws Exception {
 		// given
 		ShopUpdateRequest.Status request = ShopUpdateRequestBuilder.statusSuccessBuild();
