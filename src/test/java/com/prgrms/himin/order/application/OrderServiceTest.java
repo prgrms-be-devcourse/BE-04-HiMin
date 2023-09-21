@@ -29,6 +29,7 @@ import com.prgrms.himin.shop.domain.Category;
 import com.prgrms.himin.shop.domain.Shop;
 
 @SpringBootTest
+@Sql("/truncate.sql")
 class OrderServiceTest {
 
 	@Autowired
@@ -45,7 +46,6 @@ class OrderServiceTest {
 
 	@Nested
 	@DisplayName("주문 생성을 할 수 있다.")
-	@Sql("/truncate.sql")
 	class CreateOrder {
 
 		@DisplayName("성공한다.")
@@ -126,7 +126,6 @@ class OrderServiceTest {
 
 	@Nested
 	@DisplayName("주문 검색에 성공 한다.")
-	@Sql("/truncate.sql")
 	class SearchOrder {
 		@DisplayName("성공한다.")
 		@Test
