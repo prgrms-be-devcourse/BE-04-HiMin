@@ -118,9 +118,7 @@ class OrderServiceTest {
 			// when && then
 			assertThatThrownBy(
 				() -> orderService.createOrder(orderCreateRequest)
-			).isInstanceOf(
-				EntityNotFoundException.class
-			);
+			).isInstanceOf(EntityNotFoundException.class);
 		}
 	}
 
