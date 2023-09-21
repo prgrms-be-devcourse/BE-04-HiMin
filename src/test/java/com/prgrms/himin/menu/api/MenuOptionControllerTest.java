@@ -2,7 +2,11 @@ package com.prgrms.himin.menu.api;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -17,9 +21,11 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -42,6 +48,7 @@ import com.prgrms.himin.setup.request.MenuOptionCreateRequestBuilder;
 import com.prgrms.himin.setup.request.MenuOptionUpdateRequestBuilder;
 import com.prgrms.himin.shop.domain.Shop;
 
+@AutoConfigureRestDocs
 @Sql("/truncate.sql")
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -119,7 +126,24 @@ public class MenuOptionControllerTest {
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("menuOptionId").isNotEmpty())
 				.andExpect(jsonPath("name").value(request.name()))
-				.andExpect(jsonPath("price").value(request.price()));
+				.andExpect(jsonPath("price").value(request.price()))
+				.andDo(document("create-menu-option",
+					preprocessRequest(prettyPrint()),
+					preprocessResponse(prettyPrint()),
+					pathParameters(
+						parameterWithName("shopId").description("가게 ID"),
+						parameterWithName("menuId").description("메뉴 ID"),
+						parameterWithName("menuOptionGroupId").description("메뉴 옵션 그룹 ID")
+					),
+					requestFields(
+						fieldWithPath("name").type(JsonFieldType.STRING).description("메뉴 옵션 이름"),
+						fieldWithPath("price").type(JsonFieldType.NUMBER).description("메뉴 옵션 가격")
+					),
+					responseFields(
+						fieldWithPath("menuOptionId").type(JsonFieldType.NUMBER).description("메뉴 옵션 ID"),
+						fieldWithPath("name").type(JsonFieldType.STRING).description("메뉴 옵션 이름"),
+						fieldWithPath("price").type(JsonFieldType.NUMBER).description("메뉴 옵션 가격")
+					)));
 		}
 
 		@DisplayName("유효하지 않은 요청값이 들어와서 실패한다.")
@@ -186,8 +210,17 @@ public class MenuOptionControllerTest {
 				)
 					.content(body)
 					.contentType(MediaType.APPLICATION_JSON))
-				.andDo(print());
-
+				.andDo(document("update-menu-option",
+					preprocessRequest(prettyPrint()),
+					pathParameters(
+						parameterWithName("shopId").description("가게 ID"),
+						parameterWithName("menuId").description("메뉴 ID"),
+						parameterWithName("menuOptionGroupId").description("메뉴 옵션 그룹 ID")
+					),
+					requestFields(
+						fieldWithPath("name").type(JsonFieldType.STRING).description("메뉴 옵션 이름"),
+						fieldWithPath("price").type(JsonFieldType.NUMBER).description("메뉴 옵션 가격")
+					)));
 			// then
 			resultActions.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -249,7 +282,13 @@ public class MenuOptionControllerTest {
 					savedMenuOption.getId()
 				)
 					.contentType(MediaType.APPLICATION_JSON))
-				.andDo(print());
+				.andDo(document("delete-menu-option",
+					pathParameters(
+						parameterWithName("shopId").description("가게 ID"),
+						parameterWithName("menuId").description("메뉴 ID"),
+						parameterWithName("menuOptionGroupId").description("메뉴 옵션 그룹 ID"),
+						parameterWithName("menuOptionId").description("메뉴 옵션 ID")
+					)));
 
 			// then
 			resultActions.andExpect(status().isOk());
