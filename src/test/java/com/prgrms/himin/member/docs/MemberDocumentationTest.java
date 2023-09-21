@@ -2,9 +2,10 @@ package com.prgrms.himin.member.docs;
 
 import static org.mockito.BDDMockito.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.List;
@@ -115,6 +116,9 @@ class MemberDocumentationTest {
 			.andDo(document("member-get",
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
+				pathParameters(
+					parameterWithName("memberId").description("회원 ID")
+				),
 				responseFields(
 					fieldWithPath("id").type(JsonFieldType.NUMBER).description("ID"),
 					fieldWithPath("loginId").type(JsonFieldType.STRING).description("로그인 ID"),
@@ -145,6 +149,9 @@ class MemberDocumentationTest {
 		resultAction.andExpect(status().isNoContent())
 			.andDo(document("member-update",
 				preprocessRequest(prettyPrint()),
+				pathParameters(
+					parameterWithName("memberId").description("회원 ID")
+				),
 				requestFields(
 					fieldWithPath("loginId").type(JsonFieldType.STRING).description("로그인 ID"),
 					fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"),
@@ -165,7 +172,10 @@ class MemberDocumentationTest {
 
 		// then
 		resultAction.andExpect(status().isOk())
-			.andDo(document("member-delete"));
+			.andDo(document("member-delete",
+				pathParameters(
+					parameterWithName("memberId").description("회원 ID")
+				)));
 	}
 
 	@DisplayName("회원의 주소를 추가할 수 있다.")
@@ -188,6 +198,9 @@ class MemberDocumentationTest {
 			.andDo(document("member-address-create",
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
+				pathParameters(
+					parameterWithName("memberId").description("회원 ID")
+				),
 				requestFields(
 					fieldWithPath("addressAlias").type(JsonFieldType.STRING).description("주소 가명"),
 					fieldWithPath("address").type(JsonFieldType.STRING).description("주소")
@@ -215,6 +228,9 @@ class MemberDocumentationTest {
 		resultAction.andExpect(status().isOk())
 			.andDo(document("member-address-get-all",
 				preprocessResponse(prettyPrint()),
+				pathParameters(
+					parameterWithName("memberId").description("회원 ID")
+				),
 				responseFields(
 					fieldWithPath("[0].addressId").type(JsonFieldType.NUMBER).description("주소 ID"),
 					fieldWithPath("[0].addressAlias").type(JsonFieldType.STRING).description("주소 가명"),
@@ -238,7 +254,11 @@ class MemberDocumentationTest {
 
 		// then
 		resultAction.andExpect(status().isOk())
-			.andDo(document("member-address-delete"));
+			.andDo(document("member-address-delete",
+				pathParameters(
+					parameterWithName("memberId").description("회원 ID"),
+					parameterWithName("addressId").description("주소 ID")
+				)));
 	}
 
 	@DisplayName("주소를 업데이트 할 수 있다.")
@@ -263,6 +283,10 @@ class MemberDocumentationTest {
 		resultAction.andExpect(status().isNoContent())
 			.andDo(document("member-address-update",
 				preprocessRequest(prettyPrint()),
+				pathParameters(
+					parameterWithName("memberId").description("회원 ID"),
+					parameterWithName("addressId").description("주소 ID")
+				),
 				requestFields(
 					fieldWithPath("addressAlias").type(JsonFieldType.STRING).description("주소 가명"),
 					fieldWithPath("address").type(JsonFieldType.STRING).description("주소")
