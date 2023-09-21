@@ -227,6 +227,7 @@ class MemberDocumentationTest {
 		// then
 		resultAction.andExpect(status().isOk())
 			.andDo(document("member-address-get-all",
+				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
 				pathParameters(
 					parameterWithName("memberId").description("회원 ID")
