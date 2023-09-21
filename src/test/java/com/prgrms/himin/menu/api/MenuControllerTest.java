@@ -2,7 +2,11 @@ package com.prgrms.himin.menu.api;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -17,9 +21,11 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -30,6 +36,7 @@ import com.prgrms.himin.global.error.exception.EntityNotFoundException;
 import com.prgrms.himin.global.error.exception.ErrorCode;
 import com.prgrms.himin.menu.domain.Menu;
 import com.prgrms.himin.menu.domain.MenuRepository;
+import com.prgrms.himin.menu.domain.MenuStatus;
 import com.prgrms.himin.menu.dto.request.MenuCreateRequest;
 import com.prgrms.himin.menu.dto.request.MenuUpdateRequest;
 import com.prgrms.himin.setup.domain.MenuSetUp;
@@ -38,6 +45,7 @@ import com.prgrms.himin.setup.request.MenuCreateRequestBuilder;
 import com.prgrms.himin.setup.request.MenuUpdateRequestBuilder;
 import com.prgrms.himin.shop.domain.Shop;
 
+@AutoConfigureRestDocs
 @Sql("/truncate.sql")
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -99,7 +107,23 @@ class MenuControllerTest {
 				.andExpect(jsonPath("menuId").isNotEmpty())
 				.andExpect(jsonPath("name").value(request.name()))
 				.andExpect(jsonPath("price").value(request.price()))
-				.andExpect(jsonPath("popularity").value(request.popularity()));
+				.andExpect(jsonPath("popularity").value(request.popularity()))
+				.andExpect(jsonPath("status").value(MenuStatus.UNSELLABLE.toString()))
+				.andDo(document("create-menu",
+					preprocessRequest(prettyPrint()),
+					preprocessResponse(prettyPrint()),
+					requestFields(
+						fieldWithPath("name").type(JsonFieldType.STRING).description("메뉴 이름"),
+						fieldWithPath("price").type(JsonFieldType.NUMBER).description("메뉴 가격"),
+						fieldWithPath("popularity").type(JsonFieldType.BOOLEAN).description("메뉴 인기 여부")
+					),
+					responseFields(
+						fieldWithPath("menuId").type(JsonFieldType.NUMBER).description("메뉴 ID"),
+						fieldWithPath("name").type(JsonFieldType.STRING).description("메뉴 이름"),
+						fieldWithPath("price").type(JsonFieldType.NUMBER).description("메뉴 가격"),
+						fieldWithPath("popularity").type(JsonFieldType.BOOLEAN).description("메뉴 인기 여부"),
+						fieldWithPath("status").type(JsonFieldType.STRING).description("메뉴 상태")
+					)));
 		}
 
 		@DisplayName("실패한다.")
@@ -156,7 +180,23 @@ class MenuControllerTest {
 				.andExpect(jsonPath("menuId").isNotEmpty())
 				.andExpect(jsonPath("name").value(savedMenu.getName()))
 				.andExpect(jsonPath("price").value(savedMenu.getPrice()))
-				.andExpect(jsonPath("popularity").value(savedMenu.isPopularity()));
+				.andExpect(jsonPath("popularity").value(savedMenu.isPopularity()))
+				.andExpect(jsonPath("status").value(MenuStatus.UNSELLABLE.toString()))
+				.andDo(document("get-menu",
+					preprocessResponse(prettyPrint()),
+					pathParameters(
+						parameterWithName("shopId").description("가게 ID"),
+						parameterWithName("menuId").description("메뉴 ID")
+					),
+					responseFields(
+						fieldWithPath("menuId").type(JsonFieldType.NUMBER).description("메뉴 ID"),
+						fieldWithPath("name").type(JsonFieldType.STRING).description("메뉴 이름"),
+						fieldWithPath("price").type(JsonFieldType.NUMBER).description("메뉴 가격"),
+						fieldWithPath("popularity").type(JsonFieldType.BOOLEAN).description("메뉴 인기 여부"),
+						fieldWithPath("status").type(JsonFieldType.STRING).description("메뉴 상태"),
+						fieldWithPath("menuOptionGroupResponses").type(JsonFieldType.ARRAY)
+							.description("메뉴 옵션 그룹 response 리스트")
+					)));
 		}
 
 		@DisplayName("실패한다.")
@@ -216,7 +256,11 @@ class MenuControllerTest {
 				)
 					.content(body)
 					.contentType(MediaType.APPLICATION_JSON))
-				.andDo(print());
+				.andDo(document("update-menu",
+					pathParameters(
+						parameterWithName("shopId").description("가게 ID"),
+						parameterWithName("menuId").description("메뉴 ID")
+					)));
 
 			// then
 			resultActions.andExpect(status().isNoContent());
@@ -278,7 +322,11 @@ class MenuControllerTest {
 					savedMenu.getId()
 				)
 					.contentType(MediaType.APPLICATION_JSON))
-				.andDo(print());
+				.andDo(document("delete-menu",
+					pathParameters(
+						parameterWithName("shopId").description("가게 ID"),
+						parameterWithName("menuId").description("메뉴 ID")
+					)));
 
 			// then
 			resultActions.andExpect(status().isOk());
