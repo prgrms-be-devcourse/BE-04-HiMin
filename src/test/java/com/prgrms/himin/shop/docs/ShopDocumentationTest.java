@@ -28,11 +28,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prgrms.himin.setup.request.ShopCreateRequestBuilder;
 import com.prgrms.himin.setup.request.ShopUpdateRequestBuilder;
 import com.prgrms.himin.setup.response.ShopResponseBuilder;
+import com.prgrms.himin.setup.response.ShopsResponseBuilder;
 import com.prgrms.himin.shop.api.ShopController;
 import com.prgrms.himin.shop.application.ShopService;
+import com.prgrms.himin.shop.domain.ShopSort;
 import com.prgrms.himin.shop.dto.request.ShopCreateRequest;
+import com.prgrms.himin.shop.dto.request.ShopSearchCondition;
 import com.prgrms.himin.shop.dto.request.ShopUpdateRequest;
 import com.prgrms.himin.shop.dto.response.ShopResponse;
+import com.prgrms.himin.shop.dto.response.ShopsResponse;
 
 @AutoConfigureRestDocs
 @AutoConfigureMockMvc(addFilters = false)
@@ -124,6 +128,52 @@ class ShopDocumentationTest {
 					fieldWithPath("status").type(JsonFieldType.STRING).description("상태"),
 					fieldWithPath("openingTime").type(JsonFieldType.STRING).description("오픈 시간"),
 					fieldWithPath("closingTime").type(JsonFieldType.STRING).description("폐점 시간")
+				)));
+	}
+
+	@Test
+	@DisplayName("가게 목록을 조회할 수 있다.")
+	void getShops() throws Exception {
+		// given
+		ShopsResponse responses = ShopsResponseBuilder.successBuild();
+
+		given(shopService.getShops(any(ShopSearchCondition.class), anyInt(), anyLong(), any(ShopSort.class)))
+			.willReturn(responses);
+
+		// when
+		ResultActions resultAction = mvc.perform(
+			get("/api/shops?name=맥도날드&category=FAST_FOOD&address=광명&deliveryTip=4000&menuName=햄버거&size=3&cursor=1&sort=deliveryTipAsc"));
+
+		// then
+		resultAction.andExpect(status().isOk())
+			.andDo(document("shop-get-many",
+				preprocessResponse(prettyPrint()),
+				requestParameters(
+					parameterWithName("name").description("검색 조건 - 이름"),
+					parameterWithName("category").description("검색 조건 - 카테고리"),
+					parameterWithName("address").description("검색 조건 - 주소"),
+					parameterWithName("deliveryTip").description("검색 조건 - 배탈팁"),
+					parameterWithName("menuName").description("검색 조건 - 메뉴 이름"),
+					parameterWithName("size").description("Pagination - 사이즈"),
+					parameterWithName("cursor").description("Pagination - 커서 ID"),
+					parameterWithName("sort").description("정렬 조건")
+				),
+				responseFields(
+					fieldWithPath("shopResponses[].shopId").type(JsonFieldType.NUMBER).description("가게 ID"),
+					fieldWithPath("shopResponses[].name").type(JsonFieldType.STRING).description("이름"),
+					fieldWithPath("shopResponses[].category").type(JsonFieldType.STRING).description("음식 카테고리"),
+					fieldWithPath("shopResponses[].address").type(JsonFieldType.STRING).description("주소"),
+					fieldWithPath("shopResponses[].phone").type(JsonFieldType.STRING).description("전화번호"),
+					fieldWithPath("shopResponses[].content").type(JsonFieldType.STRING).description("소개글"),
+					fieldWithPath("shopResponses[].deliveryTip").type(JsonFieldType.NUMBER).description("배달팁"),
+					fieldWithPath("shopResponses[].dibsCount").type(JsonFieldType.NUMBER).description("찜 수"),
+					fieldWithPath("shopResponses[].status").type(JsonFieldType.STRING).description("상태"),
+					fieldWithPath("shopResponses[].openingTime").type(JsonFieldType.STRING).description("오픈 시간"),
+					fieldWithPath("shopResponses[].closingTime").type(JsonFieldType.STRING).description("폐점 시간"),
+					fieldWithPath("size").type(JsonFieldType.NUMBER).description("페이지 사이즈"),
+					fieldWithPath("nextCursor").type(JsonFieldType.NUMBER).description("다음 커서 ID"),
+					fieldWithPath("sort").type(JsonFieldType.STRING).description("정렬 조건"),
+					fieldWithPath("isLast").type(JsonFieldType.BOOLEAN).description("마지막 페이지 여부")
 				)));
 	}
 
