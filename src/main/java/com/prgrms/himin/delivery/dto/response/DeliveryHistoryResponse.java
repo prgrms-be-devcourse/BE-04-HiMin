@@ -50,6 +50,13 @@ public record DeliveryHistoryResponse(
 	) {
 	}
 
+	public static HistoryInfo createHistoryInfo(
+		DeliveryStatus deliveryStatus,
+		LocalDateTime createdAt
+	) {
+		return new HistoryInfo(deliveryStatus, createdAt);
+	}
+
 	public DeliveryStatus deliveryStatus() {
 		return this.historyInfo.deliveryStatus();
 	}
