@@ -3,7 +3,6 @@ package com.prgrms.himin.setup.factory;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.prgrms.himin.menu.domain.Menu;
@@ -11,39 +10,25 @@ import com.prgrms.himin.menu.domain.MenuOption;
 import com.prgrms.himin.menu.domain.MenuOptionGroup;
 import com.prgrms.himin.order.dto.request.SelectedMenuOptionRequest;
 import com.prgrms.himin.order.dto.request.SelectedMenuRequest;
-import com.prgrms.himin.setup.domain.MemberSetUp;
 import com.prgrms.himin.setup.domain.MenuOptionGroupSetUp;
 import com.prgrms.himin.setup.domain.MenuOptionSetUp;
 import com.prgrms.himin.setup.domain.MenuSetUp;
-import com.prgrms.himin.setup.domain.ShopSetUp;
 import com.prgrms.himin.setup.request.SelectedMenuOptionRequestBuilder;
 import com.prgrms.himin.setup.request.SelectedMenuRequestBuilder;
 import com.prgrms.himin.shop.domain.Shop;
 
+import lombok.RequiredArgsConstructor;
+
 @Component
+@RequiredArgsConstructor
 public class SelectedMenuRequestFactory {
 
-	@Autowired
-	MemberSetUp memberSetUp;
+	private final MenuSetUp menuSetUp;
 
-	@Autowired
-	ShopSetUp shopSetUp;
+	private final MenuOptionGroupSetUp menuOptionGroupSetUp;
 
-	@Autowired
-	MenuSetUp menuSetUp;
-
-	@Autowired
-	MenuOptionGroupSetUp menuOptionGroupSetUp;
-
-	@Autowired
-	MenuOptionSetUp menuOptionSetUp;
-
-	private List<SelectedMenuRequest> selectedMenuRequests;
-
-	public SelectedMenuRequestFactory(
-	) {
-		selectedMenuRequests = new ArrayList<>();
-	}
+	private final MenuOptionSetUp menuOptionSetUp;
+	private final List<SelectedMenuRequest> selectedMenuRequests = new ArrayList<>();
 
 	public void initSelectedMenuFactory(Shop shop) {
 		initSelectedMenuRequests(shop);
