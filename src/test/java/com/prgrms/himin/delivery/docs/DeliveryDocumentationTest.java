@@ -1,4 +1,4 @@
-package com.prgrms.himin.shop.docs;
+package com.prgrms.himin.delivery.docs;
 
 import static org.mockito.BDDMockito.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;

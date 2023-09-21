@@ -1,4 +1,4 @@
-package com.prgrms.himin.shop.docs;
+package com.prgrms.himin.rider.docs;
 
 import static org.mockito.BDDMockito.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
@@ -30,7 +30,7 @@ import com.prgrms.himin.setup.response.RiderResponseBuilder;
 @AutoConfigureRestDocs
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(RiderController.class)
-public class RiderDocumentTest {
+public class RiderDocumentationTest {
 
 	@Autowired
 	private MockMvc mvc;
