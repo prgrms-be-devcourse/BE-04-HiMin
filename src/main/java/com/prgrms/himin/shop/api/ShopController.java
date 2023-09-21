@@ -21,7 +21,7 @@ import com.prgrms.himin.shop.dto.request.ShopCreateRequest;
 import com.prgrms.himin.shop.dto.request.ShopSearchCondition;
 import com.prgrms.himin.shop.dto.request.ShopUpdateRequest;
 import com.prgrms.himin.shop.dto.response.ShopResponse;
-import com.prgrms.himin.shop.dto.response.ShopsReponse;
+import com.prgrms.himin.shop.dto.response.ShopsResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -47,13 +47,13 @@ public class ShopController {
 	}
 
 	@GetMapping
-	public ResponseEntity<ShopsReponse> getShops(
+	public ResponseEntity<ShopsResponse> getShops(
 		@ModelAttribute ShopSearchCondition shopSearchCondition,
 		@RequestParam(required = false, defaultValue = "10") int size,
 		@RequestParam(required = false) Long cursor,
 		@RequestParam(required = false) String sort
 	) {
-		ShopsReponse responses = shopService.getShops(
+		ShopsResponse responses = shopService.getShops(
 			shopSearchCondition,
 			size,
 			cursor,

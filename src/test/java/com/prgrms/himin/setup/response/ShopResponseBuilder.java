@@ -23,5 +23,4 @@ public class ShopResponseBuilder {
 			LocalTime.of(21, 0)
 		);
 	}
-
 }
