@@ -10,7 +10,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -21,11 +20,8 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prgrms.himin.delivery.api.DeliveryController;
 import com.prgrms.himin.delivery.application.DeliveryService;
-import com.prgrms.himin.delivery.domain.Delivery;
-import com.prgrms.himin.delivery.domain.Rider;
 import com.prgrms.himin.delivery.dto.response.DeliveryHistoryResponse;
 import com.prgrms.himin.delivery.dto.response.DeliveryResponse;
 import com.prgrms.himin.setup.response.DeliveryHistoryResponseBuilder;
@@ -39,17 +35,8 @@ class DeliveryDocumentationTest {
 	@Autowired
 	private MockMvc mvc;
 
-	@Autowired
-	private ObjectMapper objectMapper;
-
 	@MockBean
 	private DeliveryService deliveryService;
-
-	@Mock
-	Rider rider;
-
-	@Mock
-	Delivery delivery;
 
 	@DisplayName("배달을 생성할 수 있다.")
 	@Test
