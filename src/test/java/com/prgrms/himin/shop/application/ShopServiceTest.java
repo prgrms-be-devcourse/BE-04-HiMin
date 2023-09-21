@@ -27,7 +27,7 @@ import com.prgrms.himin.shop.dto.request.ShopCreateRequest;
 import com.prgrms.himin.shop.dto.request.ShopSearchCondition;
 import com.prgrms.himin.shop.dto.request.ShopUpdateRequest;
 import com.prgrms.himin.shop.dto.response.ShopResponse;
-import com.prgrms.himin.shop.dto.response.ShopsReponse;
+import com.prgrms.himin.shop.dto.response.ShopsResponse;
 
 @ExtendWith(MockitoExtension.class)
 class ShopServiceTest {
@@ -229,7 +229,7 @@ class ShopServiceTest {
 				.willReturn(shops);
 
 			// when
-			ShopsReponse shopsReponse = shopService.getShops(
+			ShopsResponse shopsResponse = shopService.getShops(
 				new ShopSearchCondition(
 					"집",
 					Category.ASIAN,
@@ -243,14 +243,14 @@ class ShopServiceTest {
 			);
 
 			// then
-			for (int i = 0; i < shopsReponse.shopsReponses().size(); i++) {
+			for (int i = 0; i < shopsResponse.shopResponses().size(); i++) {
 				assertThat(shopResponses.get(i)).usingRecursiveComparison()
-					.isEqualTo(shopsReponse.shopsReponses().get(i));
+					.isEqualTo(shopsResponse.shopResponses().get(i));
 			}
-			assertThat(shopsReponse.size()).isEqualTo(10);
-			assertThat(shopsReponse.nextCursor()).isNull();
-			assertThat(shopsReponse.sort()).isEqualTo(ShopSort.DELIVERY_TIP_ASC);
-			assertThat(shopsReponse.isLast()).isTrue();
+			assertThat(shopsResponse.size()).isEqualTo(10);
+			assertThat(shopsResponse.nextCursor()).isNull();
+			assertThat(shopsResponse.sort()).isEqualTo(ShopSort.DELIVERY_TIP_ASC);
+			assertThat(shopsResponse.isLast()).isTrue();
 		}
 	}
 }
