@@ -19,7 +19,7 @@ import com.prgrms.himin.shop.dto.request.ShopCreateRequest;
 import com.prgrms.himin.shop.dto.request.ShopSearchCondition;
 import com.prgrms.himin.shop.dto.request.ShopUpdateRequest;
 import com.prgrms.himin.shop.dto.response.ShopResponse;
-import com.prgrms.himin.shop.dto.response.ShopsReponse;
+import com.prgrms.himin.shop.dto.response.ShopsResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -49,7 +49,7 @@ public class ShopService {
 		return ShopResponse.from(shop);
 	}
 
-	public ShopsReponse getShops(
+	public ShopsResponse getShops(
 		ShopSearchCondition shopSearchCondition,
 		int size,
 		Long cursor,
@@ -62,7 +62,7 @@ public class ShopService {
 			sort
 		);
 
-		return new ShopsReponse(
+		return new ShopsResponse(
 			ShopResponse.from(shops),
 			size,
 			getNextCursor(shops),

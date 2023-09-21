@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.prgrms.himin.shop.domain.ShopSort;
 
-public record ShopsReponse(
-	List<ShopResponse> shopsReponses,
+public record ShopsResponse(
+	List<ShopResponse> shopResponses,
 	int size,
 	Long nextCursor,
 	ShopSort sort,
