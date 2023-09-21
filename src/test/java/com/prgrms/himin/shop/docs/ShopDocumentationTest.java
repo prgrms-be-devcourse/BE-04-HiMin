@@ -40,13 +40,13 @@ import com.prgrms.himin.shop.dto.response.ShopResponse;
 class ShopDocumentationTest {
 
 	@Autowired
-	private MockMvc mvc;
+	MockMvc mvc;
 
 	@Autowired
-	private ObjectMapper objectMapper;
+	ObjectMapper objectMapper;
 
 	@MockBean
-	private ShopService shopService;
+	ShopService shopService;
 
 	@Test
 	@DisplayName("가게를 생성할 수 있다.")
