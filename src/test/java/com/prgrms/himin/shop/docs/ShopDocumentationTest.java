@@ -66,7 +66,7 @@ class ShopDocumentationTest {
 
 		// then
 		resultAction.andExpect(status().isOk())
-			.andDo(document("create-shop",
+			.andDo(document("shop-create",
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
 				requestFields(
@@ -107,7 +107,7 @@ class ShopDocumentationTest {
 
 		// then
 		resultAction.andExpect(status().isOk())
-			.andDo(document("get-shop",
+			.andDo(document("shop-get-one",
 				preprocessResponse(prettyPrint()),
 				pathParameters(
 					parameterWithName("shopId").description("가게 ID")
@@ -143,7 +143,7 @@ class ShopDocumentationTest {
 
 		// then
 		resultAction.andExpect(status().isNoContent())
-			.andDo(document("update-shop",
+			.andDo(document("shop-update-info",
 				preprocessRequest(prettyPrint()),
 				requestFields(
 					fieldWithPath("name").type(JsonFieldType.STRING).description("가게 이름"),
@@ -173,7 +173,7 @@ class ShopDocumentationTest {
 
 		// then
 		resultAction.andExpect(status().isNoContent())
-			.andDo(document("change-shop-status",
+			.andDo(document("shop-change-status",
 				preprocessRequest(prettyPrint()),
 				requestFields(
 					fieldWithPath("status").type(JsonFieldType.STRING).description("상태")
@@ -191,6 +191,6 @@ class ShopDocumentationTest {
 
 		// then
 		resultAction.andExpect(status().isOk())
-			.andDo(document("delete-shop"));
+			.andDo(document("shop-delete"));
 	}
 }
