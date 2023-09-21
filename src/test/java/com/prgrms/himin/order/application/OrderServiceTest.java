@@ -10,27 +10,26 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
 
+import com.prgrms.himin.global.error.exception.EntityNotFoundException;
 import com.prgrms.himin.member.domain.Member;
-import com.prgrms.himin.menu.domain.Menu;
-import com.prgrms.himin.menu.domain.MenuOption;
-import com.prgrms.himin.menu.domain.MenuOptionGroup;
 import com.prgrms.himin.order.dto.request.OrderCreateRequest;
+import com.prgrms.himin.order.dto.request.OrderSearchCondition;
 import com.prgrms.himin.order.dto.request.SelectedMenuOptionRequest;
 import com.prgrms.himin.order.dto.request.SelectedMenuRequest;
 import com.prgrms.himin.order.dto.response.OrderResponse;
+import com.prgrms.himin.order.dto.response.OrderResponses;
 import com.prgrms.himin.order.dto.response.SelectedMenuResponse;
 import com.prgrms.himin.setup.domain.MemberSetUp;
-import com.prgrms.himin.setup.domain.MenuOptionGroupSetUp;
-import com.prgrms.himin.setup.domain.MenuOptionSetUp;
-import com.prgrms.himin.setup.domain.MenuSetUp;
 import com.prgrms.himin.setup.domain.ShopSetUp;
+import com.prgrms.himin.setup.factory.SelectedMenuRequestFactory;
 import com.prgrms.himin.setup.request.OrderCreateRequestBuilder;
-import com.prgrms.himin.setup.request.SelectedMenuOptionRequestBuilder;
-import com.prgrms.himin.setup.request.SelectedMenuRequestBuilder;
+import com.prgrms.himin.shop.domain.Category;
 import com.prgrms.himin.shop.domain.Shop;
 
 @SpringBootTest
+@Sql("/truncate.sql")
 class OrderServiceTest {
 
 	@Autowired
@@ -40,16 +39,10 @@ class OrderServiceTest {
 	ShopSetUp shopSetUp;
 
 	@Autowired
-	MenuSetUp menuSetUp;
-
-	@Autowired
-	MenuOptionGroupSetUp menuOptionGroupSetUp;
-
-	@Autowired
-	MenuOptionSetUp menuOptionSetUp;
-
-	@Autowired
 	OrderService orderService;
+
+	@Autowired
+	SelectedMenuRequestFactory selectedMenuRequestFactory;
 
 	@Nested
 	@DisplayName("주문 생성을 할 수 있다.")
@@ -62,26 +55,8 @@ class OrderServiceTest {
 			Member member = memberSetUp.saveOne();
 			Shop shop = shopSetUp.saveOne();
 
-			List<SelectedMenuRequest> selectedMenuRequests = new ArrayList<>();
-			for (int i = 0; i < 3; i++) {
-				Menu menu = menuSetUp.saveOne(shop);
-				List<MenuOptionGroup> menuOptionGroups = menuOptionGroupSetUp.saveMany(menu);
-				List<SelectedMenuOptionRequest> selectedMenuOptionRequests = new ArrayList<>();
-
-				for (MenuOptionGroup menuOptionGroup : menuOptionGroups) {
-					List<MenuOption> menuOptions = menuOptionSetUp.saveMany(menuOptionGroup);
-					SelectedMenuOptionRequest selectedMenuOptionRequest = SelectedMenuOptionRequestBuilder
-						.successBuild(menuOptions);
-					selectedMenuOptionRequests.add(selectedMenuOptionRequest);
-				}
-
-				SelectedMenuRequest selectedMenuRequest = SelectedMenuRequestBuilder.successBuild(
-					menu.getId(),
-					selectedMenuOptionRequests
-				);
-
-				selectedMenuRequests.add(selectedMenuRequest);
-			}
+			selectedMenuRequestFactory.initSelectedMenuFactory(shop);
+			List<SelectedMenuRequest> selectedMenuRequests = selectedMenuRequestFactory.getSelectedMenuRequests();
 
 			OrderCreateRequest orderCreateRequest = OrderCreateRequestBuilder.successBuild(
 				member.getId(),
@@ -119,6 +94,96 @@ class OrderServiceTest {
 				assertThat(selectedMenuResponse.selectedOptionIds()).isEqualTo(allMenuOptionIds);
 
 				selectedMenuIdx += 1;
+			}
+		}
+
+		@DisplayName("존재하지 않은 가게 id로 주문 생성에 실패한다.")
+		@Test
+		void not_found_shop_id_fail_test() {
+			// given
+			Member member = memberSetUp.saveOne();
+			Shop shop = shopSetUp.saveOne();
+
+			Long wrongShopId = 0L;
+			selectedMenuRequestFactory.initSelectedMenuFactory(shop);
+			List<SelectedMenuRequest> wrongSelectedMenuRequests = selectedMenuRequestFactory
+				.getSelectedMenuRequests();
+
+			OrderCreateRequest orderCreateRequest = OrderCreateRequestBuilder.successBuild(
+				member.getId(),
+				wrongShopId,
+				wrongSelectedMenuRequests
+			);
+
+			// when && then
+			assertThatThrownBy(
+				() -> orderService.createOrder(orderCreateRequest)
+			).isInstanceOf(EntityNotFoundException.class);
+		}
+	}
+
+	@Nested
+	@DisplayName("주문 검색에 성공 한다.")
+	class SearchOrder {
+		@DisplayName("성공한다.")
+		@Test
+		void success_test() {
+			// given
+			Member member = memberSetUp.saveOne();
+			Shop shop = shopSetUp.saveOne();
+
+			selectedMenuRequestFactory.initSelectedMenuFactory(shop);
+			List<SelectedMenuRequest> selectedMenuRequests = selectedMenuRequestFactory.getSelectedMenuRequests();
+
+			OrderCreateRequest orderCreateRequest = OrderCreateRequestBuilder.successBuild(
+				member.getId(),
+				shop.getShopId(),
+				selectedMenuRequests
+			);
+
+			List<OrderResponse> expectedOrderResponses = new ArrayList<>();
+			for (int i = 0; i < 10; i++) {
+				OrderResponse orderResponse = orderService.createOrder(orderCreateRequest);
+				expectedOrderResponses.add(orderResponse);
+			}
+
+			List<Category> categories = List.of(
+				shop.getCategory()
+			);
+
+			OrderSearchCondition orderSearchCondition = new OrderSearchCondition(
+				categories,
+				null,
+				null,
+				null
+			);
+
+			int pageSize = 5;
+
+			// when
+			OrderResponses orderResponses = orderService.getOrders(
+				member.getId(),
+				orderSearchCondition,
+				pageSize,
+				null
+			);
+
+			// then
+			assertThat(orderResponses.size()).isEqualTo(pageSize);
+			assertThat(orderResponses.isLast()).isFalse();
+
+			OrderResponse expectedCursorResponse = expectedOrderResponses.get(pageSize - 1);
+			assertThat(orderResponses.nextCursor()).isEqualTo(expectedCursorResponse.orderId());
+
+			int expectedOrderResponsesIdx = 0;
+			for (OrderResponse actualOrderResponse : orderResponses.orderResponses()) {
+				OrderResponse expectedOrderResponse = expectedOrderResponses.get(expectedOrderResponsesIdx);
+
+				assertThat(actualOrderResponse)
+					.usingRecursiveComparison()
+					.isEqualTo(expectedOrderResponse);
+
+				expectedOrderResponsesIdx += 1;
 			}
 		}
 	}
