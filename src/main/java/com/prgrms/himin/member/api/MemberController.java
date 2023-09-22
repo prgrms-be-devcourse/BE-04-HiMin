@@ -5,8 +5,6 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,10 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.prgrms.himin.global.config.security.jwt.JwtAuthentication;
-import com.prgrms.himin.global.config.security.jwt.JwtAuthenticationToken;
 import com.prgrms.himin.member.application.MemberService;
-import com.prgrms.himin.member.domain.Member;
 import com.prgrms.himin.member.dto.request.AddressCreateRequest;
 import com.prgrms.himin.member.dto.request.AddressUpdateRequest;
 import com.prgrms.himin.member.dto.request.MemberCreateRequest;
@@ -38,8 +33,6 @@ import lombok.RequiredArgsConstructor;
 public class MemberController {
 
 	private final MemberService memberService;
-	
-	private final AuthenticationManager authenticationManager;
 
 	@PostMapping("/sign-up")
 	public ResponseEntity<MemberCreateResponse> createMember(@Valid @RequestBody MemberCreateRequest request) {
@@ -50,18 +43,7 @@ public class MemberController {
 
 	@PostMapping("/sign-in")
 	public ResponseEntity<MemberLoginResponse> login(@Valid @RequestBody MemberLoginRequest request) {
-		JwtAuthenticationToken authenticationToken = new JwtAuthenticationToken(
-			request.loginId(),
-			request.password()
-		);
-		Authentication authenticated = authenticationManager.authenticate(authenticationToken);
-		JwtAuthentication authentication = (JwtAuthentication)authenticated.getPrincipal();
-		Member member = (Member)authenticated.getDetails();
-		MemberLoginResponse response = new MemberLoginResponse(
-			authentication.getToken(),
-			member.getId(),
-			member.getRoles()
-		);
+		MemberLoginResponse response = memberService.login(request);
 
 		return ResponseEntity.ok(response);
 	}

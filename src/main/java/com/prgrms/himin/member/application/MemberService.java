@@ -2,10 +2,14 @@ package com.prgrms.himin.member.application;
 
 import java.util.List;
 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.prgrms.himin.global.config.security.jwt.JwtAuthentication;
+import com.prgrms.himin.global.config.security.jwt.JwtAuthenticationToken;
 import com.prgrms.himin.global.error.exception.BusinessException;
 import com.prgrms.himin.global.error.exception.EntityNotFoundException;
 import com.prgrms.himin.global.error.exception.ErrorCode;
@@ -17,9 +21,11 @@ import com.prgrms.himin.member.domain.MemberRepository;
 import com.prgrms.himin.member.dto.request.AddressCreateRequest;
 import com.prgrms.himin.member.dto.request.AddressUpdateRequest;
 import com.prgrms.himin.member.dto.request.MemberCreateRequest;
+import com.prgrms.himin.member.dto.request.MemberLoginRequest;
 import com.prgrms.himin.member.dto.request.MemberUpdateRequest;
 import com.prgrms.himin.member.dto.response.AddressResponse;
 import com.prgrms.himin.member.dto.response.MemberCreateResponse;
+import com.prgrms.himin.member.dto.response.MemberLoginResponse;
 import com.prgrms.himin.member.dto.response.MemberResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -35,6 +41,8 @@ public class MemberService {
 
 	private final PasswordEncoder passwordEncoder;
 
+	private final AuthenticationManager authenticationManager;
+
 	@Transactional
 	public MemberCreateResponse createMember(MemberCreateRequest request) {
 		String encodedPassword = passwordEncoder.encode(request.password());
@@ -49,18 +57,12 @@ public class MemberService {
 		return MemberCreateResponse.from(savedMember);
 	}
 
-	public Member login(
-		String loginId,
-		String password
-	) {
-		Member member = memberRepository.findByLoginId(loginId)
-			.orElseThrow(() -> new InvalidValueException(ErrorCode.MEMBER_LOGIN_FAIL));
-		member.checkPassword(
-			passwordEncoder,
-			password
-		);
-
-		return member;
+	public MemberLoginResponse login(MemberLoginRequest request) {
+		JwtAuthenticationToken authenticationToken = new JwtAuthenticationToken(request.loginId(), request.password());
+		Authentication authenticated = authenticationManager.authenticate(authenticationToken);
+		JwtAuthentication authentication = (JwtAuthentication)authenticated.getPrincipal();
+		Member member = (Member)authenticated.getDetails();
+		return new MemberLoginResponse(authentication.getToken(), member.getId(), member.getRoles());
 	}
 
 	public MemberResponse getMember(Long memberId) {
