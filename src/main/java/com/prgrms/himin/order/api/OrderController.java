@@ -43,8 +43,8 @@ public class OrderController {
 	}
 
 	@GetMapping("/list")
-	private ResponseEntity<OrderResponses> getOrders(
-		@RequestHeader("member-id") Long memberId,
+	public ResponseEntity<OrderResponses> getOrders(
+		@RequestHeader Long memberId,
 		@ModelAttribute OrderSearchCondition orderSearchCondition,
 		@RequestParam(required = false, defaultValue = "10") int size,
 		@RequestParam(required = false) Long cursor
