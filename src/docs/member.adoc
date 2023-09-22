@@ -1,0 +1,95 @@
+:hardbreaks:
+ifndef::snippets[]
+:snippets: ../../../target/generated-snippets
+endif::[]
+
+== 회원
+
+=== 회원 생성
+
+.Request
+include::{snippets}/member-create/http-request.adoc[]
+include::{snippets}/member-create/request-fields.adoc[]
+
+.Response
+include::{snippets}/member-create/http-response.adoc[]
+include::{snippets}/member-create/response-fields.adoc[]
+
+=== 로그인
+
+.Request
+include::{snippets}/member-login/http-request.adoc[]
+include::{snippets}/member-login/request-fields.adoc[]
+
+.Response
+include::{snippets}/member-login/http-response.adoc[]
+include::{snippets}/member-login/response-fields.adoc[]
+
+=== 회원 조회
+
+.Request
+include::{snippets}/member-get/http-request.adoc[]
+include::{snippets}/member-get/path-parameters.adoc[]
+
+.Response
+include::{snippets}/member-get/http-response.adoc[]
+include::{snippets}/member-get/response-fields.adoc[]
+
+=== 회원 업데이트
+
+.Request
+include::{snippets}/member-update/http-request.adoc[]
+include::{snippets}/member-update/path-parameters.adoc[]
+include::{snippets}/member-update/request-fields.adoc[]
+
+.Response
+include::{snippets}/member-update/http-response.adoc[]
+
+=== 회원 삭제
+
+.Request
+include::{snippets}/member-delete/http-request.adoc[]
+include::{snippets}/member-delete/path-parameters.adoc[]
+
+.Response
+include::{snippets}/member-delete/http-response.adoc[]
+
+=== 회원 주소 추가
+
+.Request
+include::{snippets}/member-address-create/http-request.adoc[]
+include::{snippets}/member-address-create/path-parameters.adoc[]
+include::{snippets}/member-address-create/request-fields.adoc[]
+
+.Response
+include::{snippets}/member-address-create/http-response.adoc[]
+include::{snippets}/member-address-create/response-fields.adoc[]
+
+=== 회원 주소 조회
+
+.Request
+include::{snippets}/member-address-get-all/http-request.adoc[]
+include::{snippets}/member-address-get-all/path-parameters.adoc[]
+
+.Response
+include::{snippets}/member-address-get-all/http-response.adoc[]
+include::{snippets}/member-address-get-all/response-fields.adoc[]
+
+=== 회원 주소 업데이트
+
+.Request
+include::{snippets}/member-address-update/http-request.adoc[]
+include::{snippets}/member-address-update/path-parameters.adoc[]
+include::{snippets}/member-address-update/request-fields.adoc[]
+
+.Response
+include::{snippets}/member-address-update/http-response.adoc[]
+
+=== 회원 주소 삭제
+
+.Request
+include::{snippets}/member-address-delete/http-request.adoc[]
+include::{snippets}/member-address-delete/path-parameters.adoc[]
+
+.Response
+include::{snippets}/member-address-delete/http-response.adoc[]
