@@ -23,6 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prgrms.himin.setup.request.ShopCreateRequestBuilder;
@@ -45,6 +46,9 @@ class ShopDocumentationTest {
 
 	@Autowired
 	MockMvc mvc;
+
+	@Autowired
+	WebApplicationContext webApplicationContext;
 
 	@Autowired
 	ObjectMapper objectMapper;
@@ -142,7 +146,16 @@ class ShopDocumentationTest {
 
 		// when
 		ResultActions resultAction = mvc.perform(
-			get("/api/shops?name=맥도날드&category=FAST_FOOD&address=광명&deliveryTip=4000&menuName=햄버거&size=3&cursor=1&sort=deliveryTipAsc"));
+			get("/api/shops")
+				.param("name", "맥도날드")
+				.param("category", "CAFE")
+				.param("address", "광명")
+				.param("deliveryTip", "4000")
+				.param("menuName", "햄버거")
+				.param("size", "3")
+				.param("cursor", "1")
+				.param("sort", "deliveryTipAsc")
+		);
 
 		// then
 		resultAction.andExpect(status().isOk())
@@ -241,6 +254,49 @@ class ShopDocumentationTest {
 
 		// then
 		resultAction.andExpect(status().isOk())
-			.andDo(document("shop-delete"));
+			.andDo(document("shop-delete",
+				pathParameters(
+					parameterWithName("shopId").description("가게 ID")
+				)));
+	}
+
+	@DisplayName("조리를 시작할 수 있다.")
+	@Test
+	void startCooking() throws Exception {
+		// given
+		willDoNothing().given(shopService).startCooking(anyLong(), anyLong());
+
+		// when
+		ResultActions resultAction = mvc.perform(
+			post("/api/shops/{shopId}/cook-beginning/{orderId}", 1L, 1L)
+		);
+
+		// then
+		resultAction.andExpect(status().isOk())
+			.andDo(document("shop-start-cooking",
+				pathParameters(
+					parameterWithName("shopId").description("가게 ID"),
+					parameterWithName("orderId").description("주문 ID")
+				)));
+	}
+
+	@DisplayName("조리를 완료할 수 있다.")
+	@Test
+	void finishCooking() throws Exception {
+		// given
+		willDoNothing().given(shopService).finishCooking(anyLong(), anyLong());
+
+		// when
+		ResultActions resultAction = mvc.perform(
+			post("/api/shops/{shopId}/cook-completion/{orderId}", 1L, 1L)
+		);
+
+		// then
+		resultAction.andExpect(status().isOk())
+			.andDo(document("shop-finish-cooking",
+				pathParameters(
+					parameterWithName("shopId").description("가게 ID"),
+					parameterWithName("orderId").description("주문 ID")
+				)));
 	}
 }

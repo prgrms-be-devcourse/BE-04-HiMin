@@ -1,0 +1,63 @@
+:hardbreaks:
+ifndef::snippets[]
+:snippets: ../../../target/generated-snippets
+endif::[]
+
+== 가게
+
+=== 가게 생성
+
+.Request
+include::{snippets}/shop-create/http-request.adoc[]
+include::{snippets}/shop-create/response-fields.adoc[]
+
+.Response
+include::{snippets}/shop-create/http-response.adoc[]
+include::{snippets}/shop-create/response-fields.adoc[]
+
+=== 가게 단건 조회
+
+.Request
+include::{snippets}/shop-get-one/http-request.adoc[]
+include::{snippets}/shop-get-one/path-parameters.adoc[]
+
+.Response
+include::{snippets}/shop-get-one/http-response.adoc[]
+include::{snippets}/shop-get-one/response-fields.adoc[]
+
+=== 가게 다건 조회
+
+.Request
+include::{snippets}/shop-get-many/http-request.adoc[]
+
+.Response
+include::{snippets}/shop-get-many/http-response.adoc[]
+include::{snippets}/shop-get-many/response-fields.adoc[]
+
+=== 가게 삭제
+
+.Request
+include::{snippets}/shop-delete/http-request.adoc[]
+include::{snippets}/shop-delete/path-parameters.adoc[]
+
+.Response
+include::{snippets}/shop-delete/http-response.adoc[]
+
+=== 조리 시작
+
+.Request
+include::{snippets}/shop-start-cooking/http-request.adoc[]
+include::{snippets}/shop-start-cooking/path-parameters.adoc[]
+
+.Response
+include::{snippets}/shop-start-cooking/http-response.adoc[]
+
+=== 조리 완료
+
+.Request
+include::{snippets}/shop-finish-cooking/http-request.adoc[]
+include::{snippets}/shop-finish-cooking/path-parameters.adoc[]
+
+.Response
+include::{snippets}/shop-finish-cooking/http-response.adoc[]
+
