@@ -102,10 +102,8 @@ class MemberServiceTest {
 		@Test
 		void wrong_login_id_fail_test() {
 			// given
-			MemberLoginRequest wrongRequest = MemberLoginRequestBuilder.failBuild(
-				"wrongLoginId",
-				request.password()
-			);
+			MemberLoginRequest wrongRequest = MemberLoginRequestBuilder
+				.failBuild("wrongLoginId", request.password());
 
 			// when & then
 			assertThatThrownBy(
@@ -187,8 +185,7 @@ class MemberServiceTest {
 			memberService.updateMember(member.getId(), request);
 
 			// then
-			Member actual = memberRepository
-				.findById(member.getId()).get();
+			Member actual = memberRepository.findById(member.getId()).get();
 
 			assertThat(request).usingRecursiveComparison()
 				.ignoringFields("password", "addresses")

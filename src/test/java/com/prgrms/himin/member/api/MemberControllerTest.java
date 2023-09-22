@@ -155,10 +155,8 @@ class MemberControllerTest {
 		void fail_test() throws Exception {
 			// given
 			memberSetUp.saveOne();
-			MemberLoginRequest request = MemberLoginRequestBuilder.failBuild(
-				"wrong" + "rnqjaah1234",
-				"1234"
-			);
+			MemberLoginRequest request = MemberLoginRequestBuilder
+				.failBuild("wrong" + "rnqjaah1234", "1234");
 			String body = objectMapper.writeValueAsString(request);
 
 			// when
@@ -192,10 +190,7 @@ class MemberControllerTest {
 			Member savedMember = memberSetUp.saveOne();
 
 			// when
-			ResultActions resultActions = mvc.perform(get(
-				GET_URL,
-				savedMember.getId())
-			);
+			ResultActions resultActions = mvc.perform(get(GET_URL, savedMember.getId()));
 
 			// then
 			resultActions.andExpect(status().isOk())
@@ -222,10 +217,7 @@ class MemberControllerTest {
 			Long wrongMemberId = -1L;
 
 			// when
-			ResultActions resultActions = mvc.perform(get(
-				GET_URL,
-				wrongMemberId)
-			);
+			ResultActions resultActions = mvc.perform(get(GET_URL, wrongMemberId));
 
 			// then
 			resultActions.andExpect(status().isNotFound())
@@ -255,10 +247,8 @@ class MemberControllerTest {
 			String body = objectMapper.writeValueAsString(request);
 
 			// when
-			ResultActions resultActions = mvc.perform(put(
-				UPDATE_URL,
-				savedMember.getId()
-			).content(body)
+			ResultActions resultActions = mvc.perform(put(UPDATE_URL, savedMember.getId())
+				.content(body)
 				.contentType(MediaType.APPLICATION_JSON));
 
 			Member updatedMember = memberRepository.findById(savedMember.getId()).get();
@@ -286,10 +276,7 @@ class MemberControllerTest {
 			String body = objectMapper.writeValueAsString(request);
 
 			// when
-			ResultActions resultActions = mvc.perform(put(
-				UPDATE_URL,
-				savedMember.getId()
-			)
+			ResultActions resultActions = mvc.perform(put(UPDATE_URL, savedMember.getId())
 				.content(body)
 				.contentType(MediaType.APPLICATION_JSON));
 
@@ -331,10 +318,7 @@ class MemberControllerTest {
 			Member savedMember = memberSetUp.saveOne();
 
 			// when
-			ResultActions resultActions = mvc.perform(delete(
-				DELETE_URL,
-				savedMember.getId()
-			));
+			ResultActions resultActions = mvc.perform(delete(DELETE_URL, savedMember.getId()));
 
 			// then
 			resultActions.andExpect(status().isOk())
@@ -350,10 +334,7 @@ class MemberControllerTest {
 			// given
 			Long wrongMemberId = -1L;
 
-			ResultActions resultActions = mvc.perform(delete(
-				DELETE_URL,
-				wrongMemberId)
-			);
+			ResultActions resultActions = mvc.perform(delete(DELETE_URL, wrongMemberId));
 
 			// then
 			resultActions.andExpect(status().isNotFound())

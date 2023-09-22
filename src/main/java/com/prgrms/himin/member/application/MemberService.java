@@ -47,10 +47,7 @@ public class MemberService {
 	public MemberCreateResponse createMember(MemberCreateRequest request) {
 		String encodedPassword = passwordEncoder.encode(request.password());
 		Member member = request.toEntity(encodedPassword);
-		Address address = new Address(
-			request.addressAlias(),
-			request.address()
-		);
+		Address address = new Address(request.addressAlias(), request.address());
 		address.attachTo(member);
 		Member savedMember = memberRepository.save(member);
 
@@ -75,10 +72,7 @@ public class MemberService {
 			.map(AddressResponse::from)
 			.toList();
 
-		return MemberResponse.of(
-			member,
-			addresses
-		);
+		return MemberResponse.of(member, addresses);
 	}
 
 	@Transactional
@@ -171,9 +165,6 @@ public class MemberService {
 			throw new BusinessException(ErrorCode.MEMBER_ADDRESS_NOT_MATCH);
 		}
 
-		address.updateAddress(
-			request.addressAlias(),
-			request.address()
-		);
+		address.updateAddress(request.addressAlias(), request.address());
 	}
 }

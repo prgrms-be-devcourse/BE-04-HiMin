@@ -60,10 +60,7 @@ public class MemberController {
 		@PathVariable Long memberId,
 		@Valid @RequestBody MemberUpdateRequest.Info request
 	) {
-		memberService.updateMember(
-			memberId,
-			request
-		);
+		memberService.updateMember(memberId, request);
 
 		return ResponseEntity.noContent().build();
 	}
@@ -78,11 +75,9 @@ public class MemberController {
 	@PostMapping("/members/{memberId}/addresses")
 	public ResponseEntity<AddressResponse> createAddress(
 		@PathVariable Long memberId,
-		@Valid @RequestBody AddressCreateRequest request) {
-		AddressResponse response = memberService.createAddress(
-			memberId,
-			request
-		);
+		@Valid @RequestBody AddressCreateRequest request
+	) {
+		AddressResponse response = memberService.createAddress(memberId, request);
 
 		return ResponseEntity.ok(response);
 	}
@@ -99,10 +94,7 @@ public class MemberController {
 		@PathVariable Long memberId,
 		@PathVariable Long addressId
 	) {
-		memberService.deleteAddress(
-			memberId,
-			addressId
-		);
+		memberService.deleteAddress(memberId, addressId);
 
 		return ResponseEntity.ok().build();
 	}
