@@ -2,6 +2,7 @@ package com.prgrms.himin.order.docs;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
+import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -163,6 +164,17 @@ class OrderDocumentationTest {
 		resultAction.andExpect(status().isOk())
 			.andDo(document("order-get-by-order-condition",
 				preprocessResponse(prettyPrint()),
+				requestHeaders(
+					headerWithName("memberId").description("회원 ID")
+				),
+				requestParameters(
+					parameterWithName("categories").description("검색 조건 - 카테고리"),
+					parameterWithName("orderStatuses").description("검색 조건 - 주문 상태"),
+					parameterWithName("startTime").description("검색 조건 - 시작 날짜"),
+					parameterWithName("endTime").description("검색 조건 - 끝나는 날짜"),
+					parameterWithName("size").description("Pagination - 사이즈"),
+					parameterWithName("cursor").description("Pagination - 커서 ID")
+				),
 				responseFields(
 					fieldWithPath("orderResponses[].orderId").type(JsonFieldType.NUMBER).description("주문 ID"),
 					fieldWithPath("orderResponses[].memberId").type(JsonFieldType.NUMBER).description("회원 ID"),
