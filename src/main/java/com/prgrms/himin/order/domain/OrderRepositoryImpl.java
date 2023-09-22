@@ -38,17 +38,17 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
 				equalCategory(orderSearchCondition.categories()),
 				equalOrderStatus(orderSearchCondition.orderStatuses()),
 				betweenTime(orderSearchCondition.startTime(), orderSearchCondition.endTime()),
-				greaterThanCursor(cursor)
+				greaterOrEqualThanCursor(cursor)
 			)
 			.leftJoin(orderHistory).on(orderHistory.order.eq(order)) // fetch가 아니라 필터 하기 위한 join
 			.leftJoin(order.orderItems, orderItem)
 			.fetchJoin()
-			.limit(size + 1)
+			.limit(size)
 			.fetch();
 	}
 
-	private Predicate greaterThanCursor(Long cursor) {
-		return cursor != null ? order.orderId.gt(cursor) : null;
+	private Predicate greaterOrEqualThanCursor(Long cursor) {
+		return cursor != null ? order.orderId.goe(cursor) : null;
 	}
 
 	private BooleanExpression betweenTime(LocalDateTime start, LocalDateTime end) {

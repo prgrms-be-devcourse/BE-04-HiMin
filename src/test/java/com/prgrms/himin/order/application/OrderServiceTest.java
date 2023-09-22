@@ -172,7 +172,7 @@ class OrderServiceTest {
 			assertThat(orderResponses.size()).isEqualTo(pageSize);
 			assertThat(orderResponses.isLast()).isFalse();
 
-			OrderResponse expectedCursorResponse = expectedOrderResponses.get(pageSize - 1);
+			OrderResponse expectedCursorResponse = expectedOrderResponses.get(pageSize);
 			assertThat(orderResponses.nextCursor()).isEqualTo(expectedCursorResponse.orderId());
 
 			int expectedOrderResponsesIdx = 0;
