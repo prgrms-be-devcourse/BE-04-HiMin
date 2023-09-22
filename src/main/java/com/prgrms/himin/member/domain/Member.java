@@ -129,10 +129,7 @@ public class Member {
 		PasswordEncoder passwordEncoder,
 		String credentials
 	) {
-		if (!passwordEncoder.matches(
-			credentials,
-			this.password
-		)) {
+		if (!passwordEncoder.matches(credentials, this.password)) {
 			throw new InvalidValueException(ErrorCode.MEMBER_LOGIN_FAIL);
 		}
 	}

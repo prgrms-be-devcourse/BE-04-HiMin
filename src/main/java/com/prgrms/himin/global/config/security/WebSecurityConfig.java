@@ -9,12 +9,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.context.SecurityContextHolderFilter;
+import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 
 import com.prgrms.himin.global.config.security.jwt.Jwt;
 import com.prgrms.himin.global.config.security.jwt.JwtAuthenticationFilter;
 import com.prgrms.himin.global.config.security.jwt.JwtAuthenticationProvider;
-import com.prgrms.himin.member.application.MemberService;
+import com.prgrms.himin.member.domain.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -37,9 +37,9 @@ public class WebSecurityConfig {
 	@Bean
 	public JwtAuthenticationProvider jwtAuthenticationProvider(
 		Jwt jwt,
-		MemberService memberService
+		MemberRepository memberRepository
 	) {
-		return new JwtAuthenticationProvider(jwt, memberService);
+		return new JwtAuthenticationProvider(jwt, memberRepository, passwordEncoder());
 	}
 
 	@Bean
@@ -70,7 +70,7 @@ public class WebSecurityConfig {
 			.sessionManagement()
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and()
-			.addFilterAfter(jwtAuthenticationFilter(), SecurityContextHolderFilter.class);
+			.addFilterAfter(jwtAuthenticationFilter(), SecurityContextPersistenceFilter.class);
 
 		return http.build();
 	}
