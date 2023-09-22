@@ -95,7 +95,7 @@ class MemberServiceTest {
 			member = memberSetUp.saveOne();
 
 			// when & then
-			assertDoesNotThrow(() -> memberService.login(request.loginId(), request.password()));
+			assertDoesNotThrow(() -> memberService.login(request));
 		}
 
 		@DisplayName("로그인 아이디가 잘못되어 실패한다.")
@@ -109,7 +109,7 @@ class MemberServiceTest {
 
 			// when & then
 			assertThatThrownBy(
-				() -> memberService.login(wrongRequest.loginId(), wrongRequest.password())
+				() -> memberService.login(wrongRequest)
 			)
 				.isInstanceOf(InvalidValueException.class);
 		}
@@ -125,7 +125,7 @@ class MemberServiceTest {
 
 			// when & then
 			assertThatThrownBy(
-				() -> memberService.login(wrongRequest.loginId(), wrongRequest.password())
+				() -> memberService.login(wrongRequest)
 			)
 				.isInstanceOf(InvalidValueException.class);
 		}
