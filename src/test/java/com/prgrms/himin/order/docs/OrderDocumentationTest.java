@@ -6,6 +6,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -101,6 +103,37 @@ class OrderDocumentationTest {
 					fieldWithPath("selectedMenus[].quantity").type(JsonFieldType.NUMBER).description("수량"),
 					fieldWithPath("selectedMenus[].selectedOptionIds[]").type(JsonFieldType.ARRAY).description("메뉴옵션"),
 					fieldWithPath("price").type(JsonFieldType.NUMBER).description("가격")
+				)));
+	}
+
+	@Test
+	@DisplayName("주문 조회를 할 수 있다.")
+	void getOrder() throws Exception {
+		// given
+		OrderResponse response = OrderResponseBuilder.successBuild();
+		given(orderService.getOrder(anyLong())).willReturn(response);
+
+		// when
+		ResultActions resultActions = mvc.perform(RestDocumentationRequestBuilders.get("/api/orders/{orderId}", 1L));
+
+		// then
+		resultActions.andExpect(status().isOk())
+			.andDo(document("order-get",
+				preprocessResponse(prettyPrint()),
+				pathParameters(
+					parameterWithName("orderId").description("주문 ID")
+				),
+				responseFields(
+					fieldWithPath("orderId").type(JsonFieldType.NUMBER).description("주문 ID"),
+					fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 ID"),
+					fieldWithPath("shopId").type(JsonFieldType.NUMBER).description("가게 ID"),
+					fieldWithPath("address").type(JsonFieldType.STRING).description("배달 도착 주소"),
+					fieldWithPath("requirement").type(JsonFieldType.STRING).description("요구사항"),
+					fieldWithPath("selectedMenus[].menuId").type(JsonFieldType.NUMBER).description("선택 메뉴 ID"),
+					fieldWithPath("selectedMenus[].quantity").type(JsonFieldType.NUMBER).description("선택 메뉴 수량"),
+					fieldWithPath("selectedMenus[].selectedOptionIds[]").type(JsonFieldType.ARRAY)
+						.description("선택 메뉴 옵션 ID 목록"),
+					fieldWithPath("price").type(JsonFieldType.NUMBER).description("선택 메뉴 총 가격")
 				)));
 	}
 
