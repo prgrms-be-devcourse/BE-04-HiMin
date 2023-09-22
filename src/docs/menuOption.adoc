@@ -1,0 +1,35 @@
+:hardbreaks:
+ifndef::snippets[]
+:snippets: ../../../target/generated-snippets
+endif::[]
+
+== 메뉴옵션
+
+=== 메뉴옵션 생성
+
+.Request
+include::{snippets}/create-menu-option/http-request.adoc[]
+include::{snippets}/create-menu-option/path-parameters.adoc[]
+include::{snippets}/create-menu-option/request-fields.adoc[]
+
+.Response
+include::{snippets}/create-menu-option/http-response.adoc[]
+include::{snippets}/create-menu-option/response-fields.adoc[]
+
+=== 메뉴옵션 업데이트
+
+.Request
+include::{snippets}/update-menu-option/http-request.adoc[]
+include::{snippets}/update-menu-option/path-parameters.adoc[]
+
+.Response
+include::{snippets}/update-menu-option/http-response.adoc[]
+
+=== 메뉴옵션 삭제
+
+.Request
+include::{snippets}/delete-menu-option/http-request.adoc[]
+include::{snippets}/delete-menu-option/path-parameters.adoc[]
+
+.Response
+include::{snippets}/delete-menu-option/http-response.adoc[]
