@@ -1,0 +1,74 @@
+:hardbreaks:
+ifndef::snippets[]
+:snippets: ../../../target/generated-snippets
+endif::[]
+
+== 배달기사
+
+=== 배달기사 생성
+
+.Request
+include::{snippets}/rider-create/http-request.adoc[]
+include::{snippets}/rider-create/request-fields.adoc[]
+
+.Response
+include::{snippets}/rider-create/http-response.adoc[]
+include::{snippets}/rider-create/response-fields.adoc[]
+
+== 배달
+
+=== 배달 생성
+
+.Request
+include::{snippets}/delivery-create/http-request.adoc[]
+
+.Response
+include::{snippets}/delivery-create/http-response.adoc[]
+include::{snippets}/delivery-create/response-fields.adoc[]
+
+=== 배달기사 배차
+
+.Request
+include::{snippets}/delivery-allocate/http-request.adoc[]
+include::{snippets}/delivery-allocate/path-parameters.adoc[]
+
+.Response
+include::{snippets}/delivery-allocate/http-response.adoc[]
+include::{snippets}/delivery-allocate/response-fields.adoc[]
+
+=== 배달 시작
+
+.Request
+include::{snippets}/delivery-start/http-request.adoc[]
+include::{snippets}/delivery-start/path-parameters.adoc[]
+
+.Response
+include::{snippets}/delivery-start/http-response.adoc[]
+include::{snippets}/delivery-start/response-fields.adoc[]
+
+=== 배달 종료
+
+.Request
+include::{snippets}/delivery-finish/http-request.adoc[]
+include::{snippets}/delivery-finish/path-parameters.adoc[]
+
+
+.Response
+include::{snippets}/delivery-finish/http-response.adoc[]
+include::{snippets}/delivery-finish/response-fields.adoc[]
+
+=== 배달 히스토리 조회
+
+.Request
+include::{snippets}/delivery-get-delivery-histories/http-request.adoc[]
+include::{snippets}/delivery-get-delivery-histories/path-parameters.adoc[]
+
+.Response
+include::{snippets}/delivery-get-delivery-histories/http-response.adoc[]
+include::{snippets}/delivery-get-delivery-histories/response-fields.adoc[]
+
+
+
+
+
+

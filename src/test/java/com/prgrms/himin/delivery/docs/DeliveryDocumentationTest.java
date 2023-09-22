@@ -179,14 +179,10 @@ class DeliveryDocumentationTest {
 				),
 				responseFields(
 					fieldWithPath("riderId").type(JsonFieldType.NUMBER).description("배달기사 ID"),
-					fieldWithPath("historyInfos[0].deliveryStatus").type(JsonFieldType.STRING).description("배달 상태"),
-					fieldWithPath("historyInfos[0].createdAt").type(JsonFieldType.STRING).description("생성 일시"),
-					fieldWithPath("historyInfos[1].deliveryStatus").type(JsonFieldType.STRING).description("배달 상태"),
-					fieldWithPath("historyInfos[1].createdAt").type(JsonFieldType.STRING).description("생성 일시"),
-					fieldWithPath("historyInfos[2].deliveryStatus").type(JsonFieldType.STRING).description("배달 상태"),
-					fieldWithPath("historyInfos[2].createdAt").type(JsonFieldType.STRING).description("생성 일시"),
-					fieldWithPath("historyInfos[3].deliveryStatus").type(JsonFieldType.STRING).description("배달 상태"),
-					fieldWithPath("historyInfos[3].createdAt").type(JsonFieldType.STRING).description("생성 일시")
+					fieldWithPath("historyInfos[].deliveryStatus").type(JsonFieldType.STRING).description("배달 상태"),
+					fieldWithPath("historyInfos[].createdAt").type(JsonFieldType.STRING).description("생성 일시"),
+					fieldWithPath("historyInfos[].deliveryStatus").type(JsonFieldType.STRING).description("배달 상태"),
+					fieldWithPath("historyInfos[].createdAt").type(JsonFieldType.STRING).description("생성 일시")
 				)));
 	}
 }

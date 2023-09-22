@@ -49,7 +49,7 @@ class MenuControllerTest {
 
 	@Autowired
 	MockMvc mvc;
-
+	
 	@Autowired
 	ObjectMapper objectMapper;
 
