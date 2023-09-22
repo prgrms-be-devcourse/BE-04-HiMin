@@ -1,0 +1,37 @@
+:hardbreaks:
+ifndef::snippets[]
+:snippets: ../../../target/generated-snippets
+endif::[]
+
+== 주문
+
+=== 주문 생성
+
+.Request
+include::{snippets}/order-create/http-request.adoc[]
+include::{snippets}/order-create/request-fields.adoc[]
+
+.Response
+include::{snippets}/order-create/http-response.adoc[]
+include::{snippets}/order-create/response-fields.adoc[]
+
+=== 주문 조회
+
+.Request
+include::{snippets}/order-get/http-request.adoc[]
+include::{snippets}/order-get/path-parameters.adoc[]
+
+.Response
+include::{snippets}/order-get/http-response.adoc[]
+include::{snippets}/order-get/response-fields.adoc[]
+
+=== 주문 다건 조회
+
+.Request
+include::{snippets}/order-get-by-order-condition/http-request.adoc[]
+include::{snippets}/order-get-by-order-condition/request-headers.adoc[]
+include::{snippets}/order-get-by-order-condition/request-parameters.adoc[]
+
+.Response
+include::{snippets}/order-get-by-order-condition/http-response.adoc[]
+include::{snippets}/order-get-by-order-condition/response-fields.adoc[]
