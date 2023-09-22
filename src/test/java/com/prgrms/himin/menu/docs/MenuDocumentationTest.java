@@ -143,7 +143,39 @@ public class MenuDocumentationTest {
 				pathParameters(
 					parameterWithName("shopId").description("가게 ID"),
 					parameterWithName("menuId").description("메뉴 ID")
-				)));
+				),
+				requestFields(
+					fieldWithPath("name").type(JsonFieldType.STRING).description("이름"),
+					fieldWithPath("price").type(JsonFieldType.NUMBER).description("가격")
+				)
+			));
+	}
+
+	@DisplayName("메뉴 상태를 수정할 수 있다.")
+	@Test
+	void updateMenuStatus() throws Exception {
+		// given
+		MenuUpdateRequest.Status request = MenuUpdateRequestBuilder.statusSuccessBuild();
+		String body = objectMapper.writeValueAsString(request);
+
+		// when
+		ResultActions resultActions = mvc.perform(patch("/api/shops/{shopId}/menus/{menuId}", 1L, 1L)
+			.content(body)
+			.contentType(MediaType.APPLICATION_JSON));
+
+		// then
+		resultActions.andExpect(status().isNoContent())
+			.andDo(document("update-menu-status",
+				preprocessRequest(prettyPrint()),
+				preprocessResponse(prettyPrint()),
+				pathParameters(
+					parameterWithName("shopId").description("가게 ID"),
+					parameterWithName("menuId").description("메뉴 ID")
+				),
+				requestFields(
+					fieldWithPath("status").description("상태")
+				)
+			));
 	}
 
 	@Test

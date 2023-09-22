@@ -1,0 +1,44 @@
+:hardbreaks:
+ifndef::snippets[]
+:snippets: ../../../target/generated-snippets
+endif::[]
+
+== 메뉴
+
+=== 메뉴 생성
+
+.Request
+include::{snippets}/create-menu/http-request.adoc[]
+include::{snippets}/create-menu/request-fields.adoc[]
+
+.Response
+include::{snippets}/create-menu/http-response.adoc[]
+include::{snippets}/create-menu/response-fields.adoc[]
+
+=== 메뉴 조회
+
+.Request
+include::{snippets}/get-menu/http-request.adoc[]
+include::{snippets}/get-menu/path-parameters.adoc[]
+
+.Response
+include::{snippets}/get-menu/http-response.adoc[]
+include::{snippets}/get-menu/response-fields.adoc[]
+
+=== 메뉴 업데이트
+
+.Request
+include::{snippets}/update-menu/http-request.adoc[]
+include::{snippets}/update-menu/path-parameters.adoc[]
+include::{snippets}/update-menu/request-fields.adoc[]
+
+.Response
+include::{snippets}/update-menu/http-response.adoc[]
+
+=== 메뉴 상태 업데이트
+
+.Request
+include::{snippets}/update-menu-status/http-request.adoc[]
+include::{snippets}/update-menu-status/path-parameters.adoc[]
+include::{snippets}/update-menu-status/request-fields.adoc[]
+
