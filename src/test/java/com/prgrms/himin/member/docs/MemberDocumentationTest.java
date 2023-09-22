@@ -29,15 +29,19 @@ import com.prgrms.himin.member.application.MemberService;
 import com.prgrms.himin.member.dto.request.AddressCreateRequest;
 import com.prgrms.himin.member.dto.request.AddressUpdateRequest;
 import com.prgrms.himin.member.dto.request.MemberCreateRequest;
+import com.prgrms.himin.member.dto.request.MemberLoginRequest;
 import com.prgrms.himin.member.dto.request.MemberUpdateRequest;
 import com.prgrms.himin.member.dto.response.AddressResponse;
 import com.prgrms.himin.member.dto.response.MemberCreateResponse;
+import com.prgrms.himin.member.dto.response.MemberLoginResponse;
 import com.prgrms.himin.member.dto.response.MemberResponse;
 import com.prgrms.himin.setup.request.AddressCreateRequestBuilder;
 import com.prgrms.himin.setup.request.AddressUpdateRequestBuilder;
 import com.prgrms.himin.setup.request.MemberCreateRequestBuilder;
+import com.prgrms.himin.setup.request.MemberLoginRequestBuilder;
 import com.prgrms.himin.setup.request.MemberUpdateRequestBuilder;
 import com.prgrms.himin.setup.response.AddressResponseBuilder;
+import com.prgrms.himin.setup.response.MemberLoginResponseBuilder;
 import com.prgrms.himin.setup.response.MemberResponseBuilder;
 
 @AutoConfigureRestDocs
@@ -96,6 +100,37 @@ class MemberDocumentationTest {
 					fieldWithPath("addresses[0].addressId").type(JsonFieldType.NUMBER).description("주소 ID"),
 					fieldWithPath("addresses[0].addressAlias").type(JsonFieldType.STRING).description("주소 가명"),
 					fieldWithPath("addresses[0].address").type(JsonFieldType.STRING).description("주소")
+				)));
+	}
+
+	@Test
+	@DisplayName("로그인할 수 있다.")
+	void login() throws Exception {
+		// given
+		MemberLoginRequest request = MemberLoginRequestBuilder.successBuild();
+		MemberLoginResponse response = MemberLoginResponseBuilder.successBuild();
+
+		given(memberService.login(any(MemberLoginRequest.class))).willReturn(response);
+
+		// when
+		ResultActions resultAction = mvc.perform(post("/api/sign-in")
+			.accept(MediaType.APPLICATION_JSON)
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(objectMapper.writeValueAsString(request)));
+
+		// then
+		resultAction.andExpect(status().isOk())
+			.andDo(document("member-login",
+				preprocessRequest(prettyPrint()),
+				preprocessResponse(prettyPrint()),
+				requestFields(
+					fieldWithPath("loginId").type(JsonFieldType.STRING).description("로그인 ID"),
+					fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호")
+				),
+				responseFields(
+					fieldWithPath("token").type(JsonFieldType.STRING).description("JWT 토큰"),
+					fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 ID"),
+					fieldWithPath("group[]").type(JsonFieldType.ARRAY).description("역할")
 				)));
 	}
 
