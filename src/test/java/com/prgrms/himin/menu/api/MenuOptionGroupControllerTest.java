@@ -3,7 +3,6 @@ package com.prgrms.himin.menu.api;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.Optional;
@@ -104,13 +103,12 @@ public class MenuOptionGroupControllerTest {
 
 			// when
 			ResultActions resultActions = mvc.perform(post(
-					BASE_URL,
-					shop.getShopId(),
-					menu.getId()
-				)
-					.content(body)
-					.contentType(MediaType.APPLICATION_JSON))
-				.andDo(print());
+				BASE_URL,
+				shop.getShopId(),
+				menu.getId()
+			)
+				.content(body)
+				.contentType(MediaType.APPLICATION_JSON));
 
 			// then
 			resultActions.andExpect(status().isOk())
@@ -130,13 +128,12 @@ public class MenuOptionGroupControllerTest {
 
 			// when
 			ResultActions resultActions = mvc.perform(post(
-					BASE_URL,
-					shop.getShopId(),
-					menu.getId()
-				)
-					.content(body)
-					.contentType(MediaType.APPLICATION_JSON))
-				.andDo(print());
+				BASE_URL,
+				shop.getShopId(),
+				menu.getId()
+			)
+				.content(body)
+				.contentType(MediaType.APPLICATION_JSON));
 
 			// then
 			resultActions.andExpect(status().isBadRequest())
@@ -178,14 +175,13 @@ public class MenuOptionGroupControllerTest {
 
 			// when
 			ResultActions resultActions = mvc.perform(put(
-					UPDATE_URL,
-					shop.getShopId(),
-					menu.getId(),
-					savedMenuOptionGroup.getId()
-				)
-					.content(body)
-					.contentType(MediaType.APPLICATION_JSON))
-				.andDo(print());
+				UPDATE_URL,
+				shop.getShopId(),
+				menu.getId(),
+				savedMenuOptionGroup.getId()
+			)
+				.content(body)
+				.contentType(MediaType.APPLICATION_JSON));
 
 			// then
 			resultActions.andExpect(status().isNoContent());
@@ -208,14 +204,13 @@ public class MenuOptionGroupControllerTest {
 
 			// when
 			ResultActions resultActions = mvc.perform(put(
-					UPDATE_URL,
-					shop.getShopId(),
-					menu.getId(),
-					savedMenuOptionGroup.getId()
-				)
-					.content(body)
-					.contentType(MediaType.APPLICATION_JSON))
-				.andDo(print());
+				UPDATE_URL,
+				shop.getShopId(),
+				menu.getId(),
+				savedMenuOptionGroup.getId()
+			)
+				.content(body)
+				.contentType(MediaType.APPLICATION_JSON));
 
 			// then
 			resultActions.andExpect(status().isBadRequest())
@@ -244,13 +239,11 @@ public class MenuOptionGroupControllerTest {
 
 			// when
 			ResultActions resultActions = mvc.perform(delete(
-					DELETE_URL,
-					shop.getShopId(),
-					menu.getId(),
-					savedMenuOptionGroup.getId()
-				)
-					.contentType(MediaType.APPLICATION_JSON))
-				.andDo(print());
+				DELETE_URL,
+				shop.getShopId(),
+				menu.getId(),
+				savedMenuOptionGroup.getId()
+			));
 
 			// then
 			resultActions.andExpect(status().isOk());
@@ -267,13 +260,11 @@ public class MenuOptionGroupControllerTest {
 
 			// when
 			ResultActions resultActions = mvc.perform(delete(
-					DELETE_URL,
-					shop.getShopId(),
-					menu.getId(),
-					notExistMenuOptionGroupId
-				)
-					.contentType(MediaType.APPLICATION_JSON))
-				.andDo(print());
+				DELETE_URL,
+				shop.getShopId(),
+				menu.getId(),
+				notExistMenuOptionGroupId
+			));
 
 			// then
 			resultActions.andExpect(status().isNotFound())

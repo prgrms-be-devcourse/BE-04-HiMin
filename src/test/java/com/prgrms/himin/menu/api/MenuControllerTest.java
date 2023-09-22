@@ -3,7 +3,6 @@ package com.prgrms.himin.menu.api;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.Optional;
@@ -89,9 +88,8 @@ class MenuControllerTest {
 
 			// when
 			ResultActions resultActions = mvc.perform(post(BASE_URL, shop.getShopId())
-					.content(body)
-					.contentType(MediaType.APPLICATION_JSON))
-				.andDo(print());
+				.content(body)
+				.contentType(MediaType.APPLICATION_JSON));
 
 			// then
 			resultActions.andExpect(status().isOk())
@@ -112,9 +110,8 @@ class MenuControllerTest {
 
 			// when
 			ResultActions resultActions = mvc.perform(post(BASE_URL, shop.getShopId())
-					.content(body)
-					.contentType(MediaType.APPLICATION_JSON))
-				.andDo(print());
+				.content(body)
+				.contentType(MediaType.APPLICATION_JSON));
 
 			// then
 			resultActions.andExpect(status().isBadRequest())
@@ -143,12 +140,11 @@ class MenuControllerTest {
 
 			// when
 			ResultActions resultActions = mvc.perform(get(
-					GET_URL,
-					shop.getShopId(),
-					savedMenu.getId()
-				)
-					.contentType(MediaType.APPLICATION_JSON))
-				.andDo(print());
+				GET_URL,
+				shop.getShopId(),
+				savedMenu.getId()
+			)
+				.contentType(MediaType.APPLICATION_JSON));
 
 			// then
 			resultActions.andExpect(status().isOk())
@@ -167,12 +163,11 @@ class MenuControllerTest {
 
 			// when
 			ResultActions resultActions = mvc.perform(get(
-					GET_URL,
-					shop.getShopId(),
-					notExistMenuId
-				)
-					.contentType(MediaType.APPLICATION_JSON))
-				.andDo(print());
+				GET_URL,
+				shop.getShopId(),
+				notExistMenuId
+			)
+				.contentType(MediaType.APPLICATION_JSON));
 
 			// then
 			resultActions.andExpect(status().isNotFound())
@@ -210,13 +205,12 @@ class MenuControllerTest {
 
 			// when
 			ResultActions resultActions = mvc.perform(put(
-					UPDATE_URL,
-					shop.getShopId(),
-					savedMenu.getId()
-				)
-					.content(body)
-					.contentType(MediaType.APPLICATION_JSON))
-				.andDo(print());
+				UPDATE_URL,
+				shop.getShopId(),
+				savedMenu.getId()
+			)
+				.content(body)
+				.contentType(MediaType.APPLICATION_JSON));
 
 			// then
 			resultActions.andExpect(status().isNoContent());
@@ -238,13 +232,12 @@ class MenuControllerTest {
 
 			// when
 			ResultActions resultActions = mvc.perform(put(
-					UPDATE_URL,
-					shop.getShopId(),
-					savedMenu.getId()
-				)
-					.content(body)
-					.contentType(MediaType.APPLICATION_JSON))
-				.andDo(print());
+				UPDATE_URL,
+				shop.getShopId(),
+				savedMenu.getId()
+			)
+				.content(body)
+				.contentType(MediaType.APPLICATION_JSON));
 
 			// then
 			resultActions.andExpect(status().isBadRequest())
@@ -273,12 +266,10 @@ class MenuControllerTest {
 
 			// when
 			ResultActions resultActions = mvc.perform(delete(
-					DELETE_URL,
-					shop.getShopId(),
-					savedMenu.getId()
-				)
-					.contentType(MediaType.APPLICATION_JSON))
-				.andDo(print());
+				DELETE_URL,
+				shop.getShopId(),
+				savedMenu.getId()
+			));
 
 			// then
 			resultActions.andExpect(status().isOk());
@@ -294,12 +285,10 @@ class MenuControllerTest {
 
 			// when
 			ResultActions resultActions = mvc.perform(delete(
-					DELETE_URL,
-					shop.getShopId(),
-					notExistMenuId
-				)
-					.contentType(MediaType.APPLICATION_JSON))
-				.andDo(print());
+				DELETE_URL,
+				shop.getShopId(),
+				notExistMenuId
+			));
 
 			// then
 			resultActions.andExpect(status().isNotFound())
