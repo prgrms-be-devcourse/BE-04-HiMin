@@ -1,3 +1,8 @@
+:hardbreaks:
+ifndef::snippets[]
+:snippets: ../../../build/generated-snippets
+endif::[]
+
 = 히히의 민환족 API 명세
 :doctype: book
 :icons: font
