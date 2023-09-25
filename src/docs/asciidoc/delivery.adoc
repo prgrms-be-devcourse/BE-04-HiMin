@@ -1,8 +1,7 @@
 :hardbreaks:
 ifndef::snippets[]
-:snippets: ../../../target/generated-snippets
+:snippets: ../../../build/generated-snippets
 endif::[]
-
 == 배달기사
 
 === 배달기사 생성
