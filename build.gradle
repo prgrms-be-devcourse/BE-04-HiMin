@@ -61,27 +61,43 @@ test {
 }
 
 asciidoctor {
-    inputs.dir snippetsDir
     configurations 'asciidoctorExt'
+
+    sources {
+        include("**/index.adoc", "**/common/*.adoc")
+    }
+
+    baseDirFollowsSourceFile()
+
+    inputs.dir snippetsDir
+
     dependsOn test
 }
 
-bootJar {
-    dependsOn asciidoctor
-    copy {
-        from "${asciidoctor.outputDir}"
-        into 'BOOT-INF/classes/static/docs'
-    }
-}
+// static/docs 폴더 비우기
+//asciidoctor.doFirst {
+//    delete file('src/main/resources/static/docs')
+//}
 
-task copyDocument(type: Copy) {
+//bootJar {
+//    dependsOn asciidoctor
+//    copy {
+//        from "${asciidoctor.outputDir}"
+//        into 'BOOT-INF/classes/static/docs'
+//    }
+//}
+
+// asccidoctor 작업 이후 생성된 HTML 파일을 static/docs 로 copy
+task createDocument(type: Copy) {
     dependsOn asciidoctor
+
     from file("build/docs/asciidoc")
     into file("src/main/resources/static/docs")
 }
 
+// build 전 createDocument(REST Docs 문서화) 실행!
 build {
-    dependsOn copyDocument
+    dependsOn createDocument
 }
 
 // Querydsl 추가, 자동 생성된 Q클래스 gradle clean으로 제거

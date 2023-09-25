@@ -2,7 +2,6 @@
 ifndef::snippets[]
 :snippets: ./build/generated-snippets
 endif::[]
-
 == 메뉴옵션그룹
 === 메뉴옵션그룹 생성
 
@@ -33,3 +32,4 @@ include::{snippets}/delete-menu-option-group/path-parameters.adoc[]
 
 .Response
 include::{snippets}/delete-menu-option-group/http-response.adoc[]
+
