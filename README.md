@@ -164,3 +164,6 @@
 
 ## 📚 팀 노션
 ### [노션 페이지 바로가기](https://www.notion.so/Team-5ea5574118ad4bec8ce2f8505f6494d4?pvs=21)
+
+## 👓 Api 명세서
+### [Api 명세서 바로가기](https://prgrms-be-devcourse.github.io/BE-04-HiMin/)
