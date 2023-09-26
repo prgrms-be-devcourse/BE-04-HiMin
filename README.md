@@ -70,7 +70,11 @@
 </ul>
 
 ## 📁 패키지 구조
-
+- `global` : 도메인 전체에 적용되는 base entity, config 등을 담고있는 패키지
+- `api` : 레이어 아키텍쳐 중 컨트롤러가 위치한 패키지.
+- `application` : 레이어 아키텍쳐 중 서비스가 위치한 패키지.
+- `domain` : 각 도메인 엔티티와 레포지토리, 도메인에 필요한 enum들을 갖고 있는 패키지.
+- `dto` : `request`, `response` 두개로 패키지가 나뉘며, 각각 요청, 응답 dto를 갖고 있음.
 <details>
 <summary><h4> 📌 상세 보기</h4></summary>
 
