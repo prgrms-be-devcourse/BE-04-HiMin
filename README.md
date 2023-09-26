@@ -38,6 +38,10 @@
   <img src="https://img.shields.io/badge/ERDCloud-4429A7?style=flat-square&logoColor=white&style=flat"/></a>
   <img src="https://img.shields.io/badge/REST Docs-8CA1AF?style=flat-square&logo=Read the Docs&logoColor=white&style=flat">
 
+## 📋 시스템 구조
+<p align="center">
+ <img src="https://github.com/prgrms-be-devcourse/BE-04-HiMin/assets/29273437/cb86fe6e-a530-4285-9ce3-f7bde484aa7a" width="900" height="400"/>
+</p>
 
 ## 📋 클래스 의존성 다이어그램
 <p align="center">
