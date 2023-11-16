@@ -10,10 +10,10 @@
 > 프로젝트 기간 : 2023/08/28 ~ 2023/09/22
 
 ## 🧐 팀원소개
-|Product Owner|Scrum Master|                                   Developer                                    |Mentor|Mentor|
-|:---:|:---:|:------------------------------------------------------------------------------:|:---:|:---:|
-|[강병곤](https://github.com/Curry4182)|[구범모](https://github.com/BeommoKoo-dev)|                       [박이슬](https://github.com/Yiseull)                        |[히히](https://github.com/0923kdh)|[yuminhwan](https://github.com/yuminhwan)|
-|<img src="https://avatars.githubusercontent.com/u/29273437?v=4" width="300" />|<img src="https://avatars.githubusercontent.com/u/95630007?v=4" width="300" />| <img src="https://avatars.githubusercontent.com/u/98391539?v=4" width="300" /> |<img src="https://user-images.githubusercontent.com/68796085/140476834-ec30d9a4-3d0f-4b45-a99a-529fccd2dffd.png" width="300" />|<img src="https://avatars.githubusercontent.com/u/65746780?v=4" width="300" />|
+|Product Owner|Scrum Master|                                   Developer                                    |
+|:---:|:---:|:------------------------------------------------------------------------------:|
+|[강병곤](https://github.com/Curry4182)|[구범모](https://github.com/BeommoKoo-dev)|                       [박이슬](https://github.com/Yiseull)                        |
+|<img src="https://avatars.githubusercontent.com/u/29273437?v=4" width="300" />|<img src="https://avatars.githubusercontent.com/u/95630007?v=4" width="300" />| <img src="https://avatars.githubusercontent.com/u/98391539?v=4" width="300" /> |
 
 ## 🛠 기술스택
 ### 개발 환경
